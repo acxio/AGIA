@@ -1,0 +1,105 @@
+~~Copyright 2014 Acxio
+~~
+~~Licensed under the Apache License, Version 2.0 (the "License");
+~~you may not use this file except in compliance with the License.
+~~You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~Unless required by applicable law or agreed to in writing, software
+~~distributed under the License is distributed on an "AS IS" BASIS,
+~~WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~See the License for the specific language governing permissions and
+~~limitations under the License.
+ -----
+ AGIA
+ -----
+ Acxio
+ -----
+ 2012-07-27
+ -----
+
+Tâche de lecture d'une base de données et injection dans Alfresco
+
+ Cette tâche est la dernière de l'exemple (loadtheninject).
+ 
++---------------------------+
+		<batch:step id="loadtheninject">
+			<batch:tasklet task-executor="taskExecutor" transaction-manager="businessTransactionManager">
+				<batch:chunk reader="hibernateReader" processor="stagingProcessor" writer="alfrescoWriter" commit-interval="10"/>
+			</batch:tasklet>
+		</batch:step>
++---------------------------+
+
+ C'est une tâche standard de Spring Batch: un module de lecture (hibernateReader)
+ permet de lire les données, alors qu'un module d'écriture (alfrescoWriter)
+ permet de les écrire dans une base de données, et les données sont transformées
+ entre la lecture et l'écriture par un processeur (stagingProcessor).
+ 
+ La tâche est configurée avec un gestionnaire de transactions
+ (businessTransactionManager) qui permet de ne pas laisser la base de données et
+ Alfresco dans un état indéterminé (dans la mesure du possible).
+ Cela permet par exemple de réaliser un rollback de façon à pouvoir relancer la
+ tâche sur un environnement propre.
+ 
+ La tâche gère les données par paquets (batch:chunk) contenant 10
+ enregistrements (commit-interval).
+ 
+ Il est possible de modifier la granularité des paquets en fonction des
+ ressources disponibles et de la fréquence des cas d'erreur.
+ 
+ Dans le cas d'exemple, si une seule valeur est problématique dans un paquet
+ de 10 valeurs écrites dans Alfresco, l'ensemble des 10 valeurs ne
+ sera pas écrit dans Alfresco (principe du rollback).
+
+* Lecture de la base de données
+
+ La lecture de la base de données utilise les mêmes éléments de configuration
+ que l'{{{./readthenwritedb.html#Ecriture_de_la_base_de_donnes}écriture de cette même base}}.
+ 
++---------------------------+
+	<bean id="hibernateReader" class="fr.acxio.tools.agia.alfresco.HibernateNodeReader">
+		<property name="nodeDao" ref="nodeDao"/>
+		<property name="dataSource" ref="businessDataSource" />
+	</bean>
++---------------------------+
+
+* Transformation des données
+
+ Dans cet exemple, le processeur de transformation de données est particulier.
+ 
+ Son rôle est de modifier les données dans la base de données lue pour indiquer
+ si une erreur a eu lieu sur un objet destinés à Alfresco et à quelle date et
+ heure cette erreur a eu lieu.
+ 
+ Sa configuration est très simple:
+ 
++---------------------------+
+	<bean id="stagingProcessor" class="fr.acxio.tools.agia.alfresco.HibernateNodeProcessor">
+		<property name="nodeDao" ref="nodeDao"/>
+	</bean>
++---------------------------+
+
+* Ecriture dans Alfresco
+
+ L'écriture dans Alfresco est très simple à configurer:
+ 
++---------------------------+
+	<bean id="alfrescoAuthDetails" class="fr.acxio.tools.agia.alfresco.AlfrescoAuthenticationDetails">
+		<property name="endpointAddress" value="http://localhost:8080/alfresco/api"/>
+		<property name="username" value="admin"/>
+		<property name="password" value="admin"/>
+	</bean>
+	
+	<bean id="alfrescoWriter" class="fr.acxio.tools.agia.alfresco.AlfrescoNodeWriter" init-method="init" destroy-method="cleanup">
+		<property name="authenticationDetails" ref="alfrescoAuthDetails"/>
+	</bean>
++---------------------------+
+
+ Le premier module, alfrescoAuthDetails, définit les informations de
+ connexion à Alfresco.
+ 
+ Le second module écrit les objets dans Alfresco.
+ 
+ Les objets écrits dans Alfresco ont été générés à partir d'une
+ {{{./readthenwritedb.html#Fabrique_dobjets_destins__Alfresco}fabrique d'objets destinés à Alfresco}}.

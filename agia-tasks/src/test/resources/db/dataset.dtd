@@ -1,0 +1,89 @@
+<!ELEMENT dataset (
+    xalfqname*,
+    xalfnode*,
+    xalfaspect*,
+    xalfassociation*,
+    xalffolder*,
+    xalfdocument*,
+    xalfproperty*,
+    xalfpropertyvalue*,
+    xalfqueryassociation*,
+    xalfrefassociation*)>
+
+<!ELEMENT xalfqname EMPTY>
+<!ATTLIST xalfqname
+    qname_id CDATA #REQUIRED
+    localname CDATA #IMPLIED
+    namespaceuri CDATA #IMPLIED
+>
+
+<!ELEMENT xalfnode EMPTY>
+<!ATTLIST xalfnode
+    node_id CDATA #REQUIRED
+    addedtimestamp CDATA #REQUIRED
+    assoctargetid CDATA #IMPLIED
+    injectedtimestamp CDATA #IMPLIED
+    jobstep CDATA #IMPLIED
+    lasterrortimestamp CDATA #IMPLIED
+    name CDATA #REQUIRED
+    pathelement CDATA #REQUIRED
+    versionoperation CDATA #IMPLIED
+    parent_id CDATA #IMPLIED
+    type_id CDATA #IMPLIED
+>
+
+<!ELEMENT xalfaspect EMPTY>
+<!ATTLIST xalfaspect
+    aspect_id CDATA #REQUIRED
+    name_id CDATA #IMPLIED
+    node_id CDATA #IMPLIED
+>
+
+<!ELEMENT xalfassociation EMPTY>
+<!ATTLIST xalfassociation
+    association_id CDATA #REQUIRED
+    type_id CDATA #IMPLIED
+    node_id CDATA #IMPLIED
+>
+
+<!ELEMENT xalffolder EMPTY>
+<!ATTLIST xalffolder
+    node_id CDATA #REQUIRED
+    parent_id CDATA #IMPLIED
+>
+
+<!ELEMENT xalfdocument EMPTY>
+<!ATTLIST xalfdocument
+    contentpath CDATA #IMPLIED
+    encoding CDATA #IMPLIED
+    mimetype CDATA #IMPLIED
+    node_id CDATA #REQUIRED
+    parent_id CDATA #IMPLIED
+>
+
+<!ELEMENT xalfproperty EMPTY>
+<!ATTLIST xalfproperty
+    property_id CDATA #REQUIRED
+    name_id CDATA #IMPLIED
+    node_id CDATA #IMPLIED
+>
+
+<!ELEMENT xalfpropertyvalue EMPTY>
+<!ATTLIST xalfpropertyvalue
+    property_id CDATA #REQUIRED
+    value CDATA #IMPLIED
+>
+
+<!ELEMENT xalfqueryassociation EMPTY>
+<!ATTLIST xalfqueryassociation
+    query CDATA #IMPLIED
+    querylanguage CDATA #IMPLIED
+    association_id CDATA #REQUIRED
+>
+
+<!ELEMENT xalfrefassociation EMPTY>
+<!ATTLIST xalfrefassociation
+    reference CDATA #IMPLIED
+    association_id CDATA #REQUIRED
+>
+

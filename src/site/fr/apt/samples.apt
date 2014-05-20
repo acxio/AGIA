@@ -1,0 +1,56 @@
+~~Copyright 2014 Acxio
+~~
+~~Licensed under the Apache License, Version 2.0 (the "License");
+~~you may not use this file except in compliance with the License.
+~~You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~Unless required by applicable law or agreed to in writing, software
+~~distributed under the License is distributed on an "AS IS" BASIS,
+~~WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~See the License for the specific language governing permissions and
+~~limitations under the License.
+ -----
+ AGIA
+ -----
+ Acxio
+ -----
+ 2012-07-30
+ -----
+
+Exemples
+
+* Manipulation des données d'entrée
+
+** Extraire une partie d'une colonne et la concaténer à d'autres valeurs
+
++---------------------------+
+@{#in['A'].substring(6, 10)}-@{#in['B'].substring(0, 3)}-TST
++---------------------------+
+
+** Déduire une valeur à partir de la valeur d'une colonne : cas trivial
+
++---------------------------+
+@{#in['A'].equals('left')?-1:1}
++---------------------------+
+
+** Déduire une valeur à partir de la valeur d'une colonne : cas simple
+
+ Cet exemple n'est valide que pour une liste de valeurs réduite, et pour lequel
+ la colonne ne peut pas prendre d'autre valeur (ici, "lundi" à "dimanche").
+ 
+ <<IMPORTANT>> : Cette technique n'est pas la plus perfomante, il faut la
+ réserver aux cas peu fréquents.
+
++---------------------------+
+@{{{'lundi','0'},{'mardi','1'},{'mercredi','2'},{'jeudi','3'},{'vendredi','4'},{'samedi','5'},{'dimanche','6'}}.?[#this[0].equals(#in['A'])][0][1]}
++---------------------------+
+
+* Lecture d'un fichier CSV vers une base de données
+
+* Lecture d'une base de données et envoi d'un email de synthèse
+
+* Exécution périodique d'un travail d'injection
+
+* Ecriture dans Alfresco et dans une base de données simple

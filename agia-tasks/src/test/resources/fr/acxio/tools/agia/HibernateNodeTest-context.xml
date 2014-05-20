@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2014 Acxio
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+    http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:alf="http://tools.acxio.fr/schema/alfresco"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xsi:schemaLocation="http://tools.acxio.fr/schema/alfresco http://tools.acxio.fr/schema/alfresco.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+	<import resource="classpath:/META-INF/spring/app-context.xml"/>
+	
+	<batch:job id="copyjob">
+		<batch:step id="copystep" next="readthenwrite">
+			<batch:tasklet ref="fileCopyingTasklet"/>
+		</batch:step>
+		<batch:step id="readthenwrite">
+	        <batch:tasklet transaction-manager="transactionManager">
+	            <batch:chunk reader="csvInputReader" writer="hibernateWriter" commit-interval="10"/>
+	        </batch:tasklet>
+	    </batch:step>
+	</batch:job>
+	
+	<bean id="fileCopyingTasklet" class="fr.acxio.tools.agia.tasks.FileCopyTasklet">
+	    <property name="origin">
+	    	<bean id="originDirectory" class="org.springframework.core.io.FileSystemResource">
+            	<constructor-arg value="src/test/resources/testFiles/input.csv" />
+        	</bean>
+	    </property>
+	    <property name="destination">
+	    	<bean id="destinationDirectory" class="org.springframework.core.io.FileSystemResource">
+            	<constructor-arg value="target/input-copy.csv" />
+        	</bean>
+		</property>
+	</bean>
+	
+	<bean id="csvInputReader" class="org.springframework.batch.item.file.FlatFileItemReader">
+		<property name="resource" value="file:target/input-copy.csv"/>
+		<property name="lineMapper" ref="inputLineMapper"/>
+		<property name="linesToSkip" value="1"/>
+	</bean>
+	
+	<bean id="inputLineMapper"
+ 		class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+ 		<property name="lineTokenizer" ref="inputLineTokenizer"/>
+ 		<property name="fieldSetMapper" ref="alfrescoFieldSetMapper"/>
+ 	</bean>
+ 	
+ 	<bean id="inputLineTokenizer"
+		class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+ 		<property name="delimiter" value=","/>
+ 		<property name="names" value="A,B,C,D,E"/>
+	</bean>
+	
+	<bean id="alfrescoFieldSetMapper"
+		class="fr.acxio.tools.agia.alfresco.AlfrescoFieldSetMapper">
+		<property name="nodeFactory" ref="testNodeFactory"/>
+	</bean>
+	
+	<bean id="testNodeFactory" class="fr.acxio.tools.agia.alfresco.configuration.SimpleNodeFactory">
+		<property name="namespaceContext">
+			<bean id="defaultNSContext" class="fr.acxio.tools.agia.alfresco.configuration.AlfrescoNamespaceContext">
+			</bean>
+		</property>
+		<property name="nodeDefinition">
+			<alf:folder>
+				<alf:properties>
+					<alf:property localName="cm:name">
+						<alf:value>app:company_home/Job Tests</alf:value>
+					</alf:property>
+				</alf:properties>
+				<alf:aspects/>
+				<alf:document assocTargetId="1">
+					<alf:properties>
+						<alf:property localName="cm:name">
+							<alf:value>@{#in['A']}</alf:value>
+						</alf:property>
+						<alf:property localName="cm:title">
+							<alf:value>@{#in['C']}</alf:value>
+						</alf:property>
+						<alf:property localName="cm:description">
+							<alf:value>@{#in['B']}</alf:value>
+						</alf:property>
+					</alf:properties>
+					<alf:aspects>
+						<alf:aspect name="cm:titled" />
+					</alf:aspects>
+					<alf:associations>
+						<alf:ref type="cm:rel">1</alf:ref>
+						<alf:query type="cm:rel">ASPECT:"custom:otheraspect"</alf:query>
+					</alf:associations>
+				</alf:document>
+			</alf:folder>
+		</property>
+	</bean>
+	
+	<bean id="hibernateWriter" class="fr.acxio.tools.agia.alfresco.HibernateNodeWriter">
+		<property name="nodeDao" ref="nodeDao"/>
+		<property name="sessionFactory" ref="businessSessionFactory"/>
+	</bean>
+	
+	<bean id="nodeDao" class="fr.acxio.tools.agia.alfresco.dao.HibernateNodeDao">
+		<property name="sessionFactory" ref="businessSessionFactory" />
+	</bean>
+</beans>

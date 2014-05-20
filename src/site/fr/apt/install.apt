@@ -1,0 +1,202 @@
+~~Copyright 2014 Acxio
+~~
+~~Licensed under the Apache License, Version 2.0 (the "License");
+~~you may not use this file except in compliance with the License.
+~~You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~Unless required by applicable law or agreed to in writing, software
+~~distributed under the License is distributed on an "AS IS" BASIS,
+~~WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~See the License for the specific language governing permissions and
+~~limitations under the License.
+ -----
+ AGIA
+ -----
+ Acxio
+ -----
+ 2012-07-27
+ -----
+
+Installation
+
+* Contenu de la distribution
+
+ La distribution est basée sur {{{http://www.eclipse.org/jetty/}Jetty 8}} et
+ exploite la Web Application
+ {{{http://static.springsource.org/spring-batch-admin/}Spring Batch Admin Manager 1.2.1}}.
+ 
+ Elle contient également {{{http://yajsw.sourceforge.net/}YAJSW}} pour
+ permettre de lancer AGIA comme un service.
+ 
+ Voici l'organisation de cette distribution:
+ 
+*-----------------------------+-----------------------------------------------+
+ docs                         | Documentation d'AGIA
+*-----------------------------+-----------------------------------------------+
+ \ \ index.html               | Page d'accueil de la documentation anglaise
+*-----------------------------+-----------------------------------------------+
+ \ \ fr                       | Documentation d'AGIA en français
+*-----------------------------+-----------------------------------------------+
+ \ \ \ \ index.html           | Page d'accueil de la documentation française
+*-----------------------------+-----------------------------------------------+
+ etc                          | Configuration de Jetty
+*-----------------------------+-----------------------------------------------+
+ jobs                         | Travaux d'injection
+*-----------------------------+-----------------------------------------------+
+ lib                          | Bibliothèques utilisées par Jetty
+*-----------------------------+-----------------------------------------------+
+ \ \ db                       | Pilotes de bases de données
+*-----------------------------+-----------------------------------------------+
+ \ \ jndi                     | Gestion d'annuaire d'objets internes
+*-----------------------------+-----------------------------------------------+
+ \ \ jsp                      | Gestion des Java Server Pages
+*-----------------------------+-----------------------------------------------+
+ \ \ jta                      | Gestion des transactions
+*-----------------------------+-----------------------------------------------+
+ \ \ log                      | Gestion de la journalisation
+*-----------------------------+-----------------------------------------------+
+ \ \ srv                      | Extensions du serveur
+*-----------------------------+-----------------------------------------------+
+ \ \ ext                      | Extensions personnalisées
+*-----------------------------+-----------------------------------------------+
+ logs                         | Fichiers de journalisation
+*-----------------------------+-----------------------------------------------+
+ overlays                     | Web Applications et leurs personnalisations
+*-----------------------------+-----------------------------------------------+
+ \ \ instances                | Instances des modèles de WebApps
+*-----------------------------+-----------------------------------------------+
+ \ \ \ \ agiaTemplate=one     | Instance d'AGIA
+*-----------------------------+-----------------------------------------------+
+ \ \ nodes                    | Personnalisation des noeuds (cluster)
+*-----------------------------+-----------------------------------------------+
+ \ \ templates                | Modèles de WebApps
+*-----------------------------+-----------------------------------------------+
+ \ \ \ \ agiaTemplate=agia    | Personnalisation d'AGIA
+*-----------------------------+-----------------------------------------------+
+ \ \ webapps                  | WebApps
+*-----------------------------+-----------------------------------------------+
+ \ \ \ \ agia.war             | WebApp d'AGIA
+*-----------------------------+-----------------------------------------------+
+ resources                    | Configuration de Jetty
+*-----------------------------+-----------------------------------------------+
+ yajsw                        | Gestion d'AGIA comme un service
+*-----------------------------+-----------------------------------------------+
+ \ \ bat                      | Fichiers de commande Windows pour gérer le service
+*-----------------------------+-----------------------------------------------+
+ \ \ bin                      | Fichiers de commande Unix pour gérer le service
+*-----------------------------+-----------------------------------------------+
+ \ \ conf                     | Fichiers de configuration du service
+*-----------------------------+-----------------------------------------------+
+ \ \ doc                      | Documentation de YAJSW
+*-----------------------------+-----------------------------------------------+
+ \ \ lib                      | Bibliothèques de YAJSW
+*-----------------------------+-----------------------------------------------+
+ \ \ log                      | Fichiers de journalisation de YAJSW
+*-----------------------------+-----------------------------------------------+
+ \ \ scripts                  | Scripts de YAJSW
+*-----------------------------+-----------------------------------------------+
+ \ \ templates                | Modèles de YAJSW
+*-----------------------------+-----------------------------------------------+
+ \ \ tmp                      | Répertoire temporaire de YAJSW
+*-----------------------------+-----------------------------------------------+
+ \ \ webapps                  | Applications Web de YAJSW (non déployées)
+*-----------------------------+-----------------------------------------------+
+ start.ini                    | Options de démarrage en ligne de commande de Jetty
+*-----------------------------+-----------------------------------------------+
+ start.jar                    | Lanceur en ligne de commande de Jetty 
+*-----------------------------+-----------------------------------------------+
+
+* Installation du service
+
+ Le service Windows ou Unix est géré par YAJSW.
+ 
+ <<IMPORTANT>> : Une fois le service installé, AGIA ne doit pas être déplacé
+ et la configuration du service ne doit pas être modifiée. Il faut commencer
+ par désinstaller le service avant de déplacer AGIA ou de changer la
+ configuration du service. La configuration d'AGIA peut être modifiée à volonté
+ indépendemment. 
+ 
+ Pour installer le service sur un nouveau système il faut:
+ 
+ [[1]] Editer le fichier <<<yajsw/conf/wrapper.conf>>> et remplacer
+ <<<${agia_home}>>> par le chemin absolu d'installation d'agia, chemin dans
+ lequel les <<<\\>>> de Windows doivent être remplacés par des <<</>>>.
+ 
+ Par exemple, <<<C:/agia>>>.
+ 
+ [[2]] Lancer la commande <<<yajsw/bat/installService.bat>>> ou
+ <<<yajsw/bin/installDaemon.sh>>>.
+ 
+ []
+ 
+* Désinstallation du service
+
+ Lancer la commande <<<yajsw/bat/uninstallService.bat>>> ou
+ <<<yajsw/bin/uninstallDaemon.sh>>>.
+
+* Configuration
+
+** Configuration d'AGIA
+
+ La configuration d'AGIA peut se faire à plusieurs niveaux:
+ 
+ * L'emplacement privilégié est <<<overlays/templates/agiaTemplate=agia>>>, car
+ il s'applique à toutes les instances d'AGIA déployées sur le serveur.
+ 
+ Il permet de configurer les bases de données, les modules Spring,
+ la journalisation log4j (cela fera doublon avec celle du serveur Jetty) et
+ les bibliothèques supplémentaires (nouvelles tâches, par exemple).
+ 
+ Il permet également de changer le style et certaines chaînes de caractère de
+ l'interface graphique web.
+ 
+ * Dans <<<overlays/instances/agiaTemplate=one>>> pour l'instance par défaut.
+ 
+ Ceci est équivalent à l'option précédent dans un usage mono-instance.
+ 
+ * Dans <<<resources>>> pour le serveur et les WebApps.
+ 
+ Ceci peut avoir des conséquences sur le fonctionnement du serveur Jetty si
+ certaines valeurs portent le même nom dans AGIA.
+ 
+ * Dans <<<jobs>>>, où chaque travail d'injection est configuré dans un unique
+ fichier XML
+ 
+ []
+ 
+** Configuration de YAJSW
+
+ La configuration du service se fait uniquement dans le fichier
+ <<<yajsw/conf/wrapper.conf>>>.
+ 
+ Le fichier <<<yajsw/conf/wrapper.conf.default>>> présente l'ensemble des
+ options de configuration possibles.
+ 
+ Voir la documentation de YAJSW pour plus de détails.
+
+* Démarrage
+
+** Démarrage simple en ligne de commande
+
+ Le démarrage en ligne de commande est très simple:
+ 
++---------------------------+
+java -jar start.jar
++---------------------------+
+
+** Démarrage en ligne de commande comme le ferait le service
+
+ Le démarrage en ligne de commande à l'aide de YAJSW est très simple:
+ 
++---------------------------+
+yajsw/bat/runConsole.bat
++---------------------------+
+
+ ou
+ 
++---------------------------+
+yajsw/bin/runConsole.sh
++---------------------------+
+ 

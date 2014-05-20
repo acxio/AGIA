@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2014 Acxio
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+    http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<schema targetNamespace="http://tools.acxio.fr/schema/alfresco" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:alf="http://tools.acxio.fr/schema/alfresco">
+
+    
+    <complexType name="Property">
+    	<sequence>
+    		<element name="value" type="string" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    		<any processContents="lax" namespace="##other" minOccurs="0"
+    			maxOccurs="unbounded" />
+    	</sequence>
+    	<attribute name="localName" type="string" use="required"></attribute>
+    	<attribute name="converterRef" type="string"></attribute>
+    	<attributeGroup ref="alf:undefinedAttribute" />
+    </complexType>
+
+
+
+    <attributeGroup name="undefinedAttribute">
+    	<anyAttribute namespace="##other" processContents="lax" />
+    </attributeGroup>
+
+    <complexType name="Properties">
+    	<sequence>
+    		<element name="property" type="alf:Property" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="Aspect">
+    	<attribute name="name" type="string"></attribute>
+    </complexType>
+
+    <element name="aspect" type="alf:Aspect"></element>
+
+    <element name="properties" type="alf:Properties"></element>
+
+    <element name="property" type="alf:Property"></element>
+
+    <complexType name="Node">
+    	<sequence>
+    		<element name="properties" type="alf:Properties"></element>
+    		<element name="aspects" type="alf:Aspects"></element>
+    		<element name="associations" type="alf:Associations" minOccurs="0"></element>
+    	</sequence>
+    	<attribute name="id" type="ID" />
+    	<attribute name="nodeType" type="string" />
+    	<attribute name="versionOperation"
+    		type="alf:VersionOperation">
+    	</attribute>
+    	<attribute name="assocTargetId" type="string"></attribute>
+    </complexType>
+
+    <complexType name="Aspects">
+    	<sequence>
+    		<element name="aspect" type="alf:Aspect" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="aspects" type="alf:Aspects"></element>
+
+    <complexType name="Folder">
+    	<complexContent>
+    		<extension base="alf:Node">
+    			<sequence>
+                    <element name="folder" type="alf:Folder"
+    					minOccurs="0" maxOccurs="unbounded">
+    				</element>
+    				<element name="document" type="alf:Document"
+    					minOccurs="0" maxOccurs="unbounded">
+    				</element>
+    			</sequence>
+    			<attribute name="condition" type="string"></attribute>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="Document">
+    	<complexContent>
+    		<extension base="alf:Node">
+    			<attribute name="contentPath" type="string"></attribute>
+    			<attribute name="mimeType" type="string"></attribute>
+    			<attribute name="encoding" type="string"></attribute>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <element name="document" type="alf:Document"></element>
+    
+    <element name="folder" type="alf:Folder"></element>
+
+    <simpleType name="VersionOperation">
+    	<restriction base="string">
+    		<enumeration value="error"></enumeration>
+    		<enumeration value="version"></enumeration>
+    		<enumeration value="replace"></enumeration>
+    		<enumeration value="update"></enumeration>
+    	</restriction>
+    </simpleType>
+    
+    <simpleType name="QueryLanguage">
+		<restriction base="string">
+			<enumeration value="lucene"></enumeration>
+			<enumeration value="xpath"></enumeration>
+			<enumeration value="cql"></enumeration>
+		</restriction>
+	</simpleType>
+
+    <complexType name="Associations">
+    	<sequence>
+            <element name="ref" type="alf:Association" minOccurs="0" maxOccurs="unbounded"></element>
+            <element name="query" type="alf:Query" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="Query">
+    	<simpleContent>
+    		<extension base="alf:Association">
+    			<attribute name="language" use="optional"
+    				type="alf:QueryLanguage" />
+    		</extension>
+    	</simpleContent>
+    </complexType>
+
+
+    <complexType name="Association">
+    	<simpleContent>
+    		<extension base="string">
+    			<attribute name="type" type="string" use="required"></attribute>
+    		</extension>
+    	</simpleContent>
+    </complexType>
+</schema>

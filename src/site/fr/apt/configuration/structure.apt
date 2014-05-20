@@ -1,0 +1,84 @@
+~~Copyright 2014 Acxio
+~~
+~~Licensed under the Apache License, Version 2.0 (the "License");
+~~you may not use this file except in compliance with the License.
+~~You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~Unless required by applicable law or agreed to in writing, software
+~~distributed under the License is distributed on an "AS IS" BASIS,
+~~WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~See the License for the specific language governing permissions and
+~~limitations under the License.
+ -----
+ AGIA
+ -----
+ Acxio
+ -----
+ 2012-07-27
+ -----
+
+Structure d'un fichier de configuration
+ 
+ Un fichier décrivant un travail d'injection est un fichier XML conforme à la
+ syntaxe Spring Beans.
+ 
+ Voici un exemple de fichier de configuration vide:
+ 
++---------------------------+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:alf="http://tools.acxio.fr/schema/alfresco"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://tools.acxio.fr/schema/alfresco http://tools.acxio.fr/schema/alfresco.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+</beans>
++---------------------------+
+
+ L'entête est extrêment importante et ne peut pas être réduite.
+ 
+ Un travail d'injection se déclare conformément à Spring Batch, c'est à dire à
+ l'aide d'une balise "batch:job" contenant des étapes "batch:step".
+ 
+ Voici un exemple de déclaration de travail d'injection:
+ 
++---------------------------+
+	<batch:job id="testCSV2BD2Alfjob" incrementer="runIdIncrementer">
+		<batch:description>Copy of CSV to DB to Alfresco</batch:description>
+		<batch:step id="copystep" next="readthenwrite">
+			<batch:tasklet ref="fileCopyingTasklet"/>
+		</batch:step>
+		<batch:step id="readthenwrite" next="loadtheninject">
+			<batch:tasklet transaction-manager="businessTransactionManager">
+				<batch:chunk reader="csvInputReader" writer="hibernateWriter" commit-interval="10"/>
+			</batch:tasklet>
+		</batch:step>
+		<batch:step id="loadtheninject">
+			<batch:tasklet task-executor="taskExecutor" transaction-manager="businessTransactionManager">
+				<batch:chunk reader="hibernateReader" processor="stagingProcessor" writer="alfrescoWriter" commit-interval="10"/>
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
++---------------------------+
+
+ Cet exemple un peu complexe présente les éléments généraux:
+ 
+ * Un travail d'injection porte un identifiant (id) et une courte description.
+ 
+ * Chaque étape porte un identifiant (id) et indique logiquement quel est
+ l'étape suivante en la référençant par son identifiant.
+ 
+ * Une étape contient une tâche qui peut être soit spécifique, comme la tâche
+ qui recopie un fichier à un emplacement pré-défini, ou générique, comme les
+ tâches qui enchaînent la lecture, le traitement et l'écriture de données.
+ 
+ []
+ 
+ Dans l'exemple, les tâches font référence à différents éléments de
+ configuration.

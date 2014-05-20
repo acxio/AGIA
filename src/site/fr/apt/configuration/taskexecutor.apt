@@ -1,0 +1,45 @@
+~~Copyright 2014 Acxio
+~~
+~~Licensed under the Apache License, Version 2.0 (the "License");
+~~you may not use this file except in compliance with the License.
+~~You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~Unless required by applicable law or agreed to in writing, software
+~~distributed under the License is distributed on an "AS IS" BASIS,
+~~WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~See the License for the specific language governing permissions and
+~~limitations under the License.
+ -----
+ AGIA
+ -----
+ Acxio
+ -----
+ 2012-07-27
+ -----
+
+Exécuteur de tâches
+
+ Chaque tâche peut avoir un exécuteur de tâche différent.
+ 
+ Ce qui caractérise un exécuteur de tâche est notamment la façon dont il le
+ fait, la différence la plus évidente étant entre l'exécuteur synchrone et
+ l'exécuteur asynchrone. L'exécuteur synchrone est l'exécuteur par défaut.
+ 
+ Dans l'exemple, l'exécuteur de tâche n'est précisé que pour la tâche de l'étape
+ "loadtheninject" et il est référencé par "taskExecutor".
+ 
+ Cet exécuteur de tâche est déclaré comme suit:
+
++---------------------------+
+	<bean id="taskExecutor" class="org.springframework.core.task.SyncTaskExecutor" />
++---------------------------+
+
+ Cette déclaration est équivalente à la valeur par défaut mais elle pourrait
+ être modifiée pour utiliser l'exécuteur asynchrone par exemple.
+ 
+ <<ATTENTION>> : l'exécuteur asynchrone peut provoquer des erreurs avec le
+ module d'écriture pour Alfresco, dans la mesure où un même dossier pourrait
+ être créé simultanément par plusieurs threads, par exemple lorsque
+ l'arborescence de stockage d'un ensemble de documents est créée.

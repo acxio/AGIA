@@ -1,0 +1,72 @@
+~~Copyright 2014 Acxio
+~~
+~~Licensed under the Apache License, Version 2.0 (the "License");
+~~you may not use this file except in compliance with the License.
+~~You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~Unless required by applicable law or agreed to in writing, software
+~~distributed under the License is distributed on an "AS IS" BASIS,
+~~WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~See the License for the specific language governing permissions and
+~~limitations under the License.
+ -----
+ Notes
+ -----
+ ACXIO
+ -----
+ -----
+
+Launcher
+~~~~~~~~
+
+   The launcher must know which jobs to start. It can either have a list of jobs+jobparameters,
+   or use a jobRepository (in a db containing jobs and jobparameters).
+   
+   See spring-batch-admin for details on jobRepository.
+   
+   
+Configuration
+~~~~~~~~~~~~~
+   
+   Configuring Alfresco : have a bean factory with its configuration, able to produce
+   Alfresco nodes from the configuration, the context AND the current item.
+
+Job preparation
+~~~~~~~~~~~~~~~
+
+   execute preparation phases for batch jobs, then launch jobs
+   
+   WARNING : the preparation phase should not be repeated if the job has been interrupted, because that may erase a CSV file, for example
+   
+   It would be better if the preparation phase can be integrated in the flow.
+   
+   ==> JUST CREATE A SPECIFIC TYPE OF org.springframework.batch.core.Step
+   
+   We may need an utility to explore a folder tree to discover CSV files and then schedule jobs to copy/read/write them.
+
+Alfresco
+~~~~~~~~
+
+   The input may induce folders AND document creation: 1 line => n lines (ok with the new model).
+   This is a regular chunck in spring-batch.
+   
+   We may also create n docs (or folders ?) from 1 input line (say, PDF + XML) => we may need some extended configuration options.
+
+   WE MAY NEED A INTERMEDIARY DATABASE TO STORE DATA TO BE ABLE TO SKIP FAULTY ROWS
+   
+   OR branch to a CSV writer for these rows only and reread the CSV on the next run.
+   
+   The intermediary database can follow the node-properties model, with a relationships table.
+   
+   The relationship table will store relations between folders and docs.
+   
+   The DAO would take care of the whole graph of relationships.
+   
+   Status of created objects should be indicated, with some dates.
+
+Paths
+~~~~~
+
+   Can we create a path as a regular bean and then use its reference in a node ?

@@ -1,0 +1,80 @@
+~~Copyright 2014 Acxio
+~~
+~~Licensed under the Apache License, Version 2.0 (the "License");
+~~you may not use this file except in compliance with the License.
+~~You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~Unless required by applicable law or agreed to in writing, software
+~~distributed under the License is distributed on an "AS IS" BASIS,
+~~WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~See the License for the specific language governing permissions and
+~~limitations under the License.
+ -----
+ AGIA
+ -----
+ Acxio
+ -----
+ 2012-07-30
+ -----
+
+Configuration du plan de classement
+
+ Le plan de classement est normalement utilisé dans un objet de type
+ {{{../apidocs/fr/acxio/tools/agia/alfresco/configuration/NodeFactory.html}NodeFactory}}.
+ 
+ Il peut être déclaré directement à l'intérieur d'un NodeFactory, ou bien comme
+ un bean indépendant référencé dans un NodeFactory.
+ 
+* Structure de configuration
+
+ La structure de configuration est décrite dans un schéma XML.
+ 
+ En voici la vision générale:
+ 
+[../../images/alfxsd_folder.png] Dossier et document
+
+[../../images/alfxsd_node.png] Noeud
+
+[../../images/alfxsd_property.png] Propriété
+
+[../../images/alfxsd_aspect.png] Aspect
+
+ Pour résumer, un noeud (dossier ou document) doit contenir une collection de
+ propriétés et une collection d'aspects, même si elles sont vides.
+ 
+ Un noeud (dossier ou document) peut avoir:
+ 
+ * un identifiant (id), notamment utilisé pour y faire référence dans un
+ NodeFactory
+ 
+ * un type (nodeType), qui est un nom qualifié reconnu par Alfresco, par exemple
+ custom:mytype ou {http://custom/namespace/1.0}mytype.
+ 
+ * un mode de gestion de version (versionOperation), qui peut prendre une valeur
+ parmi: error, version, replace et update. La valeur par défaut est error.
+ 
+ []
+ 
+ Un dossier peut avoir une condition, c'est à dire une expression Java qui
+ retourne true ou false.
+ 
+ Un dossier peut contenir des dossiers et des documents, déclarés dans cet ordre.
+ 
+ Un document peut avoir:
+ 
+ * un chemin vers un fichier de contenu (contentPath), absolu ou relatif
+ 
+ * un type MIME pour le contenu (mimeType)
+ 
+ * un descripteur d'encodage (encoding)
+ 
+ []
+ 
+ Une propriété doit avoir un nom (localName), qui est un nom qualifié reconnu
+ par Alfresco, et peut avoir une référence de convertisseur.
+ 
+ Elle peut avoir de 0 à plusieurs valeurs.
+ 
+ Un aspect doit avoir un nom (name), qui est un nom qualifié reconnu par Alfresco.

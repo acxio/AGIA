@@ -1,0 +1,57 @@
+~~Copyright 2014 Acxio
+~~
+~~Licensed under the Apache License, Version 2.0 (the "License");
+~~you may not use this file except in compliance with the License.
+~~You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~Unless required by applicable law or agreed to in writing, software
+~~distributed under the License is distributed on an "AS IS" BASIS,
+~~WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~See the License for the specific language governing permissions and
+~~limitations under the License.
+ -----
+ AGIA
+ -----
+ Acxio
+ -----
+ 2012-07-27
+ -----
+
+Tâche de copie de fichiers
+
+ La tâche de copie de fichier est la première réalisée dans l'exemple (copystep).
+ 
++---------------------------+
+		<batch:step id="copystep" next="readthenwrite">
+			<batch:tasklet ref="fileCopyingTasklet"/>
+		</batch:step>
++---------------------------+
+ 
+ C'est une tâche spécifique qui prend en paramètres un chemin d'origine et un
+ chemin destination.
+ 
+ En voici le détail:
+
++---------------------------+
+	<bean id="fileCopyingTasklet" class="fr.acxio.tools.agia.tasks.FileCopyTasklet">
+		<property name="origin">
+			<bean id="originDirectory" class="org.springframework.core.io.FileSystemResource">
+				<constructor-arg value="data/input.csv" />
+			</bean>
+		</property>
+		<property name="destination">
+			<bean id="destinationDirectory" class="org.springframework.core.io.FileSystemResource">
+				<constructor-arg value="data/input-copy.csv" />
+			</bean>
+		</property>
+	</bean>
++---------------------------+
+
+ La syntaxe de déclaration des chemins est un peu complexe mais elle offre la
+ possibilité ultérieure de définir autre chose que des chemins de fichiers
+ locaux.
+ 
+ Dans le cas présent, le fichier dont le chemin relatif est "data/input.csv"
+ est recopié dans le chemin relatif "data/input-copy.csv".

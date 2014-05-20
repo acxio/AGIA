@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2014 Acxio
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+    http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project name="AGIA">
+
+	<version position="left"/>
+
+	<bannerLeft>
+		<name>AGIA</name>
+        <href>http://www.acxio.fr</href>
+	</bannerLeft>
+	
+	<body>
+	
+		<links>
+            <item name="AGIA" href="index.html"/>
+            <item name="Spring Source" href="http://www.springsource.org/"/>
+            <item name="Spring Batch" href="http://www.springsource.org/spring-batch"/>
+        </links>
+	
+        <menu name="AGIA">
+            <item name="Présentation" href="index.html"/>
+            <item name="Configuration" href="configure.html">
+            	<item name="Structure" href="configuration/structure.html"/>
+            		<item name="Plan de classement" href="configuration/alfdomain.html"/>
+            	<item name="Eléments" href="configuration/elements.html">
+            		<item name="Incrémenteur de contexte" href="configuration/contextincrementer.html"/>
+            		<item name="Exécuteur de tâches" href="configuration/taskexecutor.html"/>
+            		<item name="Tâche de copie de fichiers" href="configuration/copytask.html"/>
+            		<item name="Tâche de lecture du fichier CSV et injection dans une base de données" href="configuration/readthenwritedb.html"/>
+            		<item name="Tâche de lecture d'une base de données et injection dans Alfresco" href="configuration/loadtheninject.html"/>
+            	</item>
+            </item>
+            <item name="Installation" href="install.html"/>
+            <item name="Personnalisation" href="customization.html"/>
+            <item name="Exemples" href="samples.html"/>
+        </menu>
+        
+        <menu ref="reports"/>
+        
+    </body>
+    
+</project>

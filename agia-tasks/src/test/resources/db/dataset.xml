@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  Copyright 2014 Acxio
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+    http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<dataset>
+  <xalfqname qname_id="2" localname="folder" namespaceuri="http://www.alfresco.org/model/content/1.0"/>
+  <xalfqname qname_id="4" localname="name" namespaceuri="http://www.alfresco.org/model/content/1.0"/>
+  <xalfqname qname_id="8" localname="content" namespaceuri="http://www.alfresco.org/model/content/1.0"/>
+  <xalfqname qname_id="10" localname="titled" namespaceuri="http://www.alfresco.org/model/content/1.0"/>
+  <xalfqname qname_id="12" localname="rel" namespaceuri="http://www.alfresco.org/model/content/1.0"/>
+  <xalfqname qname_id="16" localname="title" namespaceuri="http://www.alfresco.org/model/content/1.0"/>
+  <xalfnode node_id="1" addedtimestamp="2013-03-11 11:29:37.648" jobstep="0" name="company_home" pathelement="app:company_home" versionoperation="0" type_id="2"/>
+  <xalfnode node_id="5" addedtimestamp="2013-03-11 11:29:37.648" jobstep="0" name="Test Batch Writer" pathelement="cm:Test_x0020_Batch_x0020_Writer" versionoperation="0" parent_id="1" type_id="2"/>
+  <xalfnode node_id="7" addedtimestamp="2013-03-11 11:29:37.648" jobstep="0" name="Test Batch Writer Content" pathelement="cm:Test_x0020_Batch_x0020_Writer_x0020_Content" versionoperation="0" parent_id="5" type_id="8"/>
+  <xalfaspect aspect_id="9" name_id="10" node_id="7"/>
+  <xalfassociation association_id="11" type_id="12" node_id="7"/>
+  <xalfassociation association_id="13" type_id="12" node_id="7"/>
+  <xalffolder node_id="1"/>
+  <xalffolder node_id="5" parent_id="1"/>
+  <xalfdocument contentpath="src/test/resources/testFiles/content1.pdf" mimetype="application/pdf" node_id="7" parent_id="5"/>
+  <xalfproperty property_id="3" name_id="4" node_id="1"/>
+  <xalfproperty property_id="6" name_id="4" node_id="5"/>
+  <xalfproperty property_id="14" name_id="4" node_id="7"/>
+  <xalfproperty property_id="15" name_id="16" node_id="7"/>
+  <xalfpropertyvalue property_id="3" value="company_home"/>
+  <xalfpropertyvalue property_id="6" value="Test Batch Writer"/>
+  <xalfpropertyvalue property_id="14" value="Test Batch Writer Content"/>
+  <xalfpropertyvalue property_id="15" value="Text content"/>
+  <xalfqueryassociation query="ASPECT:&quot;custom:otheraspect&quot;" querylanguage="lucene" association_id="13"/>
+  <xalfrefassociation reference="1" association_id="11"/>
+</dataset>
