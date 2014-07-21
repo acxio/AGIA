@@ -52,7 +52,7 @@ import fr.acxio.tools.agia.alfresco.domain.NodeList;
  */
 public class AlfrescoNodeContentWriter extends AlfrescoServicesConsumer implements ItemWriter<NodeList> {
 	
-	private static Logger logger = LoggerFactory.getLogger(AlfrescoNodeContentWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AlfrescoNodeContentWriter.class);
 	
 	private static final String URL_TEMPLATE_UPLOAD = "/upload/{scheme}/{address}/{uuid}/{name}?ticket={ticket}&encoding={encoding}&mimetype={mimetype}";
 	private static final String PARAM_SCHEME = "scheme";
@@ -119,8 +119,8 @@ public class AlfrescoNodeContentWriter extends AlfrescoServicesConsumer implemen
 								}
 								
 								if (aUUID != null) {
-				                	if (logger.isDebugEnabled()) {
-				        				logger.debug("Will upload content");
+				                	if (LOGGER.isDebugEnabled()) {
+				        				LOGGER.debug("Will upload content");
 				        			}
 				                	
 				                	StringBuilder aURL = new StringBuilder(getAlfrescoService().getWebappAddress());
@@ -141,10 +141,10 @@ public class AlfrescoNodeContentWriter extends AlfrescoServicesConsumer implemen
 				                	HttpEntity<FileSystemResource> aEntity = new HttpEntity<FileSystemResource>(new FileSystemResource(aFile), aHeaders);
 				                	getRestTemplate().put(aURL.toString(), aEntity, aURLVariables);
 				                	
-				                	if (logger.isDebugEnabled()) {
-				        				logger.debug("Content uploaded");
+				                	if (LOGGER.isDebugEnabled()) {
+				        				LOGGER.debug("Content uploaded");
 				        			}
-				                					                	
+
 								} else {
 									throw new NodePathException("Cannot find the node: " + aNode.getPath());
 								}

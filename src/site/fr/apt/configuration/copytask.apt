@@ -16,12 +16,13 @@
  -----
  Acxio
  -----
- 2012-07-27
+ 2014-07-21
  -----
 
 Tâche de copie de fichiers
 
- La tâche de copie de fichier est la première réalisée dans l'exemple (copystep).
+ La tâche de copie de fichier est la première réalisée dans l'exemple
+ (<<<copystep>>>).
  
 +---------------------------+
 		<batch:step id="copystep" next="readthenwrite">
@@ -53,5 +54,5 @@ Tâche de copie de fichiers
  possibilité ultérieure de définir autre chose que des chemins de fichiers
  locaux.
  
- Dans le cas présent, le fichier dont le chemin relatif est "data/input.csv"
- est recopié dans le chemin relatif "data/input-copy.csv".
+ Dans le cas présent, le fichier dont le chemin relatif est <<<data/input.csv>>>
+ est recopié dans le chemin relatif <<<data/input-copy.csv>>>.

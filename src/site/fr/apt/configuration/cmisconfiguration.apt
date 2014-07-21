@@ -1,0 +1,112 @@
+~~Copyright 2014 Acxio
+~~
+~~Licensed under the Apache License, Version 2.0 (the "License");
+~~you may not use this file except in compliance with the License.
+~~You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~Unless required by applicable law or agreed to in writing, software
+~~distributed under the License is distributed on an "AS IS" BASIS,
+~~WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~See the License for the specific language governing permissions and
+~~limitations under the License.
+ -----
+ AGIA
+ -----
+ Acxio
+ -----
+ 2014-06-19
+ -----
+ 
+Configuration du plan de classement pour CMIS
+
+ La configuration du plan de classement a été initialement conçue pour Alfresco.
+ 
+ <<La refonte du modèle de configuration est en cours pour tenir compte des
+ spécificités de Nuxeo et de CMIS, le mode de fonctionnement décrit ici sera
+ alors obsolète.>>
+ 
+ Quelques amménagements de l'interprétation de la configuration ont été faits
+ dans le CmisWriter, de façon à pouvoir convertir les valeurs des propriétés
+ dans les types atomiques adéquats et à faire correspondre les noms de types
+ ou de propriété par défaut ou nécessaires.
+ 
+* Chemins des noeuds
+
+ Les chemins des noeuds doivent être exprimés selon des noms qualifiés.
+ 
+ Le CmisWriter supprime les préfix pour ne conserver que les noms locaux de
+ chaque niveau des chemins.
+ 
+* Types par défaut
+
+ Lorsqu'ils ne sont pas précisés sur les noeuds, des types par défaut sont
+ utilisés:
+ 
+ * <<<cmis:folder>>> pour les dossiers
+ 
+ * <<<cmis:document>>> pour les documents
+ 
+ []
+ 
+* Nom unique
+
+ La propriété obligatoire portant le nom <<<cm:name>>> correspond à la propriété
+ CMIS portant le nom <<<cmis:name>>>.
+ 
+* Conversion des types
+
+ Par défaut, les valeurs des propriétés sont de type chaîne de caractères.
+ 
+ CMIS impose la déclaration explicite a priori des types des valeurs des
+ propriétés, contrairement à Alfresco qui accepte de réaliser la conversion
+ a posteriori selon le modèle de contenu.
+ 
+ La bibliothèques OpenCMIS utilisée impose même d'utiliser les types atomiques
+ Java pour les valeurs des propriétés.
+ 
+ Les convertisseurs qui peuvent être référencés par les propriétés dans la
+ configuration ne permettent pas de convertir des chaînes de caractères
+ en types atomiques différents.
+ 
+ Le CmisWriter accepte une syntaxe spécifique dans les valeurs des propriétés
+ qui permet de spécifier un type de conversion et éventuellement un format
+ d'entrée des valeurs.
+ 
+ La syntaxe est la suivante:
+ 
+ %C<Format>%<Valeur>
+ 
+ où C représente le convertisseur:
+ 
+ * B : Boolean
+ 
+ * D : Long
+ 
+ * F : Double
+ 
+ * T : Date/Time
+ 
+ []
+ 
+ <Format> représente le format à utiliser pour réaliser la conversion
+ (uniquement pour la conversion T).
+ 
+ Par exemple: <<<yyyy-MM-dd'T'HH:mm:ss.SSSZZ>>> (format ISO 8601)
+ 
+ <Valeur> est la valeur de la propriété.
+ 
+ Voici un exemple de déclaration des propriétés pour CMIS:
+ 
++---------------------------+
+	<alf:property localName="myDomain:Type_Document">
+		<alf:value>Facture</alf:value>
+	</alf:property>
+	<alf:property localName="myDomain:Est_Comptable">
+		<alf:value>%B%false</alf:value>
+	</alf:property>
+	<alf:property localName="myDomain:Date_Numerisation">
+		<alf:value>%Tyyyy-MM-dd'T'HH:mm:ss.SSSZZ%@{#sysdc.convert(new java.util.Date())}</alf:value>
+	</alf:property>
++---------------------------+

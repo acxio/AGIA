@@ -58,7 +58,7 @@ import fr.acxio.tools.agia.alfresco.domain.QName;
 
 public class AlfrescoNodeReader extends AlfrescoServicesConsumer implements ItemReader<Node>, ItemStream, StepExecutionListener, InitializingBean, DisposableBean {
 
-	private static Logger logger = LoggerFactory.getLogger(AlfrescoNodeReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AlfrescoNodeReader.class);
 	
 	private static final Pattern PATH_EXTRACT_PATTERN = Pattern.compile("^(?:(.*/)[^/]*/|(?:(.*/))?[^/]*)$");
 	private static final Pattern CMCONTENT_PATTERN = Pattern.compile("([^|=]+)=([^|=]+)");
@@ -199,8 +199,8 @@ public class AlfrescoNodeReader extends AlfrescoServicesConsumer implements Item
 				if (aResource.isDirectory()) {
 					if (!currentDirPath.equals(aResource.getPath())) {
 						
-						if (logger.isDebugEnabled()) {
-							logger.debug("Row " + aCurrentIndex + ": " + aResource.getPath());
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Row " + aCurrentIndex + ": " + aResource.getPath());
 						}
 						
 						String aPath = aResource.getPath().substring(baseURI.getPath().length());
@@ -218,8 +218,8 @@ public class AlfrescoNodeReader extends AlfrescoServicesConsumer implements Item
 					}
 				} else {
 					// Handle content node
-					if (logger.isDebugEnabled()) {
-						logger.debug("Row " + aCurrentIndex + ": " + aResource.getPath());
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Row " + aCurrentIndex + ": " + aResource.getPath());
 					}
 					
 					String aPath = aResource.getPath().substring(baseURI.getPath().length());
@@ -267,7 +267,6 @@ public class AlfrescoNodeReader extends AlfrescoServicesConsumer implements Item
 					Document aDocument = (Document)aResult;
 					Map<String,String> aValues = readCMContent(aProperty.getValue());
 					aDocument.setMimeType(aValues.get(SUBPROP_MIMETYPE));
-//					aDocument.setContentPath(aValues.get(SUBPROP_CONTENT_URL));
 					try {
 						aDocument.setContentPath(getWebDavDirectoryURI(aResource.getPath()).toASCIIString());
 					} catch (URISyntaxException e) {

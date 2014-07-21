@@ -30,7 +30,7 @@ import com.googlecode.sardine.Sardine;
 
 public class DefaultDavResourcesResolver implements DavResourcesResolver {
 	
-	private static Logger logger = LoggerFactory.getLogger(DefaultDavResourcesResolver.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDavResourcesResolver.class);
 	
 	private static final String CACHE_KEY = "#sPath";
 	private static final String CACHE_NAME = "rdirlist";
@@ -38,8 +38,8 @@ public class DefaultDavResourcesResolver implements DavResourcesResolver {
 	@Override
 	@Cacheable(value=CACHE_NAME, key=CACHE_KEY)
 	public List<DavResource> getDirectoryList(Sardine sSardine, String sPath) throws IOException {
-		if (logger.isDebugEnabled()) {
-        	logger.debug("Calling WebDav for path: " + sPath);
+		if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("Calling WebDav for path: " + sPath);
         }
 		
 		return sSardine.list(sPath);
@@ -49,8 +49,8 @@ public class DefaultDavResourcesResolver implements DavResourcesResolver {
 	@CachePut(value=CACHE_NAME, key=CACHE_KEY)
 	public List<DavResource> setLocalDirectoryList(String sPath,
 			List<DavResource> sResources) {
-		if (logger.isDebugEnabled()) {
-        	logger.debug("Set local for WebDav path: " + sPath);
+		if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("Set local for WebDav path: " + sPath);
         }
 		return sResources;
 	}
@@ -58,16 +58,16 @@ public class DefaultDavResourcesResolver implements DavResourcesResolver {
 	@Override
 	@CacheEvict(value=CACHE_NAME)
 	public void evictDirectoryList(String sPath) {
-		if (logger.isDebugEnabled()) {
-        	logger.debug("Evict WebDav path: " + sPath);
+		if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("Evict WebDav path: " + sPath);
         }
 	}
 
 	@Override
 	@CacheEvict(value=CACHE_NAME, allEntries=true)
 	public void evictDictoriesLists() {
-		if (logger.isDebugEnabled()) {
-        	logger.debug("Evict all WebDav directories lists");
+		if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("Evict all WebDav directories lists");
         }
 	}
 

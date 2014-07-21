@@ -16,7 +16,7 @@
  -----
  Acxio
  -----
- 2012-07-27
+ 2014-07-21
  -----
 
 Eléments de configuration
@@ -26,6 +26,8 @@ Eléments de configuration
  * {{{./taskexecutor.html}Exécuteur de tâches}}
  
  * {{{./copytask.html}Tâche de copie de fichiers}}
+ 
+ * {{{./nodefactory.html}Fabrique d'objets destinés à Alfresco}}
  
  * {{{./readthenwritedb.html}Tâche de lecture du fichier CSV et injection dans une base de données}}
  

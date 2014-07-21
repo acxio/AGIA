@@ -83,6 +83,8 @@ Installation
 *-----------------------------+-----------------------------------------------+
  yajsw                        | Gestion d'AGIA comme un service
 *-----------------------------+-----------------------------------------------+
+ work                         | Répertoire de travail de Jetty
+*-----------------------------+-----------------------------------------------+
  \ \ bat                      | Fichiers de commande Windows pour gérer le service
 *-----------------------------+-----------------------------------------------+
  \ \ bin                      | Fichiers de commande Unix pour gérer le service
@@ -105,8 +107,28 @@ Installation
 *-----------------------------+-----------------------------------------------+
  start.ini                    | Options de démarrage en ligne de commande de Jetty
 *-----------------------------+-----------------------------------------------+
- start.jar                    | Lanceur en ligne de commande de Jetty 
+ start.jar                    | Lanceur en ligne de commande de Jetty
 *-----------------------------+-----------------------------------------------+
+ setup.sh                     | Configurateur en ligne de commande de Jetty pour Linux
+*-----------------------------+-----------------------------------------------+
+ setup.bat                    | Configurateur en ligne de commande de Jetty pour Windows
+*-----------------------------+-----------------------------------------------+
+ setup.groovy                 | Configurateur en ligne de commande de Jetty
+*-----------------------------+-----------------------------------------------+
+
+* Configuration minimaliste
+
+ Les scripts de configuration <<<setup.sh>>> et <<<setup.bat>>> permettent de
+ configurer les paramètres essentiels d'AGIA:
+ 
+ * Le chemin absolu d'installation d'AGIA, nécessaire pour installer AGIA comme
+ un service.
+ 
+ * Les ports TCP de fonctionnement de Jetty (HTTP et HTTPS)
+ 
+ * Le mot de passe du compte d'administration
+ 
+ []
 
 * Installation du service
 
@@ -120,8 +142,9 @@ Installation
  
  Pour installer le service sur un nouveau système il faut:
  
- [[1]] Editer le fichier <<<yajsw/conf/wrapper.conf>>> et remplacer
- <<<${agia_home}>>> par le chemin absolu d'installation d'agia, chemin dans
+ [[1]] Editer le fichier <<<yajsw/conf/wrapper.conf>>> et remplacer la valeur
+ de la propriété <<<wrapper.working.dir>>> (par défaut définie à 
+ <<<$\{agia_home\}>>>) par le chemin absolu d'installation d'AGIA, chemin dans
  lequel les <<<\\>>> de Windows doivent être remplacés par des <<</>>>.
  
  Par exemple, <<<C:/agia>>>.
@@ -145,8 +168,7 @@ Installation
  * L'emplacement privilégié est <<<overlays/templates/agiaTemplate=agia>>>, car
  il s'applique à toutes les instances d'AGIA déployées sur le serveur.
  
- Il permet de configurer les bases de données, les modules Spring,
- la journalisation log4j (cela fera doublon avec celle du serveur Jetty) et
+ Il permet de configurer les bases de données, les modules Spring et
  les bibliothèques supplémentaires (nouvelles tâches, par exemple).
  
  Il permet également de changer le style et certaines chaînes de caractère de

@@ -34,7 +34,7 @@ import org.springframework.util.Assert;
  */
 public class AlfrescoServicesConsumer {
 
-	private static Logger logger = LoggerFactory.getLogger(AlfrescoServicesConsumer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AlfrescoServicesConsumer.class);
 	
 	public static final Store STORE = new Store(Constants.WORKSPACE_STORE, "SpacesStore");
 	

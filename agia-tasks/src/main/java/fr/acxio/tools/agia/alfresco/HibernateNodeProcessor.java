@@ -51,7 +51,7 @@ import fr.acxio.tools.agia.common.ProcessIndicatorItemWrapper;
  */
 public class HibernateNodeProcessor implements ItemProcessor<ProcessIndicatorItemWrapper<Node>, NodeList>, ItemWriteListener<NodeList>, InitializingBean {
 
-	private static Logger logger = LoggerFactory.getLogger(HibernateNodeProcessor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HibernateNodeProcessor.class);
 	
 	private NodeDao nodeDao;
 	
@@ -110,19 +110,19 @@ public class HibernateNodeProcessor implements ItemProcessor<ProcessIndicatorIte
 				}
 			}
 		} catch (NodeDaoException e) {
-			logger.error("Cannot update nodes", e);
+			LOGGER.error("Cannot update nodes", e);
 		}
 	}
 
 	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void onWriteError(Exception sException, List<? extends NodeList> sItems) {
-		logger.info("Write error occured");
+		LOGGER.info("Write error occured");
 		for(NodeList aNodeList : sItems) {
 			for(Node aNode : aNodeList) {
 				try {
 					nodeDao.markError(aNode.getId(), errorStep);
 				} catch (Exception e) {
-					logger.error("Unable to mark node on error with id " + aNode.getId(), e);
+					LOGGER.error("Unable to mark node on error with id " + aNode.getId(), e);
 				}
 			}
 		}

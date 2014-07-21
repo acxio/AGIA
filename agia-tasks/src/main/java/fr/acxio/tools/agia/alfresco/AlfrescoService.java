@@ -35,14 +35,40 @@ import com.googlecode.sardine.Sardine;
 
 public interface AlfrescoService {
 	
+	/**
+	 * Returns the endpoint address of the Alfresco webservices.
+	 * 
+	 * @return the endpoint address of the Alfresco webservices.
+	 */
 	String getEndpointAddress();
 
+	/**
+	 * Returns the webapp address of Alfresco.
+	 * 
+	 * @return the webapp address of Alfresco.
+	 */
 	String getWebappAddress();
 
+	/**
+	 * Returns the username for Alfresco.
+	 * 
+	 * @return the username for Alfresco.
+	 */
 	String getUsername();
 
+	/**
+	 * Returns the password for Alfresco.
+	 * 
+	 * @return the password for Alfresco.
+	 */
 	String getPassword();
 
+	/**
+	 * Returns the timeout delay used to estimate if the session has timed out
+	 * on the server.
+	 * 
+	 * @return the timeout delay used to estimate if the session has timed out.
+	 */
 	long getTimeOutInterval();
 
 	/**
@@ -61,8 +87,18 @@ public interface AlfrescoService {
 	 */
 	void endSession();
 	
+	/**
+	 * Returns the ticket of the session.
+	 * 
+	 * @return the ticket of the session.
+	 */
 	String getTicket();
 	
+	/**
+	 * Starts a new WebDav session against Alfresco.
+	 * 
+	 * @return a new WebDav session against Alfresco.
+	 */
 	Sardine startWebDavSession();
 	
 	/**
@@ -72,5 +108,10 @@ public interface AlfrescoService {
 	 */
 	RepositoryServiceSoapBindingStub getRepositoryService();
 	
+	/**
+	 * <p>Content service accessor.</p>
+	 * 
+	 * @return the content service stub.
+	 */
 	ContentServiceSoapBindingStub getContentService();
 }

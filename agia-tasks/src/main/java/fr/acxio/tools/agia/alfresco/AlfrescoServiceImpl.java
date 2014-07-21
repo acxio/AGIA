@@ -41,7 +41,7 @@ import com.googlecode.sardine.SardineFactory;
 @Service
 public class AlfrescoServiceImpl implements AlfrescoService {
 	
-	private static Logger logger = LoggerFactory.getLogger(AlfrescoServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AlfrescoServiceImpl.class);
 	
 	/**
 	 * WebServices URL
@@ -104,8 +104,8 @@ public class AlfrescoServiceImpl implements AlfrescoService {
 	 */
 	public void startSession() throws RemoteException {
 		if ((AuthenticationUtils.getTicket() == null) || AuthenticationUtils.isCurrentTicketTimedOut()) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Starting new Alfresco session...");
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Starting new Alfresco session...");
 			}
 			WebServiceFactory.setEndpointAddress(getEndpointAddress());
 			AuthenticationUtils.startSession(getUsername(), getPassword(), getTimeOutInterval());

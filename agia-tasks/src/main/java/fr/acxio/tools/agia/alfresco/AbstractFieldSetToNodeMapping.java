@@ -15,36 +15,28 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.file.transform.FieldSet;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.util.Assert;
-import org.springframework.validation.BindException;
-
-import fr.acxio.tools.agia.alfresco.configuration.NodeFactory;
-import fr.acxio.tools.agia.alfresco.domain.NodeList;
-import fr.acxio.tools.agia.expression.EvaluationContextFactory;
-import fr.acxio.tools.agia.expression.StandardEvaluationContextFactory;
 
 /**
- * <p>Common processing which transform a
+ * <p>
+ * Common processing which transform a
  * {@link org.springframework.batch.item.file.transform.FieldSet FieldSet} into
- * a {@link fr.acxio.tools.agia.alfresco.domain.NodeList NodeList}.</p>
+ * a {@link fr.acxio.tools.agia.alfresco.domain.NodeList NodeList}.
+ * </p>
  * 
  * @author pcollardez
- *
+ * 
  */
 public class AbstractFieldSetToNodeMapping extends NodeMapper<FieldSet> {
-	
-	private static Logger logger = LoggerFactory.getLogger(AbstractFieldSetToNodeMapping.class);
 
-	@Override
-	public Object transformData(FieldSet sData) {
-		return (sData != null) ? sData.getProperties() : null;
-	}
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractFieldSetToNodeMapping.class);
+
+    @Override
+    public Object transformData(FieldSet sData) {
+        return (sData != null) ? sData.getProperties() : null;
+    }
+
 }

@@ -39,7 +39,7 @@ public class ExpressionResourceFactory implements ResourceFactory {
 	
 	private DataExpressionResolver expressionResolver = new StandardDataExpressionResolver();
 	
-	public void setExpression(String sExpression) {
+	public synchronized void setExpression(String sExpression) {
 		expression = sExpression;
 	}
 

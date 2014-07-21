@@ -37,7 +37,7 @@ import org.springframework.cache.annotation.Cacheable;
  */
 public class DefaultNodePathResolver implements NodePathResolver {
 
-	private static Logger logger = LoggerFactory.getLogger(DefaultNodePathResolver.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultNodePathResolver.class);
 
 	private static final String CACHE_KEY = "#sPath";
 	private static final String CACHE_NAME = "rnodes";
@@ -47,8 +47,8 @@ public class DefaultNodePathResolver implements NodePathResolver {
 	public Node[] getRepositoryMatchingNodes(
 			RepositoryServiceSoapBindingStub sRepositoryService, String sPath)
 			throws NodePathException {
-		if (logger.isDebugEnabled()) {
-        	logger.debug("Calling Alfresco for path: " + sPath);
+		if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("Calling Alfresco for path: " + sPath);
         }
 		Reference reference = new Reference(AlfrescoServicesConsumer.STORE, null, sPath);
         Predicate predicate = new Predicate(new Reference[]{reference}, null, null);        
@@ -67,8 +67,8 @@ public class DefaultNodePathResolver implements NodePathResolver {
 	@CachePut(value=CACHE_NAME, key=CACHE_KEY)
 	public Node[] setLocalMatchingNodes(String sPath, Node[] sNodes)
 			throws NodePathException {
-		if (logger.isDebugEnabled()) {
-        	logger.debug("Set local for Alfresco path: " + sPath);
+		if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("Set local for Alfresco path: " + sPath);
         }
 		return sNodes;
 	}
@@ -76,16 +76,16 @@ public class DefaultNodePathResolver implements NodePathResolver {
 	@Override
 	@CacheEvict(value=CACHE_NAME)
 	public void evictRepositoryNode(String sPath) {
-		if (logger.isDebugEnabled()) {
-        	logger.debug("Evict Alfresco path: " + sPath);
+		if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("Evict Alfresco path: " + sPath);
         }
 	}
 
 	@Override
 	@CacheEvict(value=CACHE_NAME, allEntries=true)
 	public void evictRepositoryNodes() {
-		if (logger.isDebugEnabled()) {
-        	logger.debug("Evict all Alfresco pathes");
+		if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("Evict all Alfresco pathes");
         }
 	}
 

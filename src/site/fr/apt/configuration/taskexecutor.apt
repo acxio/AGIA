@@ -16,7 +16,7 @@
  -----
  Acxio
  -----
- 2012-07-27
+ 2014-07-21
  -----
 
 Exécuteur de tâches
@@ -28,7 +28,7 @@ Exécuteur de tâches
  l'exécuteur asynchrone. L'exécuteur synchrone est l'exécuteur par défaut.
  
  Dans l'exemple, l'exécuteur de tâche n'est précisé que pour la tâche de l'étape
- "loadtheninject" et il est référencé par "taskExecutor".
+ <<<loadtheninject>>> et il est référencé par <<<taskExecutor>>>.
  
  Cet exécuteur de tâche est déclaré comme suit:
 

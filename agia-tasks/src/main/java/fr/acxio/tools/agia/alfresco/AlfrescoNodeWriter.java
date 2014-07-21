@@ -91,7 +91,7 @@ public class AlfrescoNodeWriter extends AlfrescoServicesConsumer implements Item
 	// Some documents may be created, some other may not (probably a pb with the cache)
 	// Since a nice fix is done, use a SyncTaskExecutor !
 	
-	private static Logger logger = LoggerFactory.getLogger(AlfrescoNodeWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AlfrescoNodeWriter.class);
 	
 	private boolean sendContents = true;
 	
@@ -132,8 +132,8 @@ public class AlfrescoNodeWriter extends AlfrescoServicesConsumer implements Item
 				}
 			}
 	
-			if (logger.isDebugEnabled()) {
-				logger.debug("Will commit");
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Will commit");
 			}
 			
 	    	UpdateResult[] result = repositoryService.update(aCMLHelper.getCML());
@@ -141,8 +141,8 @@ public class AlfrescoNodeWriter extends AlfrescoServicesConsumer implements Item
 	    	// Update the cache of paths and references
 	    	updateDataWithResult(sData, aNodesIndexes, result);
 	        
-	        if (logger.isDebugEnabled()) {
-	        	logger.debug("Commited");
+	        if (LOGGER.isDebugEnabled()) {
+	        	LOGGER.debug("Commited");
 	        }
 	        
 	        cleanup();
@@ -194,9 +194,9 @@ public class AlfrescoNodeWriter extends AlfrescoServicesConsumer implements Item
 			throws NodePathException {
 		Map<String, Node> aIndexes = buildIndexesNodesRef(sNodesIndexes);
 		for(UpdateResult aUpdateResult : sResult) {
-			if (aUpdateResult.getDestination() != null) {
+			Reference aDestination = aUpdateResult.getDestination();
+			if (aDestination != null) {
 				Reference aSource = aUpdateResult.getSource();
-				Reference aDestination = aUpdateResult.getDestination();
 
 				if (aUpdateResult.getSourceId() != null) {
 					Node aNode = aIndexes.get(aUpdateResult.getSourceId());
@@ -216,7 +216,7 @@ public class AlfrescoNodeWriter extends AlfrescoServicesConsumer implements Item
 	    					aNode.setAddress(aSource.getStore().getAddress());
 	    					aNode.setUuid(aSource.getUuid());
 						}
-						if ((aDestination != null) && aNode.getPath().equals(aDestination.getPath())) {
+						if (aNode.getPath().equals(aDestination.getPath())) {
 							aNode.setScheme(aDestination.getStore().getScheme());
 	    					aNode.setAddress(aDestination.getStore().getAddress());
 	    					aNode.setUuid(aDestination.getUuid());
@@ -239,8 +239,8 @@ public class AlfrescoNodeWriter extends AlfrescoServicesConsumer implements Item
 			throws IOException {
 		
 		// Create a new node
-		if (logger.isDebugEnabled()) {
-			logger.debug("Will add node " + sNode.getId());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Will add node " + sNode.getId());
 		}
 		
 		addCreateForNode(sCMLHelper, sNode, sNodesIndexes.get(sNode));
@@ -265,8 +265,8 @@ public class AlfrescoNodeWriter extends AlfrescoServicesConsumer implements Item
 		
 		// Node.VersionOperation.RAISEERROR : Do nothing
 		if (sNode.getVersionOperation().equals(Node.VersionOperation.REPLACE)) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Will replace folder node " + sNode.getId());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Will replace folder node " + sNode.getId());
 			}
 			// WARNING : The node is deleted OUT OF THE CURRENT TRANSACTION !!!
 			//           But they are sent to the deleted items of the user used to connect to Alfresco
@@ -282,8 +282,8 @@ public class AlfrescoNodeWriter extends AlfrescoServicesConsumer implements Item
 			evictRepositoryNode(sCurrentNodePath);
 			
 		} else if (sNode.getVersionOperation().equals(Node.VersionOperation.UPDATE) || sNode.getVersionOperation().equals(Node.VersionOperation.VERSION)) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Will skip folder node " + sNode.getId());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Will skip folder node " + sNode.getId());
 			}
 			// Folders are not versionable, just update them
 			sCMLHelper.addUpdate(new CMLUpdate(getProperties(sNode), sWhereNode, null));
@@ -306,8 +306,8 @@ public class AlfrescoNodeWriter extends AlfrescoServicesConsumer implements Item
 		if (sNode.getVersionOperation().equals(Node.VersionOperation.RAISEERROR)) {
 			throw new VersionOperationException("Node already exists " + sNode.getId());
 		} else if (sNode.getVersionOperation().equals(Node.VersionOperation.REPLACE)) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Will replace document node " + sNode.getId());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Will replace document node " + sNode.getId());
 			}
 //		    aCMLHelper.addDelete(new CMLDelete(sWhereNode)); // THIS DOES NOT WORK because every CMLCreate happen BEFORE every CMLDelete
 			
@@ -321,8 +321,8 @@ public class AlfrescoNodeWriter extends AlfrescoServicesConsumer implements Item
 			addAssociationsForNode(sCMLHelper, sNode, null, sNodesRefIndexes, sNodesIndexes.get(sNode));
 			addContentForNode(sCMLHelper, (Document)sNode, null, sNodesIndexes.get(sNode));
 		} else if (sNode.getVersionOperation().equals(Node.VersionOperation.UPDATE)) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Will update document node " + sNode.getId());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Will update document node " + sNode.getId());
 			}
 			// WARNING : Updating a versionable node will create a new version
 			sCMLHelper.addUpdate(new CMLUpdate(getProperties(sNode), sWhereNode, null));
@@ -330,8 +330,8 @@ public class AlfrescoNodeWriter extends AlfrescoServicesConsumer implements Item
 			addAssociationsForNode(sCMLHelper, sNode, sWhereNode, sNodesRefIndexes, 0);
 			addContentForNode(sCMLHelper, (Document)sNode, sWhereNode, 0);
 		} else if (sNode.getVersionOperation().equals(Node.VersionOperation.VERSION)) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Will create a new version of document node " + sNode.getId());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Will create a new version of document node " + sNode.getId());
 			}
 			// WARNING : the update will not create a version if there is not property or content change
 			// WARNING : the aspect is added AFTER the properties or content change

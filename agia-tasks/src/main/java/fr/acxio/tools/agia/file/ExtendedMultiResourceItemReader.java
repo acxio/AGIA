@@ -163,7 +163,7 @@ public class ExtendedMultiResourceItemReader<T> implements ItemReader<T>, ItemSt
 		}
 		
 		noInput = false;
-		if (resources.length == 0) {
+		if ((resources == null) || (resources.length == 0)) {
 			if (strict) {
 				throw new IllegalStateException(
 						"No resources to read. Set strict=false if this is not an error condition.");

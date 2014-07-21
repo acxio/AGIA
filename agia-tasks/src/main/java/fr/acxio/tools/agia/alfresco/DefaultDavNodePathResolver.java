@@ -16,24 +16,13 @@ package fr.acxio.tools.agia.alfresco;
  * limitations under the License.
  */
  
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.NamespaceContext;
 
-import org.alfresco.webservice.repository.QueryResult;
-import org.alfresco.webservice.repository.RepositoryFault;
 import org.alfresco.webservice.repository.RepositoryServiceSoapBindingStub;
-import org.alfresco.webservice.types.NamedValue;
 import org.alfresco.webservice.types.Node;
-import org.alfresco.webservice.types.Predicate;
-import org.alfresco.webservice.types.Query;
-import org.alfresco.webservice.types.Reference;
-import org.alfresco.webservice.types.ResultSet;
-import org.alfresco.webservice.types.ResultSetRow;
 import org.alfresco.webservice.util.ISO9075;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,14 +34,13 @@ import fr.acxio.tools.agia.alfresco.domain.QName;
 
 public class DefaultDavNodePathResolver implements NodePathResolver {
 
-	private static Logger logger = LoggerFactory.getLogger(DefaultDavNodePathResolver.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDavNodePathResolver.class);
 	
 	private static final String PATH_SEPARATOR = "/";
 	private static final String APP_COMPANY_HOME_PATH = "/app:company_home";
 
 	private static final String PATH_FORMAT = "%s/%s:%s";
 	
-//	private static final Pattern PATH_EXTRACT_PATTERN = Pattern.compile("^(.*/)?(?:$|([^/]+)$)");
 	private static final Pattern PATH_EXTRACT_PATTERN = Pattern.compile("^(?:(/?.*)/)?([^/]*)$");
 	
 	private NamespaceContext namespaceContext;
@@ -77,8 +65,8 @@ public class DefaultDavNodePathResolver implements NodePathResolver {
 			RepositoryServiceSoapBindingStub sRepositoryService, String sPath)
 			throws NodePathException {
 
-		if (logger.isDebugEnabled()) {
-        	logger.debug("Querying Alfresco for DAV path: " + sPath);
+		if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("Querying Alfresco for DAV path: " + sPath);
         }
 		
 		NodeAndPath aResult = null;

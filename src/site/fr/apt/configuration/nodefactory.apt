@@ -1,0 +1,406 @@
+~~Copyright 2014 Acxio
+~~
+~~Licensed under the Apache License, Version 2.0 (the "License");
+~~you may not use this file except in compliance with the License.
+~~You may obtain a copy of the License at
+~~
+~~  http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~Unless required by applicable law or agreed to in writing, software
+~~distributed under the License is distributed on an "AS IS" BASIS,
+~~WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~See the License for the specific language governing permissions and
+~~limitations under the License.
+ -----
+ AGIA
+ -----
+ Acxio
+ -----
+ 2014-07-21
+ -----
+ 
+Fabrique d'objets destinés à Alfresco
+
+ La fabrique d'objets destinés à Alfresco permet de préparer un
+ modèle d'arborescence de dossiers et de documents.
+ 
+ Pour fonctionner, elle a besoin de plusieurs modules différents qui sont
+ décrits ci-dessous.
+ 
+* Gestionnaire d'espaces de noms
+
+ Alfresco fait usage de plusieurs espaces de noms pour identifier avec fiabilité
+ les propriétés et les objets spécifiques à chaque domaine de travail.
+ 
+ Par exemple, une grand partie des types des objets Alfresco sont préfixés avec
+ <<<cm>>> qui correspond à l'espace de nom
+ <<<http://www.alfresco.org/model/content/1.0>>>.
+ 
+ Afin de rendre la configuration simple et cohérente, la fabrique utilise un
+ gestionnaire d'espaces de noms qui permet d'écrire <<<cm:title>>> plutôt que
+ <<<{http://www.alfresco.org/model/content/1.0}title>>>.
+
+ Le gestionnaire d'espaces de noms est configuré comme suit:
+ 
++---------------------------+
+	<bean id="defaultNSContext" class="fr.acxio.tools.agia.alfresco.configuration.AlfrescoNamespaceContext">
+	</bean>
++---------------------------+
+ 
+ Le gestionnaire d'espaces de noms connaît par défaut les espaces suivants:
+ 
+*--------*----------------------------------------------*
+||Préfixe||URL                                          |
+*--------*----------------------------------------------*
+|sys     |http://www.alfresco.org/model/system/1.0      |
+*--------*----------------------------------------------*
+|cm      |http://www.alfresco.org/model/content/1.0     |
+*--------*----------------------------------------------*
+|app     |http://www.alfresco.org/model/application/1.0 |
+*--------*----------------------------------------------*
+|alf     |http://www.alfresco.org                       |
+*--------*----------------------------------------------*
+|d       |http://www.alfresco.org/model/dictionary/1.0  |
+*--------*----------------------------------------------*
+ 
+ Dans le cas où un espace de noms personnalisé doit être ajouté, il faut le
+ déclarer comme suit, <<<key>>> correspondant au préfixe, <<<value>>> à l'URL:
+
++---------------------------+
+	<bean id="defaultNSContext" class="fr.acxio.tools.agia.alfresco.configuration.AlfrescoNamespaceContext">
+		<property name="bindings">
+			<map>
+				<entry key="custom" value="http://custom/model/objects/1.0"/>
+			</map>
+		</property>
+	</bean>
++---------------------------+
+
+ D'autres espaces de noms peuvent être définis en ajoutant des balises
+ <<<entry>>>.
+ 
+* Convertisseurs
+
+ Les valeurs attribuées aux différentes propriétés des dossiers et documents
+ peuvent être converties à l'aide de convertisseurs.
+ 
+ Cette approche est généralement plus simple que d'utiliser des expressions
+ de calcul dans les valeurs en question.
+ 
+ Tous les convertisseurs prennent en paramètre une valeur et retournent une
+ liste de valeurs.
+ 
+ Ce comportement, qui peut sembler curieux, permet de gérer le cas particulier
+ d'une propriété multivaluées dont les valeurs sont issues d'une colonne unique
+ d'un fichier CSV par exemple.
+ 
+ Voici un exemple de différents convertisseurs:
+ 
++---------------------------+
+	<bean id="listConverter" class="fr.acxio.tools.agia.convert.ListFormatConverter">
+		<property name="separator" value="@"/>
+	</bean>
+	
+	<bean id="dateConverterJodaISO" class="fr.acxio.tools.agia.convert.DateFormatConverter">
+		<property name="sourcePattern" value="dd/MM/yyyy"/>
+		<property name="destinationPattern" value="yyyy-MM-dd'T'HH:mm:ss.SSSZZ"/>
+	</bean>
+
+	<bean id="dateConverter" class="fr.acxio.tools.agia.convert.ISODateFormatConverter">
+		<property name="sourcePattern" value="dd/MM/yyyy"/>
+	</bean>
+	
+	<bean id="notNullConverter" class="fr.acxio.tools.agia.convert.NotNullConverter">
+	</bean>
+	
+	<bean id="compositeConverter" class="fr.acxio.tools.agia.convert.CompositeConverter">
+		<property name="converters">
+			<list>
+				<ref bean="listConverter"/>
+				<ref bean="notNullConverter"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="categoryConverter" class="fr.acxio.tools.agia.alfresco.AlfrescoCategoryConverter">
+		<property name="alfrescoService" ref="alfrescoService"/>
+		<property name="namespaceContext" ref="defaultNSContext"/>
+		<property name="basePath" value="/cm:generalclassifiable/cm:Software Document Classification//*"/>
+	</bean>
++---------------------------+
+
+ Le premier convertisseur (<<<listConverter>>>) transforme une valeur en liste
+ de valeurs en utilisant le caractère <<<@>>> comme séparateur.
+ 
+ Le second (<<<dateConverterJodaISO>>>) convertit une date au format
+ <<<dd/MM/yyyy>>> dans le format ISO 8601 <<<yyyy-MM-dd'T'HH:mm:ss.SSSZZ>>>.
+ 
+ Le troisième (<<<dateConverter>>>) fait exactement le même travail que le
+ second, mais avec une approche plus concise.
+ 
+ Le quatrième (<<<notNullConverter>>>) est particulier:
+ il ne retourne aucune valeur si la valeur qui lui est passée est <<<null>>>.
+ La différence entre une valeur nulle et aucune valeur est important au niveau
+ d'Alfresco, étant donné qu'une valeur nulle retire une propriété présente sur
+ un objet.
+ 
+ Le cinquième (<<<compositeConverter>>>) permet de combiner plusieurs
+ convertisseur dans l'ordre dans lequel ils sont listés.
+ 
+ Dans l'exemple, il exécute le convertisseur en liste puis le convertisseur
+ qui retire les valeurs nulles.
+ 
+ Il faut noter que le résultat de ce convertisseur composite est une liste de
+ valeurs qui contient la concaténation des listes de valeurs du dernier
+ convertisseur de sa collection.
+ 
+ Enfin le dernier convertisseur (<<<categoryConverter>>>) permet de transformer
+ un nom de catégorie Alfresco en identifiant d'objet, ce qui permet d'affecter
+ des catégories aux dossiers et aux documents.
+ 
+ Dans l'exemple, le convertisseur a besoin d'un élément de connexion à Alfresco
+ (<<<alfrescoService>>>) ainsi que d'un gestionnaire d'espaces de noms
+ (<<<defaultNSContext>>>).
+ 
+ Il est configuré avec un chemin de recherche des catégories (<<<basePath>>>),
+ ce qui permet de restreindre la plage de recherche et qui, dans un système
+ orienté taxonomies, permet de gérer un typage fort des catégories.
+ 
+ Il est également possible de ne pas définir de chemin de recherche mais dans ce
+ cas, la valeur de propriété qui lui est passée en paramètre doit être un
+ chemin absolu dans Alfresco.
+ 
+* Fabrique d'objets
+
+ La fabrique d'objets destinés à Alfresco permet de décrire un modèle
+ d'arborescence de dossiers et de documents.
+ 
+ Chaque noeud (dossier ou document) doit avoir une propriété <<<cm:name>>> qui
+ définit son nom dans l'entrepôt.
+ 
+ Chaque noeud peut avoir un type, un mode de gestion des mises à jour, des
+ propriétés, des aspects et des associations.
+ 
+ Les dossiers peuvent contenir des dossiers et des documents.
+ 
+ Les dossiers peuvent avoir une expression conditionnelle qui détermine si
+ le dossier et tout ce qui se trouve en dessous doit être créé ou non.
+ 
+ Cela permet de créer des arborescences avec des règles de gestion avancées.
+ 
+ Les documents peuvent avoir un chemin vers un fichier de contenu, ainsi qu'un
+ type MIME associé et un descripteur d'encodage (par exemple "UTF-8").
+ 
+ Chaque propriété a un nom, éventuellement un convertisseur, et une liste de
+ valeurs.
+ 
+ Un aspect possède juste un nom.
+ 
+ Une association peut être de type "référence" ou "requête" et possède
+ obligatoirement un type.
+ 
+ Une association de type "référence" fait référence à un identifiant utilisé
+ dans n'importe quel autre noeud portant un attribut <<<assocTargetId>>> ayant
+ le même identifiant.
+ 
+ Une association de type "requête" contient une requête dont les résultats
+ seront utilisés pour créer autant de relations avec le noeud portant cette
+ association.
+ 
+ Voici un exemple de configuration d'une fabrique:
+ 
++---------------------------+
+	<bean id="testNodeFactory" class="fr.acxio.tools.agia.alfresco.configuration.SimpleNodeFactory">
+		<property name="namespaceContext" ref="defaultNSContext"/>
+		<property name="nodeDefinition">
+			<alf:folder>
+				<alf:properties>
+					<alf:property localName="cm:name">
+						<alf:value>app:company_home/Job Tests</alf:value>
+					</alf:property>
+				</alf:properties>
+				<alf:aspects/>
+				<alf:document contentPath="data/@{#in['D']}" mimeType="application/pdf" encoding="UTF-8">
+					<alf:properties>
+						<alf:property localName="cm:name">
+							<alf:value>@{#in['A']}.pdf</alf:value>
+						</alf:property>
+						<alf:property localName="cm:title">
+							<alf:value>@{#in['C']}</alf:value>
+						</alf:property>
+						<alf:property localName="cm:description">
+							<alf:value>@{#in['B']}</alf:value>
+						</alf:property>
+						<alf:property localName="cm:categories" converterRef="categoryConverter">
+							<alf:value>@{#in['E']}</alf:value>
+							<alf:value>Analysis Request</alf:value>
+						</alf:property>
+						<alf:property localName="cm:from" converterRef="dateConverterJodaISO">
+							<alf:value>@{#in['C']}</alf:value>
+						</alf:property>
+					</alf:properties>
+					<alf:aspects>
+						<alf:aspect name="cm:titled" />
+						<alf:aspect name="cm:generalclassifiable" />
+						<alf:aspect name="cm:effectivity" />
+					</alf:aspects>
+					<alf:associations>
+						<alf:ref type="custom:rel">1</alf:ref>
+						<alf:query type="custom:rel">ASPECT:"custom:otheraspect"</alf:query>
+					</alf:associations>
+				</alf:document>
+				<alf:document assocTargetId="1">
+					<alf:properties>
+						<alf:property localName="cm:name">
+							<alf:value>@{#in['A']} Metadata.xml</alf:value>
+						</alf:property>
+					</alf:properties>
+					<alf:aspects>
+					</alf:aspects>
+				</alf:document>
+			</alf:folder>
+		</property>
+	</bean>
++---------------------------+
+
+ Cette fabrique utilise un gestionnaire d'espace de noms simple.
+ 
+ Elle définit un dossier de base <<<app:company_home/Job Tests>>> dans lequel
+ deux documents seront créés.
+ 
+ L'usage du caractère "/" dans un nom de dossier ou de document induit la
+ création des dossiers intermédiaires s'ils n'existent pas.
+ 
+ Pour les nouveaux dossiers créés ainsi, et si le chemin indiqué s'applique à
+ un dossier, les propriétés et les aspects seront identiques à ceux indiqués
+ pour le dossier ayant le nom à découper.
+ 
+* {Expressions}
+ 
+ Le premier document a un contenu dans <<<data/@\{#in['D']\}>>>, qui est une
+ expression calculée.
+ 
+ Pour utiliser les expressions calculées dans la configuration de la fabrique,
+ il faut utiliser les délimiteurs <<<@\{...\}>>> pour exploiter les données en
+ cours de lecture.
+ 
+ Les délimiteurs <<<#\{...\}>>> et <<<$\{...\}>>> permettent également de
+ définir des expressions mais elles seront évaluées au chargement du fichier de
+ configuration, c'est à dire avant que des données soient envoyées à la
+ fabrique. Cela peut être intéressant pour définir un chemin racine ou des
+ valeurs contextuelles à l'application.
+ 
+ Dans l'exemple, <<<@\{#in['D']\}>>> signifie: récupérer la valeur de la
+ variable <<<D>>> dans le tableau <<<in>>> qui représente les valeurs lues dans
+ le fichier CSV.
+ 
+ Tout ce qui se trouve en dehors du délimiteur <<<@\{...\}>>> n'est pas évalué
+ et est considéré comme une valeur littérale.
+ 
+ Dans l'exemple, pour une colonne D égale à <<<content1.pdf>>>, la valeur du
+ contenu du document serait <<<data/content1.pdf>>> lors de la lecture de la
+ première ligne du CSV.
+ 
+ Il est possible d'utiliser pratiquement toutes les fonctions Java dans une
+ expression, ce qui laisse la possibilité de traiter des cas complexes de
+ découpage ou de transformation de valeur qui ne puisse pas être traité
+ à l'aide d'un convertisseur.
+ 
+ Par exemple, pour extraire une partie d'une valeur d'entrée, il est possible
+ d'utiliser la fonction <<<{{{http://docs.oracle.com/javase/6/docs/api/java/lang/String.html#substring%28int,%20int%29}substring}}>>>.
+ 
+ L'expression <<<@\{#in['A'].substring(6, 10)\}>>> pour une valeur de la colonne
+ <<<A>>> égale à <<<01/02/2012>>> donnera <<<2012>>>.
+ 
+ Il est possible d'utiliser les expressions dans tous les attributs et toutes
+ les valeurs de configuration, même pour les noms des propriétés et des aspects.
+ 
+ Dans la condition de création des dossiers, l'expression de condition doit
+ impérativement retourner <<<true>>> ou <<<false>>>, la valeur par défaut étant
+ <<<true>>>, soit la création systématique du dossier lorsqu'il n'existe pas
+ encore.
+ 
+** Utilisation de beans dédiés dans les expressions
+
+ L'instanciation de classes Java dans les expressions a un inconvénient majeur:
+ chaque évaluation de l'expression créera une nouvelle instance d'objet.
+ 
+ Pour augmenter les performances de l'évaluation des expressions, il est
+ possible d'utiliser voire de créer des classes Java qui réalisent des
+ opérations complexes et qui seront instanciées sous forme de singleton pour
+ tous les contextes d'évaluation des expressions.
+ 
+ Un bean manipulant une fabrique de noeuds peut également utiliser une
+ fabrique de contextes:
+ 
++---------------------------+
+	<bean id="alfrescoFieldSetMapper"
+		class="fr.acxio.tools.agia.alfresco.AlfrescoFieldSetMapper">
+		
+		<property name="nodeFactory" ref="testNodeFactory"/>
+		<property name="evaluationContextFactory" ref="evaluationContextFactory" />
+	</bean>
+	
+	<bean id="evaluationContextFactory"
+		class="fr.acxio.tools.agia.expression.StandardEvaluationContextFactory">
+		
+		<property name="commonObjects">
+		<map>
+			<entry key="sysdcnd" value-ref="sysdateConverterNomDoc"/>
+	   </map>
+	  </property>
+	</bean>
+	
+	<bean id="sysdateConverterNomDoc"
+		class="fr.acxio.tools.agia.convert.DateToStringConverter">
+		
+		<property name="destinationPattern" value="yyyyMMdd"/>
+	</bean>
++---------------------------+
+ 
+ Avec cette configuration, les expressions déclarées dans la fabrique de noeud
+ <<<testNodeFactory>>> peuvent utiliser une référence à
+ <<<sysdateConverterNomDoc>>> grâce à son nom de variable <<<sysdcnd>>>:
+ 
++---------------------------+
+...
+	<alf:property localName="cm:name">
+		<alf:value>PREFIX_@{#sysdcnd.convert(new java.util.Date())}_@{#in['suffix']}.pdf</alf:value>
+	</alf:property>
+...
++---------------------------+
+ 
+* Gestion des mises à jour
+
+ Chaque dossier et chaque document configuré dans la fabrique peut avoir un mode
+ de gestion des mises à jour différent.
+ 
++---------------------------+
+...
+	<alf:document ... versionOperation="version" ...>
+...
++---------------------------+
+ 
+ Les modes de mise à jour disponibles sont les suivants:
+ 
+ * <<<error>>> (mode par défaut) : si le document existe déjà, une erreur est
+ générée; si le dossier existe déjà, il est simplement ignoré.
+ 
+ * <<<replace>>> : si le document existe déjà, il est supprimé puis recréé; même
+ chose pour un dossier, mais une erreur peut survenir s'il n'est pas vide.
+ 
+ * <<<version>>>: si le document existe déjà ET qu'il possède l'aspect
+ <<<versionable>>>, une nouvelle version est créée, sinon, l'aspect versionable
+ lui est ajouté et il est mis à jour (donc aucune version n'est créée lors de ce
+ premier ajout de l'aspect versionable); si le dossier existe déjà, il est mis à
+ jour comme pour le mode <<<update>>>.
+ 
+ * <<<update>>>: si le document existe déjà, il est mis à jour (propriétés,
+ contenu et aspects); même chose pour le dossier.
+ 
+ []
+ 
+ <<IMPORTANT>> : Pour le moment, certains modes peuvent générer des erreurs ou
+ des comportements déroutants, et il n'est pas encore possible de retirer des
+ aspects ou des propriétés.
+ 

@@ -46,13 +46,11 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.Drive.Children;
-import com.google.api.services.drive.Drive.Files;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.About;
 import com.google.api.services.drive.model.ChildList;
 import com.google.api.services.drive.model.ChildReference;
 import com.google.api.services.drive.model.File;
-import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
 import com.google.api.services.drive.model.Property;
 import com.google.api.services.drive.model.PropertyList;
@@ -357,8 +355,8 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 	                    	aResult.add(file);
 	                    }
 	                }
+		            request.setPageToken(files.getNextPageToken());
 	        	}
-	            request.setPageToken(files.getNextPageToken());
 	        } catch (IOException exception) {
 	            ok = false;
 	        }

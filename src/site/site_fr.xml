@@ -22,35 +22,37 @@
 		<name>AGIA</name>
         <href>http://www.acxio.fr</href>
 	</bannerLeft>
-	
+
 	<body>
-	
+
 		<links>
             <item name="AGIA" href="index.html"/>
             <item name="Spring Source" href="http://www.springsource.org/"/>
             <item name="Spring Batch" href="http://www.springsource.org/spring-batch"/>
         </links>
-	
+
         <menu name="AGIA">
             <item name="Présentation" href="index.html"/>
+            <item name="Installation" href="install.html"/>
             <item name="Configuration" href="configure.html">
             	<item name="Structure" href="configuration/structure.html"/>
             		<item name="Plan de classement" href="configuration/alfdomain.html"/>
+            		<item name="Plan de classement pour CMIS" href="configuration/cmisconfiguration.html"/>
             	<item name="Eléments" href="configuration/elements.html">
             		<item name="Incrémenteur de contexte" href="configuration/contextincrementer.html"/>
             		<item name="Exécuteur de tâches" href="configuration/taskexecutor.html"/>
             		<item name="Tâche de copie de fichiers" href="configuration/copytask.html"/>
+            		<item name="Fabrique de noeuds documentaires" href="configuration/nodefactory.html"/>
             		<item name="Tâche de lecture du fichier CSV et injection dans une base de données" href="configuration/readthenwritedb.html"/>
             		<item name="Tâche de lecture d'une base de données et injection dans Alfresco" href="configuration/loadtheninject.html"/>
             	</item>
             </item>
-            <item name="Installation" href="install.html"/>
             <item name="Personnalisation" href="customization.html"/>
             <item name="Exemples" href="samples.html"/>
         </menu>
-        
+
         <menu ref="reports"/>
-        
+
     </body>
-    
+
 </project>

@@ -17,6 +17,7 @@ package fr.acxio.tools.agia.google;
  */
  
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,7 +108,7 @@ public class GoogleDriveWriter implements ItemWriter<NodeList> {
         	aPropValues = aProperty.getValues();
         	if (aPropValues.size() > 1) {
         		String[] aValues = aPropValues.toArray(new String[] {});
-        		aProps.put(aProperty.getName().toString(), aValues.toString());
+        		aProps.put(aProperty.getName().toString(), Arrays.toString(aValues));
         	} else {
         		String aValue = (aPropValues.size() == 0) ? null : aPropValues.get(0);
         		aProps.put(aProperty.getName().toString(), aValue);

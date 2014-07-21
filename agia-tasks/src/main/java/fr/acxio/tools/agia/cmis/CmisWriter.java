@@ -128,11 +128,11 @@ public class CmisWriter implements ItemStreamWriter<NodeList> {
 	    Map<String, Object> aProperties = getProperties(sNode);
 	    if (sNode instanceof Document) {
 	    	ContentStream contentStream = createStreamForNode((Document) sNode);
-	    	org.apache.chemistry.opencmis.client.api.Document newDoc = aParent.createDocument(aProperties, contentStream, VersioningState.MAJOR);
+	    	aParent.createDocument(aProperties, contentStream, VersioningState.MAJOR);
 	    	
 	    	((ContentStreamImpl)contentStream).getStream().close();
 	    } else if (sNode instanceof Folder) {
-	    	org.apache.chemistry.opencmis.client.api.Folder newFolder = aParent.createFolder(aProperties);
+	    	aParent.createFolder(aProperties);
 	    }
     }
 

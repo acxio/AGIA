@@ -75,7 +75,7 @@ public class AlfrescoCategoryConverter extends AlfrescoServicesConsumer implemen
 	private static final String FULLPATH_QUERY = "+PATH:\"%s\"";
 	private static final String BASEPATH_AND_NAME_QUERY = "+TYPE:\"cm:category\" +@cm\\:name:\"%s\" +PATH:\"%s\"";
 	
-	private static Logger logger = LoggerFactory.getLogger(AlfrescoCategoryConverter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AlfrescoCategoryConverter.class);
 	
 	private NamespaceContext namespaceContext;
 	private String basePath;
@@ -87,8 +87,8 @@ public class AlfrescoCategoryConverter extends AlfrescoServicesConsumer implemen
 
 	@CacheEvict(value="rcategories", allEntries=true)
 	public void setBasePath(String sBasePath) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Evict all Alfresco categories");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Evict all Alfresco categories");
 		}
 		basePath = sBasePath;
 	}
@@ -99,8 +99,8 @@ public class AlfrescoCategoryConverter extends AlfrescoServicesConsumer implemen
 
 	@CacheEvict(value="rcategories", allEntries=true)
 	public void setNamespaceContext(NamespaceContext sNamespaceContext) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Evict all Alfresco categories");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Evict all Alfresco categories");
 		}
 		namespaceContext = sNamespaceContext;
 	}
@@ -115,8 +115,8 @@ public class AlfrescoCategoryConverter extends AlfrescoServicesConsumer implemen
 	
 	@Cacheable(value="rcategories")
 	public List<String> convert(String sSource) throws ConversionException {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Calling Alfresco for category: " + sSource);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Calling Alfresco for category: " + sSource);
 		}
 		List<String> aResult = (List<String>) (ignoreUnknown ? Collections.emptyList() : Collections.singletonList(sSource));
 		if ((sSource != null) && sSource.length() > 0) {
@@ -142,7 +142,7 @@ public class AlfrescoCategoryConverter extends AlfrescoServicesConsumer implemen
 						aResult.add(Utils.getNodeRef(new Reference(STORE, aRSRow.getNode().getId(), null)));
 					}
 				} else {
-					logger.info("Category not found: " + sSource);
+					LOGGER.info("Category not found: " + sSource);
 				}
 				
 			} catch (Exception e) {
@@ -189,8 +189,8 @@ public class AlfrescoCategoryConverter extends AlfrescoServicesConsumer implemen
 				}
 			}
 			aResult = aBuilder.toString();
-			if (logger.isDebugEnabled()) {
-				logger.debug("The path '" + sPath + "' is encoded as '" + aResult + "'");
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("The path '" + sPath + "' is encoded as '" + aResult + "'");
 			}
 		}
 		return aResult;

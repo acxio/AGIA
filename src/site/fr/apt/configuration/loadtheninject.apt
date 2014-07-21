@@ -16,34 +16,35 @@
  -----
  Acxio
  -----
- 2012-07-27
+ 2014-07-21
  -----
 
 Tâche de lecture d'une base de données et injection dans Alfresco
 
- Cette tâche est la dernière de l'exemple (loadtheninject).
+ Cette tâche est la dernière de l'exemple (<<<loadtheninject>>>).
  
 +---------------------------+
-		<batch:step id="loadtheninject">
-			<batch:tasklet task-executor="taskExecutor" transaction-manager="businessTransactionManager">
-				<batch:chunk reader="hibernateReader" processor="stagingProcessor" writer="alfrescoWriter" commit-interval="10"/>
-			</batch:tasklet>
-		</batch:step>
+	<batch:step id="loadtheninject">
+		<batch:tasklet task-executor="taskExecutor" transaction-manager="businessTransactionManager">
+			<batch:chunk reader="hibernateReader" processor="stagingProcessor" writer="alfrescoWriter" commit-interval="10"/>
+		</batch:tasklet>
+	</batch:step>
 +---------------------------+
 
- C'est une tâche standard de Spring Batch: un module de lecture (hibernateReader)
- permet de lire les données, alors qu'un module d'écriture (alfrescoWriter)
- permet de les écrire dans une base de données, et les données sont transformées
- entre la lecture et l'écriture par un processeur (stagingProcessor).
+ C'est une tâche standard de Spring Batch: un module de lecture
+ (<<<hibernateReader>>>) permet de lire les données, alors qu'un module
+ d'écriture (<<<alfrescoWriter>>>) permet de les écrire dans une base de
+ données, et les données sont transformées entre la lecture et l'écriture par un
+ processeur (<<<stagingProcessor>>>).
  
  La tâche est configurée avec un gestionnaire de transactions
- (businessTransactionManager) qui permet de ne pas laisser la base de données et
- Alfresco dans un état indéterminé (dans la mesure du possible).
+ (<<<businessTransactionManager>>>) qui permet de ne pas laisser la base de
+ données et Alfresco dans un état indéterminé (dans la mesure du possible).
  Cela permet par exemple de réaliser un rollback de façon à pouvoir relancer la
  tâche sur un environnement propre.
  
- La tâche gère les données par paquets (batch:chunk) contenant 10
- enregistrements (commit-interval).
+ La tâche gère les données par paquets (<<<batch:chunk>>>) contenant 10
+ enregistrements (<<<commit-interval>>>).
  
  Il est possible de modifier la granularité des paquets en fonction des
  ressources disponibles et de la fréquence des cas d'erreur.
@@ -85,21 +86,29 @@ Tâche de lecture d'une base de données et injection dans Alfresco
  L'écriture dans Alfresco est très simple à configurer:
  
 +---------------------------+
-	<bean id="alfrescoAuthDetails" class="fr.acxio.tools.agia.alfresco.AlfrescoAuthenticationDetails">
+	<bean id="alfrescoService" class="fr.acxio.tools.agia.alfresco.AlfrescoServiceImpl">
 		<property name="endpointAddress" value="http://localhost:8080/alfresco/api"/>
+		<property name="webappAddress" value="http://localhost:8080/alfresco"/>
 		<property name="username" value="admin"/>
 		<property name="password" value="admin"/>
 	</bean>
 	
-	<bean id="alfrescoWriter" class="fr.acxio.tools.agia.alfresco.AlfrescoNodeWriter" init-method="init" destroy-method="cleanup">
-		<property name="authenticationDetails" ref="alfrescoAuthDetails"/>
+	<bean id="defaultNodePathResolver" class="fr.acxio.tools.agia.alfresco.DefaultNodePathResolver">
+	</bean>
+	
+	<bean id="alfrescoWriter" class="fr.acxio.tools.agia.alfresco.AlfrescoNodeWriter">
+		<property name="alfrescoService" ref="alfrescoService"/>
+		<property name="nodePathResolver" ref="defaultNodePathResolver"/>
 	</bean>
 +---------------------------+
 
- Le premier module, alfrescoAuthDetails, définit les informations de
+ Le premier module (<<<alfrescoService>>>) définit les informations de
  connexion à Alfresco.
  
- Le second module écrit les objets dans Alfresco.
+ Le second module (<<<defaultNodePathResolver>>>) implémente la gestion du
+ cache pour les chemins des noeuds.
+ 
+ Le dernier module écrit les objets dans Alfresco.
  
  Les objets écrits dans Alfresco ont été générés à partir d'une
- {{{./readthenwritedb.html#Fabrique_dobjets_destins__Alfresco}fabrique d'objets destinés à Alfresco}}.
+ {{{./nodefactory.html}fabrique d'objets destinés à Alfresco}}.

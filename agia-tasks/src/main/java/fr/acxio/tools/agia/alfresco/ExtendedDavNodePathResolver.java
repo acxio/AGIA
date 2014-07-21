@@ -25,7 +25,6 @@ import org.alfresco.webservice.repository.RepositoryFault;
 import org.alfresco.webservice.repository.RepositoryServiceSoapBindingStub;
 import org.alfresco.webservice.types.NamedValue;
 import org.alfresco.webservice.types.Node;
-import org.alfresco.webservice.types.Predicate;
 import org.alfresco.webservice.types.Query;
 import org.alfresco.webservice.types.Reference;
 import org.alfresco.webservice.types.ResultSet;
@@ -36,7 +35,7 @@ import org.springframework.cache.annotation.Cacheable;
 
 public class ExtendedDavNodePathResolver implements ExtendedNodePathResolver {
 	
-	private static Logger logger = LoggerFactory.getLogger(ExtendedDavNodePathResolver.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ExtendedDavNodePathResolver.class);
 	
 	private static final String QUERY_PATH_AND_NAME = "PATH:\"%s/*\" AND @cm\\:name:\"%s\"";
 	
@@ -48,14 +47,12 @@ public class ExtendedDavNodePathResolver implements ExtendedNodePathResolver {
 	public Node[] getRepositoryMatchingNodes(
 			RepositoryServiceSoapBindingStub sRepositoryService, String sPath,
 			String sName) throws NodePathException {
-		if (logger.isDebugEnabled()) {
-        	logger.debug("Querying Alfresco for path: " + sPath + " and name " + sName);
+		if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("Querying Alfresco for path: " + sPath + " and name " + sName);
         }
 		
 		Query aQuery = new Query("lucene", String.format(QUERY_PATH_AND_NAME, sPath, sName));
 		
-		Reference reference = new Reference(AlfrescoServicesConsumer.STORE, null, sPath);
-        Predicate predicate = new Predicate(new Reference[]{reference}, null, null);
         List<Node> aNodeList = new ArrayList<Node>(1);
        	try {
 			QueryResult aQueryResult = sRepositoryService.query(AlfrescoServicesConsumer.STORE, aQuery, true);

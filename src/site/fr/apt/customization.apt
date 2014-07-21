@@ -16,7 +16,7 @@
  -----
  Acxio
  -----
- 2012-07-27
+ 2014-07-21
  -----
 
 Personnalisation
@@ -27,12 +27,56 @@ Personnalisation
  
  L'exemple typique est la configuration de la base de données.
  
- Cela peut se faire soit dans les fichiers ...properties dans la configuration
- du modèle de WebApp, soit dans un fichier ...-context.xml dans la configuration
- du modèle de WebApp, soit encore directement dans la configuration d'un travail.
+ Cela peut se faire soit dans les fichiers <<<*.properties>>> dans la
+ configuration du modèle de WebApp, soit dans un fichier <<<*-context.xml>>>
+ dans la configuration du modèle de WebApp, soit encore directement dans la
+ configuration d'un travail.
  
  Il peut être nécessaire d'ajouter un pilote de base de données dans le
  répertoire <<<lib/db>>>.
+ 
+** Paramétrage d'un job depuis un fichier de propriétés externe
+
+ Un tel paramétrage vise à externaliser les propriétés essentielles d'un fichier
+ de job pour le rendre plus facile à déployer et à mettre à jour.
+ 
+ Voici les étapes à suivre pour externaliser ces propriétés:
+ 
+ [[1]] Créer un fichier properties contenant les clefs et les valeurs des
+ propriétés souhaitées:
+ 
++---------------------------+
+sample.alf.url=http://localhost:8080/alfresco
+sample.alf.username=admin
+sample.alf.password=admin
++---------------------------+
+
+ NB: Il est préférable de préfixer l'ensemble des clefs relatives à un même job
+ ou domaine pour éviter les collisions entre les propriétés.
+ 
+ [[2]] Ajouter et ajuster la déclaration suivante au début du fichier de job:
+ 
++---------------------------+
+	<bean id="sampleProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:sample.properties" />
+		<property name="order" value="0" /> <!-- Loaded before Spring Batch properties -->
+	</bean>
++---------------------------+
+ 
+ [[3]] Utiliser les clefs dans le fichier de job à l'aide du préfix
+ <<<$\{...\}>>>:
+ 
++---------------------------+
+	<bean id="alfrescoService" class="fr.acxio.tools.agia.alfresco.AlfrescoServiceImpl">
+		<property name="endpointAddress" value="${sample.alf.url}/api"/>
+		<property name="webappAddress" value="${sample.alf.url}"/>
+		<property name="username" value="${sample.alf.username}"/>
+		<property name="password" value="${sample.alf.password}"/>
+	</bean>
++---------------------------+
+ 
+ [[4]] Lors du déploiment du fichier de job dans le répertoire <<<jobs>>>, le
+ fichier de propriétés peut être déployé dans le répertoire <<<resources>>>.
  
 * Ajout de tâches pour un travail configuré
 

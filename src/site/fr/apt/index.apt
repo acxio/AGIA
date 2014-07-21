@@ -16,7 +16,7 @@
  -----
  Acxio
  -----
- 2012-07-27
+ 2014-06-19
  -----
 
 Présentation
@@ -44,6 +44,8 @@ Présentation
  * convertir les données dans différents formats, comme les dates, les listes ou
  les catégories
 
+ []
+ 
  D'un point de vue global, AGIA est un ETL, et il pourrait sembler légitime de
  le comparer à Talend Open Studio.
  

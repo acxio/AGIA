@@ -16,7 +16,7 @@
  -----
  Acxio
  -----
- 2012-07-30
+ 2014-07-21
  -----
 
 Exemples
@@ -49,8 +49,285 @@ Exemples
 
 * Lecture d'un fichier CSV vers une base de données
 
+ La lecture d'un fichier CSV est triviale, mais l'écriture dans une base de
+ données dépend du mode de sérialisation utilisé.
+ 
+ Dans le cas de l'utilisation d'Hibernate, il faut créer les objets Java du
+ domaine qui seront sérialisés (et désérialisés) dans la base de données.
+ C'est le cas des noeuds manipulés par AGIA.
+ 
+ Une alternative consiste à utiliser un
+ <<<org.springframework.batch.item.database.JdbcBatchItemWriter>>> et un
+ mapping plus conventionnel.
+
 * Lecture d'une base de données et envoi d'un email de synthèse
+
+ TODO
 
 * Exécution périodique d'un travail d'injection
 
+ Dans le fichier de job, il faut ajouter un bean de type
+ <<<org.springframework.scheduling.quartz.SchedulerFactoryBean>>> dans lequel
+ plusieurs programmations d'exécution peuvent être déclarées.
+ 
+ Pour chaque programmation d'exécution, il faut également déclarer un bean de
+ type <<<org.springframework.scheduling.quartz.JobDetailBean>>> dont le rôle
+ est de déclencher l'exécution d'un job.
+ 
+ Plusieurs jobs peuvent être déclarés dans le même fichier de jobs et chacun
+ peut être programmé indépendamment des autres, même plusieurs fois.
+
++---------------------------+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<bean id="cronTrigger1" class="org.springframework.scheduling.quartz.CronTriggerBean">
+					<property name="jobDetail" ref="job1Detail" />
+					<property name="cronExpression" value="0 0/30 * * * ?" /> <!-- Every 30 min -->
+				</bean>
+				<bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerBean">
+					<property name="jobDetail" ref="job2Detail" />
+					<property name="cronExpression" value="0 5/30 * * * ?" /> <!-- Every 30 min -->
+				</bean>
+			</list>
+		</property>
+		<property name="transactionManager" ref="transactionManager"/>
+		<property name="quartzProperties">
+			<props>
+				<prop key="org.quartz.scheduler.instanceName">agiaJobsScheduler</prop>
+				<prop key="org.quartz.scheduler.rmi.export">false</prop>
+				<prop key="org.quartz.scheduler.rmi.proxy">false</prop>
+				<prop key="org.quartz.scheduler.wrapJobExecutionInUserTransaction">false</prop>
+
+				<prop key="org.quartz.threadPool.class">org.quartz.simpl.SimpleThreadPool</prop>
+				<prop key="org.quartz.threadPool.threadCount">1</prop>
+				<prop key="org.quartz.threadPool.threadPriority">5</prop>
+				<prop key="org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread">true</prop>
+
+				<prop key="org.quartz.jobStore.misfireThreshold">6000</prop>
+				<prop key="org.quartz.jobStore.class">org.quartz.simpl.RAMJobStore</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="job1Detail" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="fr.acxio.tools.agia.common.JobLauncherDetails" />
+		<property name="group" value="quartz-batch" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="jobName" value="job1"/>
+				<entry key="jobLocator" value-ref="jobRegistry"/>
+				<entry key="jobLauncher" value-ref="jobLauncher"/>
+				<entry key="jobExplorer" value-ref="jobExplorer"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="job2Detail" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="fr.acxio.tools.agia.common.JobLauncherDetails" />
+		<property name="group" value="quartz-batch" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="jobName" value="job2"/>
+				<entry key="jobLocator" value-ref="jobRegistry"/>
+				<entry key="jobLauncher" value-ref="jobLauncher"/>
+				<entry key="jobExplorer" value-ref="jobExplorer"/>
+			</map>
+		</property>
+	</bean>
+	
+	<batch:job id="job1" incrementer="runIdIncrementer">
+	...
+	</batch:job>
+	
+	<batch:job id="job2" incrementer="runIdIncrementer">
+	...
+	</batch:job>
++---------------------------+
+
+* Ecriture dans Alfresco des noeuds puis des contenus
+
+ Pour accélérer l'injection des documents dans Alfresco et réduire l'espace
+ mémoire utilisé par AGIA, il est possible d'effectuer l'écriture des noeuds
+ par lots sans leur ajouter de contenu immédiatement, puis d'ajouter tous les
+ contenus des noeuds créés dans Alfresco.
+ 
+ Pour cela, il est nécessaire de désactiver l'ajout des contenus à la création
+ des noeuds (<<<sendContents>>> positionné à <<<false>>>), et de combiner
+ l'écriture des noeuds et l'écriture des contenus dans un <<<Writer>>> composite
+ qui peut être utilisé à la place de n'importe quel <<<AlfrescoNodeWriter>>>:
+ 
++---------------------------+
+	<bean id="alfrescoNodeWriter" class="fr.acxio.tools.agia.alfresco.AlfrescoNodeWriter">
+		<property name="alfrescoService" ref="alfrescoService"/>
+		<property name="nodePathResolver" ref="defaultNodePathResolver"/>
+		<property name="sendContents" value="false"/>
+	</bean>
+	
+	<bean id="alfrescoContentWriter" class="fr.acxio.tools.agia.support.alfresco.AlfrescoNodeContentWriter">
+		<property name="alfrescoService" ref="alfrescoService"/>
+		<property name="nodePathResolver" ref="defaultNodePathResolver"/>
+		<property name="failIfFileNotFound" value="true"/>
+	</bean>
+	
+	<bean id="alfrescoWriter" class="org.springframework.batch.item.support.CompositeItemWriter">
+		<property name="delegates">
+			<list>
+				<ref bean="alfrescoNodeWriter"/>
+				<ref bean="alfrescoContentWriter"/>
+			</list>
+		</property>
+	</bean>
++---------------------------+
+ 
+ Il est également possible d'effectuer l'injection des contenus dans une autre
+ étape d'un job, à la condition que les identifiants des noeuds créés dans
+ Alfresco soient conservés pour pouvoir être utilisés.
+ 
+ Dans l'exemple ci-dessous, les noeuds sont stockés dans une base de données.
+ La base de données est mise à jour à chaque étape. Un second job supprime 
+ les fichiers qui ont été injectés dans Alfresco.
+ 
+ Le bean de type <<<fr.acxio.tools.agia.alfresco.AlfrescoNodeWriter>>> met à
+ jour les noeuds qui lui sont passés avec les identifiants retournés par
+ Alfresco, ce qui permet des traitements ultérieurs en utilisant ces
+ identifiants.
+ 
+ Remarque: Les <<<fr.acxio.tools.agia.alfresco.HibernateNodeProcessor>>>
+ permettent de mettre à jour un champ entier dans la base de donnée. Il est
+ utilisé pour indiqué une étape de traitement des documents, indépendamment
+ des principes d'états gérés par Spring-Batch, et avec deux issues possibles:
+ l'état en cas de succès (<<<nextStep>>>) et l'état en cas d'échec
+ (<<<errorStep>>>).
+ Les <<<fr.acxio.tools.agia.alfresco.HibernateNodeReader>>> permettent de
+ lire dans la base de données les noeuds d'un état précis (<<<currentStep>>>).
+ 
++---------------------------+
+	<batch:job id="sampleAlfjob" incrementer="runIdIncrementer">
+		<batch:description>Copy DB to Alfresco</batch:description>
+		<batch:step id="loadtheninject" next="injectcontents">
+			<batch:tasklet transaction-manager="businessTransactionManager">
+				<batch:chunk reader="hibernateReader" processor="stagingProcessor" writer="alfrescoWriter" commit-interval="10"/>
+			</batch:tasklet>
+		</batch:step>
+		<batch:step id="injectcontents">
+			<batch:tasklet transaction-manager="businessTransactionManager">
+				<batch:chunk reader="hibernateReader2" processor="stagingProcessor2" writer="alfrescoContentWriter" commit-interval="1"/>
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
+	
+	<batch:job id="sampleDeleteContentjob" incrementer="runIdIncrementer">
+		<batch:description>Delete content files</batch:description>
+		<batch:step id="deletecontentfiles">
+			<batch:tasklet transaction-manager="businessTransactionManager">
+				<batch:chunk reader="hibernateReader3" processor="stagingProcessor3" writer="deleteWriter" commit-interval="1"/>
+			</batch:tasklet>
+		</batch:step>		
+	</batch:job>
+	
+	<bean id="hibernateReader" class="fr.acxio.tools.agia.alfresco.HibernateNodeReader">
+		<property name="nodeDao" ref="nodeDao"/>
+		<property name="dataSource" ref="businessDataSource" />
+		<property name="currentStep" value="0"/>
+	</bean>
+	
+	<bean id="hibernateReader2" class="fr.acxio.tools.agia.alfresco.HibernateNodeReader">
+		<property name="nodeDao" ref="nodeDao"/>
+		<property name="dataSource" ref="businessDataSource" />
+		<property name="currentStep" value="500"/>
+	</bean>
+	
+	<bean id="hibernateReader3" class="fr.acxio.tools.agia.alfresco.HibernateNodeReader">
+		<property name="nodeDao" ref="nodeDao"/>
+		<property name="dataSource" ref="businessDataSource" />
+		<property name="currentStep" value="1000"/>
+	</bean>
+
+	<bean id="stagingProcessor" class="fr.acxio.tools.agia.alfresco.HibernateNodeProcessor">
+		<property name="nodeDao" ref="nodeDao"/>
+		<property name="nextStep" value="500"/>
+		<property name="errorStep" value="-500"/>
+	</bean>
+	
+	<bean id="stagingProcessor2" class="fr.acxio.tools.agia.alfresco.HibernateNodeProcessor">
+		<property name="nodeDao" ref="nodeDao"/>
+		<property name="nextStep" value="1000"/>
+		<property name="errorStep" value="-1000"/>
+	</bean>
+	
+	<bean id="stagingProcessor3" class="fr.acxio.tools.agia.alfresco.HibernateNodeProcessor">
+		<property name="nodeDao" ref="nodeDao"/>
+		<property name="nextStep" value="1500"/>
+		<property name="errorStep" value="-1500"/>
+	</bean>
+	
+	<bean id="alfrescoWriter" class="fr.acxio.tools.agia.alfresco.AlfrescoNodeWriter">
+		<property name="alfrescoService" ref="alfrescoService"/>
+		<property name="nodePathResolver" ref="defaultNodePathResolver"/>
+		<property name="sendContents" value="false"/>
+	</bean>
+	
+	<bean id="alfrescoContentWriter" class="fr.acxio.tools.agia.alfresco.AlfrescoNodeContentWriter">
+		<property name="alfrescoService" ref="alfrescoService"/>
+		<property name="nodePathResolver" ref="defaultNodePathResolver"/>
+		<property name="failIfFileNotFound" value="true"/>
+	</bean>
+		
+	<bean id="deleteWriter" class="fr.acxio.tools.agia.alfresco.ContentFileDeleteWriter">
+		<property name="ignoreErrors" value="false"/>
+	</bean>
+	
+	<bean id="nodeDao" class="fr.acxio.tools.agia.alfresco.dao.HibernateNodeDao">
+		<property name="sessionFactory" ref="businessSessionFactory" />
+	</bean>
+	
+	<bean id="businessDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://localhost:5432/injectordb" />
+		<property name="username" value="injectordb" />
+		<property name="password" value="injectordb" />
+		<property name="testWhileIdle" value="false"/>
+		<property name="validationQuery" value=""/>
+	</bean>
+	
+	<bean id="businessSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" destroy-method="destroy">
+		<property name="annotatedClasses">
+			<list>
+				<value>fr.acxio.tools.agia.alfresco.domain.Node</value>
+				<value>fr.acxio.tools.agia.alfresco.domain.Folder</value>
+				<value>fr.acxio.tools.agia.alfresco.domain.Document</value>
+				<value>fr.acxio.tools.agia.alfresco.domain.Aspect</value>
+				<value>fr.acxio.tools.agia.alfresco.domain.Property</value>
+				<value>fr.acxio.tools.agia.alfresco.domain.QName</value>
+				<value>fr.acxio.tools.agia.alfresco.domain.Association</value>
+				<value>fr.acxio.tools.agia.alfresco.domain.RefAssociation</value>
+				<value>fr.acxio.tools.agia.alfresco.domain.QueryAssociation</value>
+			</list>
+		</property>
+		<property name="dataSource" ref="businessDataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		<property name="eventListeners">
+			<map>
+				<entry key="merge">
+					<bean class="org.springframework.orm.hibernate3.support.IdTransferringMergeEventListener" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="businessTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="businessSessionFactory" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="businessTransactionManager" />
++---------------------------+
+ 
 * Ecriture dans Alfresco et dans une base de données simple
+
+ TODO

@@ -42,15 +42,15 @@ import fr.acxio.tools.agia.alfresco.domain.NodeList;
  */
 public class HibernateNodeWriter implements ItemWriter<NodeList>, InitializingBean {
 
-	private static Logger logger = LoggerFactory.getLogger(HibernateNodeWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HibernateNodeWriter.class);
 	
 	private NodeDao nodeDao;
 	
 	private HibernateOperations hibernateTemplate;
 	
 	public void write(List<? extends NodeList> sData) throws NodeDaoException {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Writing to Hibernate with " + sData.size() + " top nodes.");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Writing to Hibernate with " + sData.size() + " top nodes.");
 		}
 		
 		if (!sData.isEmpty()) {

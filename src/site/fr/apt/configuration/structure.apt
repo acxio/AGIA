@@ -16,7 +16,7 @@
  -----
  Acxio
  -----
- 2012-07-27
+ 2014-06-19
  -----
 
 Structure d'un fichier de configuration
@@ -44,7 +44,7 @@ Structure d'un fichier de configuration
  L'entête est extrêment importante et ne peut pas être réduite.
  
  Un travail d'injection se déclare conformément à Spring Batch, c'est à dire à
- l'aide d'une balise "batch:job" contenant des étapes "batch:step".
+ l'aide d'une balise <<<batch:job>>> contenant des étapes <<<batch:step>>>.
  
  Voici un exemple de déclaration de travail d'injection:
  
@@ -69,10 +69,11 @@ Structure d'un fichier de configuration
 
  Cet exemple un peu complexe présente les éléments généraux:
  
- * Un travail d'injection porte un identifiant (id) et une courte description.
+ * Un travail d'injection porte un identifiant (<<<id>>>) et une courte
+ description.
  
- * Chaque étape porte un identifiant (id) et indique logiquement quel est
- l'étape suivante en la référençant par son identifiant.
+ * Chaque étape porte un identifiant (<<<id>>>) et indique logiquement quelle
+ est l'étape suivante en la référençant par son identifiant.
  
  * Une étape contient une tâche qui peut être soit spécifique, comme la tâche
  qui recopie un fichier à un emplacement pré-défini, ou générique, comme les

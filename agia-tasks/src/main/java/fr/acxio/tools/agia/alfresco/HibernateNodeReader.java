@@ -65,7 +65,7 @@ import fr.acxio.tools.agia.common.ProcessIndicatorItemWrapper;
  */
 public class HibernateNodeReader implements ItemReader<ProcessIndicatorItemWrapper<Node>>, StepExecutionListener, InitializingBean, DisposableBean {
 
-	private static Logger logger = LoggerFactory.getLogger(HibernateNodeReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HibernateNodeReader.class);
 	
 	private static final String JOBSTEP_PARAM = "jobStep";
 
@@ -162,8 +162,8 @@ public class HibernateNodeReader implements ItemReader<ProcessIndicatorItemWrapp
 				id = keys.next();
 			}
 		}
-		if (logger.isDebugEnabled()) {
-			logger.debug("Retrieved key from list: " + id);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Retrieved key from list: " + id);
 		}
 
 		if (id == null) {
@@ -177,8 +177,8 @@ public class HibernateNodeReader implements ItemReader<ProcessIndicatorItemWrapp
 		synchronized (lock) {
 			if (keys == null) {
 				keys = retrieveKeys().iterator();
-				if (logger.isDebugEnabled()) {
-					logger.debug("Keys obtained for staging.");
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Keys obtained for staging.");
 				}
 				initialized = true;
 			}

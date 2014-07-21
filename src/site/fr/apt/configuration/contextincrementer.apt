@@ -16,7 +16,7 @@
  -----
  Acxio
  -----
- 2012-07-27
+ 2014-07-21
  -----
 
 Incrémenteur de contexte
@@ -31,11 +31,11 @@ Incrémenteur de contexte
  un serveur d'application ou un service système.
  
  Dans l'exemple ci-dessus, il n'y a pas de valeurs issues du contexte, mais il
- y a un incrémenteur de contexte (runIdIncrementer).
+ y a un incrémenteur de contexte (<<<runIdIncrementer>>>).
  
- Son rôle est d'incrémenter une valeur nommée "id" dans le contexte d'exécution
- du travail d'injection avant chacun de ses démarrages, en commençant à 0 si
- le contexte ne contient pas une telle valeur.
+ Son rôle est d'incrémenter une valeur nommée <<<id>>> dans le contexte
+ d'exécution du travail d'injection avant chacun de ses démarrages, en
+ commençant à 0 si le contexte ne contient pas une telle valeur.
  
  Ainsi, il est possible de relancer le travail d'injection à volonté quelque
  soit la méthode d'exécution choisie.

@@ -38,7 +38,7 @@ import fr.acxio.tools.agia.alfresco.domain.NodeList;
  */
 public class ContentFileDeleteWriter implements ItemWriter<NodeList> {
 	
-	private static Logger logger = LoggerFactory.getLogger(ContentFileDeleteWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ContentFileDeleteWriter.class);
 
 	private boolean ignoreErrors = true;
 	
@@ -61,7 +61,7 @@ public class ContentFileDeleteWriter implements ItemWriter<NodeList> {
 			File aFile = new File(sDocument.getContentPath());
 			if (aFile.exists() && aFile.isFile() && !aFile.delete()) {
 				if (ignoreErrors) {
-					logger.warn("Cannot delete content file: " + sDocument.getContentPath());
+					LOGGER.warn("Cannot delete content file: " + sDocument.getContentPath());
 				} else {
 					throw new IOException("Cannot delete content file: " + sDocument.getContentPath());
 				}
