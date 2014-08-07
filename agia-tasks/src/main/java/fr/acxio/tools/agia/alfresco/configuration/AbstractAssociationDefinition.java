@@ -15,32 +15,34 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- * <p>Abstract AssociationDefinition holding common properties.</p>
+ * <p>
+ * Abstract AssociationDefinition holding common properties.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class AbstractAssociationDefinition implements AssociationDefinition, InitializingBean {
 
-	private String type;
-	
-	@Override
-	public String getType() {
-		return type;
-	}
+    private String type;
 
-	public void setType(String sType) {
-		type = sType;
-	}
+    @Override
+    public String getType() {
+        return type;
+    }
 
-	@Override
-	public void afterPropertiesSet() {
-		// TODO Auto-generated method stub
-		
-	}
+    public void setType(String sType) {
+        type = sType;
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        // TODO Auto-generated method stub
+
+    }
 
 }

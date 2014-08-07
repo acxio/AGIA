@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco.domain;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -23,62 +23,64 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ForeignKey;
 
 /**
- * <p>Alfresco document local representation.</p>
+ * <p>
+ * Alfresco document local representation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 @Entity
-@Table(name=DatabaseConstants.TABLE_NAME_DOCUMENT)
+@Table(name = DatabaseConstants.TABLE_NAME_DOCUMENT)
 @ForeignKey(name = DatabaseConstants.FK_DOCUMENT_NODE)
 public class Document extends Node {
 
-	private static final long serialVersionUID = 489557608272413831L;
+    private static final long serialVersionUID = 489557608272413831L;
 
-	@Column(name=DatabaseConstants.COLUMN_NAME_CONTENT_PATH, length=DatabaseConstants.COLUMN_LENGTH_CONTENT_PATH)
-	private String contentPath;
-	
-	@Column(name=DatabaseConstants.COLUMN_NAME_MIMETYPE, length=DatabaseConstants.COLUMN_LENGTH_MIMETYPE)
-	private String mimeType;
-	
-	@Column(name=DatabaseConstants.COLUMN_NAME_ENCODING, length=DatabaseConstants.COLUMN_LENGTH_ENCODING)
-	private String encoding;
+    @Column(name = DatabaseConstants.COLUMN_NAME_CONTENT_PATH, length = DatabaseConstants.COLUMN_LENGTH_CONTENT_PATH)
+    private String contentPath;
 
-	public String getContentPath() {
-		return contentPath;
-	}
+    @Column(name = DatabaseConstants.COLUMN_NAME_MIMETYPE, length = DatabaseConstants.COLUMN_LENGTH_MIMETYPE)
+    private String mimeType;
 
-	public void setContentPath(String sContentPath) {
-		contentPath = sContentPath;
-	}
+    @Column(name = DatabaseConstants.COLUMN_NAME_ENCODING, length = DatabaseConstants.COLUMN_LENGTH_ENCODING)
+    private String encoding;
 
-	public String getMimeType() {
-		return mimeType;
-	}
+    public String getContentPath() {
+        return contentPath;
+    }
 
-	public void setMimeType(String sMimeType) {
-		mimeType = sMimeType;
-	}
+    public void setContentPath(String sContentPath) {
+        contentPath = sContentPath;
+    }
 
-	public String getEncoding() {
-		return encoding;
-	}
+    public String getMimeType() {
+        return mimeType;
+    }
 
-	public void setEncoding(String sEncoding) {
-		encoding = sEncoding;
-	}
+    public void setMimeType(String sMimeType) {
+        mimeType = sMimeType;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder aString = new StringBuilder();
-		aString.append("Document: { type:").append(getType());
-		aString.append(", properties:").append(getProperties());
-		aString.append(", aspects:").append(getAspects());
-		aString.append(", contentPath:").append(contentPath);
-		aString.append(", mimeType:").append(mimeType);
-		aString.append(", encoding:").append(encoding);
-		aString.append("}");
-		return aString.toString();
-	}
-	
+    public String getEncoding() {
+        return encoding;
+    }
+
+    public void setEncoding(String sEncoding) {
+        encoding = sEncoding;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder aString = new StringBuilder();
+        aString.append("Document: { type:").append(getType());
+        aString.append(", properties:").append(getProperties());
+        aString.append(", aspects:").append(getAspects());
+        aString.append(", contentPath:").append(contentPath);
+        aString.append(", mimeType:").append(mimeType);
+        aString.append(", encoding:").append(encoding);
+        aString.append("}");
+        return aString.toString();
+    }
+
 }

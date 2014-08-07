@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.convert;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.Collections;
 import java.util.List;
 
@@ -23,11 +23,11 @@ import org.alfresco.webservice.util.ISO9075;
 
 public class AlfrescoPathToPathConverter implements FormatConverter {
 
-	private static final String PREFIX_REGEX = "[^/:]+:";
+    private static final String PREFIX_REGEX = "[^/:]+:";
 
-	@Override
-	public List<String> convert(String sSource) throws ConversionException {
-		return Collections.singletonList(ISO9075.decode(sSource.replaceAll(PREFIX_REGEX, "")));
-	}
+    @Override
+    public List<String> convert(String sSource) throws ConversionException {
+        return Collections.singletonList(ISO9075.decode(sSource.replaceAll(PREFIX_REGEX, "")));
+    }
 
 }

@@ -15,21 +15,21 @@ package fr.acxio.tools.agia.convert;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.Collections;
 import java.util.List;
 
 /**
  * The NotNullConverter removes null value by returning an empty list if the
- * value is null, or a singleton list otherwise.  
+ * value is null, or a singleton list otherwise.
  * 
  * @author pcollardez
  *
  */
 public class NotNullConverter implements FormatConverter {
 
-	public List<String> convert(String sSource) throws ConversionException {
-		return ((sSource == null) ? Collections.<String>emptyList() : Collections.singletonList(sSource));
-	}
+    public List<String> convert(String sSource) throws ConversionException {
+        return ((sSource == null) ? Collections.<String> emptyList() : Collections.singletonList(sSource));
+    }
 
 }

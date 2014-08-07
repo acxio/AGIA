@@ -15,38 +15,38 @@ package fr.acxio.tools.agia.alfresco.domain;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * <p>Collection of {@link fr.acxio.tools.agia.alfresco.domain.Node Node}s used
- * as a container when a
+ * <p>
+ * Collection of {@link fr.acxio.tools.agia.alfresco.domain.Node Node}s used as
+ * a container when a
  * {@link fr.acxio.tools.agia.alfresco.configuration.NodeFactory NodeFactory}
- * creates a collection of nodes from its configuration.</p>
- * <p>A NodeList matches a single item from an input source.</p>
+ * creates a collection of nodes from its configuration.
+ * </p>
+ * <p>
+ * A NodeList matches a single item from an input source.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class NodeList extends ArrayList<Node> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 49168097805059942L;
+    private static final long serialVersionUID = 49168097805059942L;
 
-	public NodeList() {
-		super();
-	}
+    public NodeList() {
+        super();
+    }
 
-	public NodeList(Collection<? extends Node> sArg0) {
-		super(sArg0);
-	}
+    public NodeList(Collection<? extends Node> sArg0) {
+        super(sArg0);
+    }
 
-	public NodeList(int sArg0) {
-		super(sArg0);
-	}
+    public NodeList(int sArg0) {
+        super(sArg0);
+    }
 
-	
 }

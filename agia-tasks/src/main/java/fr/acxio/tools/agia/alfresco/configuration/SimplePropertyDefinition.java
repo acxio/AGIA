@@ -15,53 +15,54 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.List;
 
 import fr.acxio.tools.agia.convert.FormatConverter;
 
 /**
- * <p>Simple
- * {@link fr.acxio.tools.agia.alfresco.configuration.PropertyDefinition PropertyDefinition}
- * implementation.</p>
+ * <p>
+ * Simple {@link fr.acxio.tools.agia.alfresco.configuration.PropertyDefinition
+ * PropertyDefinition} implementation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class SimplePropertyDefinition implements PropertyDefinition {
 
-	private String localName;
-	
-	private FormatConverter converter;
-	
-	private List<String> values;
-	
-	public void setLocalName(String sLocalName) {
-		localName = sLocalName;
-	}
+    private String localName;
 
-	public String getLocalName() {
-		return localName;
-	}
+    private FormatConverter converter;
 
-	public void setConverter(FormatConverter sConverter) {
-		converter = sConverter;
-	}
+    private List<String> values;
 
-	public FormatConverter getConverter() {
-		return converter;
-	}
+    public void setLocalName(String sLocalName) {
+        localName = sLocalName;
+    }
 
-	public void setValues(List<String> sValues) {
-		values = sValues;
-	}
+    public String getLocalName() {
+        return localName;
+    }
 
-	public List<String> getValues() {
-		return values;
-	}
+    public void setConverter(FormatConverter sConverter) {
+        converter = sConverter;
+    }
 
-	public boolean isMultiValued() {
-		return ((values != null) && (values.size() > 1));
-	}
+    public FormatConverter getConverter() {
+        return converter;
+    }
+
+    public void setValues(List<String> sValues) {
+        values = sValues;
+    }
+
+    public List<String> getValues() {
+        return values;
+    }
+
+    public boolean isMultiValued() {
+        return ((values != null) && (values.size() > 1));
+    }
 
 }

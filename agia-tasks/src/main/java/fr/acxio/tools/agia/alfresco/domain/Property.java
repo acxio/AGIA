@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco.domain;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,72 +36,75 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 
 /**
- * <p>Alfresco property local representation.</p>
+ * <p>
+ * Alfresco property local representation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 @Entity
-@Table(name=DatabaseConstants.TABLE_NAME_PROPERTY)
+@Table(name = DatabaseConstants.TABLE_NAME_PROPERTY)
 public class Property implements Serializable {
 
-	private static final long serialVersionUID = 73780822054117673L;
+    private static final long serialVersionUID = 73780822054117673L;
 
-	@Id
-	@GeneratedValue
-    @Column(name=DatabaseConstants.COLUMN_NAME_PROPERTY_ID)
-	private long id;
-	
-	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
-	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-	@JoinColumn(name=DatabaseConstants.COLUMN_NAME_NAME_ID)
-	private QName name;
-	
-	@ElementCollection(targetClass = java.lang.String.class, fetch=FetchType.EAGER)
-	@CollectionTable(name=DatabaseConstants.TABLE_NAME_PROPERTYVALUE, joinColumns=@JoinColumn(name=DatabaseConstants.COLUMN_NAME_PROPERTY_ID))
-//	@CollectionId(columns={@Column(name="property_id")}, generator="", type=@Type(type="long"))
-	@Column(name=DatabaseConstants.COLUMN_NAME_VALUE)
-	@Lob
-	private List<String> values = new ArrayList<String>();
-	
-	public Property() {
-	}
-	
-	public Property(QName sName, String sValue) {
-		name = sName;
-		values.add(sValue);
-	}
-	
-	public Property(QName sName, List<String> sValues) {
-		name = sName;
-		values.addAll(sValues);
-	}
-	
-	public QName getName() {
-		return name;
-	}
+    @Id
+    @GeneratedValue
+    @Column(name = DatabaseConstants.COLUMN_NAME_PROPERTY_ID)
+    private long id;
 
-	public void setName(QName sName) {
-		name = sName;
-	}
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = DatabaseConstants.COLUMN_NAME_NAME_ID)
+    private QName name;
 
-	public List<String> getValues() {
-		return values;
-	}
-	
-	public void addValue(String sValue) {
-		values.add(sValue);
-	}
+    @ElementCollection(targetClass = java.lang.String.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = DatabaseConstants.TABLE_NAME_PROPERTYVALUE, joinColumns = @JoinColumn(name = DatabaseConstants.COLUMN_NAME_PROPERTY_ID))
+    // @CollectionId(columns={@Column(name="property_id")}, generator="",
+    // type=@Type(type="long"))
+    @Column(name = DatabaseConstants.COLUMN_NAME_VALUE)
+    @Lob
+    private List<String> values = new ArrayList<String>();
 
-	boolean isMultiValued() {
-		return ((values != null) && (values.size() > 1));
-	}
+    public Property() {
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder aString = new StringBuilder();
-		aString.append(name.getShortName()).append(":").append(values.toString());
-		return aString.toString();
-	}
-	
+    public Property(QName sName, String sValue) {
+        name = sName;
+        values.add(sValue);
+    }
+
+    public Property(QName sName, List<String> sValues) {
+        name = sName;
+        values.addAll(sValues);
+    }
+
+    public QName getName() {
+        return name;
+    }
+
+    public void setName(QName sName) {
+        name = sName;
+    }
+
+    public List<String> getValues() {
+        return values;
+    }
+
+    public void addValue(String sValue) {
+        values.add(sValue);
+    }
+
+    boolean isMultiValued() {
+        return ((values != null) && (values.size() > 1));
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder aString = new StringBuilder();
+        aString.append(name.getShortName()).append(":").append(values.toString());
+        return aString.toString();
+    }
+
 }

@@ -15,25 +15,26 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>Simple
- * {@link fr.acxio.tools.agia.alfresco.configuration.AspectDefinition AspectDefinition}
- * implementation.</p>
+ * <p>
+ * Simple {@link fr.acxio.tools.agia.alfresco.configuration.AspectDefinition
+ * AspectDefinition} implementation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class SimpleAspectDefinition implements AspectDefinition {
 
-	private String name;
-	
-	public SimpleAspectDefinition(String sName) {
-		name = sName;
-	}
+    private String name;
 
-	public String getName() {
-		return name;
-	}
+    public SimpleAspectDefinition(String sName) {
+        name = sName;
+    }
+
+    public String getName() {
+        return name;
+    }
 
 }

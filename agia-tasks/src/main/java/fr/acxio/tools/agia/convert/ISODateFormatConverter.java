@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.convert;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +27,10 @@ import org.joda.time.format.ISODateTimeFormat;
 /**
  * Specific ISO date-time converter.
  * <p>
- * The input value can be parsed from any date format available
- * to {@link org.joda.time.format.DateTimeFormat joda time} and converted to
- * the ISO format.</br>
- * This class is especially useful when converting dates for Alfresco.
+ * The input value can be parsed from any date format available to
+ * {@link org.joda.time.format.DateTimeFormat joda time} and converted to the
+ * ISO format.</br> This class is especially useful when converting dates for
+ * Alfresco.
  * </p>
  * 
  * @author pcollardez
@@ -38,36 +38,36 @@ import org.joda.time.format.ISODateTimeFormat;
  */
 public class ISODateFormatConverter implements FormatConverter {
 
-	private String sourcePattern;
-	private DateTimeFormatter sourceFormatter;
-	private static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTime();
-	
-	public ISODateFormatConverter() {
-	}
-	
-	public ISODateFormatConverter(String sSourcePattern) {
-		sourcePattern = sSourcePattern;
-		sourceFormatter = DateTimeFormat.forPattern(sourcePattern);
-	}
+    private String sourcePattern;
+    private DateTimeFormatter sourceFormatter;
+    private static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTime();
 
-	public String getSourcePattern() {
-		return sourcePattern;
-	}
+    public ISODateFormatConverter() {
+    }
 
-	public void setSourcePattern(String sSourcePattern) {
-		sourcePattern = sSourcePattern;
-		sourceFormatter = DateTimeFormat.forPattern(sourcePattern);
-	}
-	
-	public List<String> convert(String sSource) throws ConversionException {
-		List<String> aResult = new ArrayList<String>(1);
-		try {
-			DateTime aDateTime = sourceFormatter.parseDateTime(sSource);
-			aResult.add(ISO_FORMATTER.print(aDateTime));
-		} catch (Exception e) {
-			throw new ConversionException("Error converting: " + sSource, e);
-		}
-		return aResult;
-	}
+    public ISODateFormatConverter(String sSourcePattern) {
+        sourcePattern = sSourcePattern;
+        sourceFormatter = DateTimeFormat.forPattern(sourcePattern);
+    }
+
+    public String getSourcePattern() {
+        return sourcePattern;
+    }
+
+    public void setSourcePattern(String sSourcePattern) {
+        sourcePattern = sSourcePattern;
+        sourceFormatter = DateTimeFormat.forPattern(sourcePattern);
+    }
+
+    public List<String> convert(String sSource) throws ConversionException {
+        List<String> aResult = new ArrayList<String>(1);
+        try {
+            DateTime aDateTime = sourceFormatter.parseDateTime(sSource);
+            aResult.add(ISO_FORMATTER.print(aDateTime));
+        } catch (Exception e) {
+            throw new ConversionException("Error converting: " + sSource, e);
+        }
+        return aResult;
+    }
 
 }

@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.cmis;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.apache.chemistry.opencmis.client.api.QueryResult;
 
 import org.springframework.batch.item.ItemProcessor;
@@ -25,14 +25,14 @@ import fr.acxio.tools.agia.alfresco.domain.NodeList;
 
 public class QueryResultToNodeProcessor extends NodeMapper<QueryResult> implements ItemProcessor<QueryResult, NodeList> {
 
-	@Override
-	public NodeList process(QueryResult sItem) throws Exception {
-		return objectToNodeList(sItem);
-	}
+    @Override
+    public NodeList process(QueryResult sItem) throws Exception {
+        return objectToNodeList(sItem);
+    }
 
-	@Override
-	public Object transformData(QueryResult sData) {
-		return sData;
-	}
+    @Override
+    public Object transformData(QueryResult sData) {
+        return sData;
+    }
 
 }

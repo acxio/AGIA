@@ -15,12 +15,12 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.List;
 
 /**
- * Alfresco local representation of folders.</br>
- * The FolderDefinition describes how a folder will be created in Alfresco:</br>
+ * Alfresco local representation of folders.</br> The FolderDefinition describes
+ * how a folder will be created in Alfresco:</br>
  * <ul>
  * <li>A folder is a node.</li>
  * <li>A folder may have a condition (condition) determining if it must be
@@ -35,15 +35,15 @@ import java.util.List;
  */
 public interface FolderDefinition extends NodeDefinition {
 
-	void addFolder(FolderDefinition sFolderDefinition);
-	
-	List<FolderDefinition> getFolders();
-	
-	List<String> getPaths();
-	
-	String getCondition();
-	
-	void addDocument(DocumentDefinition sDocumentDefinition);
-	
-	List<DocumentDefinition> getDocuments();
+    void addFolder(FolderDefinition sFolderDefinition);
+
+    List<FolderDefinition> getFolders();
+
+    List<String> getPaths();
+
+    String getCondition();
+
+    void addDocument(DocumentDefinition sDocumentDefinition);
+
+    List<DocumentDefinition> getDocuments();
 }

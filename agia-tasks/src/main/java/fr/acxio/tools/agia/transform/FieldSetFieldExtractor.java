@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.transform;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,32 +26,34 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
 /**
- * <p>This is a field extractor for a
+ * <p>
+ * This is a field extractor for a
  * {@link org.springframework.batch.item.file.transform.FieldSet FieldSet}.
  * Given an array of property names, it will get the matching fields and return
- * an array of all the values.</p>
+ * an array of all the values.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class FieldSetFieldExtractor implements FieldExtractor<FieldSet>, InitializingBean {
 
-	private String[] names;
-	
-	public void setNames(String[] names) {
-		Assert.notNull(names, "Names must be non-null");
-		this.names = Arrays.asList(names).toArray(new String[names.length]);
-	}
-	
-	public Object[] extract(FieldSet sItem) {
-		List<Object> values = new ArrayList<Object>();
-		for (String propertyName : this.names) {
-			values.add(sItem.readString(propertyName));
-		}
-		return values.toArray();
-	}
+    private String[] names;
 
-	public void afterPropertiesSet() {
-		Assert.notNull(names, "The 'names' property must be set.");
-	}
+    public void setNames(String[] names) {
+        Assert.notNull(names, "Names must be non-null");
+        this.names = Arrays.asList(names).toArray(new String[names.length]);
+    }
+
+    public Object[] extract(FieldSet sItem) {
+        List<Object> values = new ArrayList<Object>();
+        for (String propertyName : this.names) {
+            values.add(sItem.readString(propertyName));
+        }
+        return values.toArray();
+    }
+
+    public void afterPropertiesSet() {
+        Assert.notNull(names, "The 'names' property must be set.");
+    }
 }

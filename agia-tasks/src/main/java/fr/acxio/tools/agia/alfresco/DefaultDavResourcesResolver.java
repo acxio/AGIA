@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.IOException;
 import java.util.List;
 
@@ -29,46 +29,45 @@ import com.googlecode.sardine.DavResource;
 import com.googlecode.sardine.Sardine;
 
 public class DefaultDavResourcesResolver implements DavResourcesResolver {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDavResourcesResolver.class);
-	
-	private static final String CACHE_KEY = "#sPath";
-	private static final String CACHE_NAME = "rdirlist";
 
-	@Override
-	@Cacheable(value=CACHE_NAME, key=CACHE_KEY)
-	public List<DavResource> getDirectoryList(Sardine sSardine, String sPath) throws IOException {
-		if (LOGGER.isDebugEnabled()) {
-        	LOGGER.debug("Calling WebDav for path: " + sPath);
-        }
-		
-		return sSardine.list(sPath);
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDavResourcesResolver.class);
 
-	@Override
-	@CachePut(value=CACHE_NAME, key=CACHE_KEY)
-	public List<DavResource> setLocalDirectoryList(String sPath,
-			List<DavResource> sResources) {
-		if (LOGGER.isDebugEnabled()) {
-        	LOGGER.debug("Set local for WebDav path: " + sPath);
-        }
-		return sResources;
-	}
+    private static final String CACHE_KEY = "#sPath";
+    private static final String CACHE_NAME = "rdirlist";
 
-	@Override
-	@CacheEvict(value=CACHE_NAME)
-	public void evictDirectoryList(String sPath) {
-		if (LOGGER.isDebugEnabled()) {
-        	LOGGER.debug("Evict WebDav path: " + sPath);
+    @Override
+    @Cacheable(value = CACHE_NAME, key = CACHE_KEY)
+    public List<DavResource> getDirectoryList(Sardine sSardine, String sPath) throws IOException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Calling WebDav for path: " + sPath);
         }
-	}
 
-	@Override
-	@CacheEvict(value=CACHE_NAME, allEntries=true)
-	public void evictDictoriesLists() {
-		if (LOGGER.isDebugEnabled()) {
-        	LOGGER.debug("Evict all WebDav directories lists");
+        return sSardine.list(sPath);
+    }
+
+    @Override
+    @CachePut(value = CACHE_NAME, key = CACHE_KEY)
+    public List<DavResource> setLocalDirectoryList(String sPath, List<DavResource> sResources) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Set local for WebDav path: " + sPath);
         }
-	}
+        return sResources;
+    }
+
+    @Override
+    @CacheEvict(value = CACHE_NAME)
+    public void evictDirectoryList(String sPath) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Evict WebDav path: " + sPath);
+        }
+    }
+
+    @Override
+    @CacheEvict(value = CACHE_NAME, allEntries = true)
+    public void evictDictoriesLists() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Evict all WebDav directories lists");
+        }
+    }
 
 }

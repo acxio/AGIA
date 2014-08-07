@@ -15,31 +15,33 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>Exception related to Node paths resolution.</p>
+ * <p>
+ * Exception related to Node paths resolution.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class NodePathException extends Exception {
 
-	private static final long serialVersionUID = 2100451021139085044L;
+    private static final long serialVersionUID = 2100451021139085044L;
 
-	public NodePathException() {
-		super();
-	}
+    public NodePathException() {
+        super();
+    }
 
-	public NodePathException(String sMessage) {
-		super(sMessage);
-	}
+    public NodePathException(String sMessage) {
+        super(sMessage);
+    }
 
-	public NodePathException(Throwable sCause) {
-		super(sCause);
-	}
+    public NodePathException(Throwable sCause) {
+        super(sCause);
+    }
 
-	public NodePathException(String sMessage, Throwable sCause) {
-		super(sMessage, sCause);
-	}
+    public NodePathException(String sMessage, Throwable sCause) {
+        super(sMessage, sCause);
+    }
 
 }

@@ -15,54 +15,54 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>Simple
- * {@link fr.acxio.tools.agia.alfresco.configuration.FolderDefinition FolderDefinition}
- * implementation.</p>
+ * <p>
+ * Simple {@link fr.acxio.tools.agia.alfresco.configuration.FolderDefinition
+ * FolderDefinition} implementation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class SimpleFolderDefinition extends AbstractNodeDefinition implements FolderDefinition {
 
-	private String condition;
-	
-	private List<FolderDefinition> folders = new ArrayList<FolderDefinition>();
-	
-	private List<DocumentDefinition> documents = new ArrayList<DocumentDefinition>();
+    private String condition;
 
-	public void addFolder(FolderDefinition sFolderDefinition) {
-		folders.add(sFolderDefinition);
-	}
+    private List<FolderDefinition> folders = new ArrayList<FolderDefinition>();
 
-	public List<FolderDefinition> getFolders() {
-		return folders;
-	}
+    private List<DocumentDefinition> documents = new ArrayList<DocumentDefinition>();
 
-	public List<String> getPaths() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public void addFolder(FolderDefinition sFolderDefinition) {
+        folders.add(sFolderDefinition);
+    }
 
-	public String getCondition() {
-		return condition;
-	}
+    public List<FolderDefinition> getFolders() {
+        return folders;
+    }
 
-	public void addDocument(DocumentDefinition sDocumentDefinition) {
-		documents.add(sDocumentDefinition);
-	}
+    public List<String> getPaths() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public List<DocumentDefinition> getDocuments() {
-		return documents;
-	}
+    public String getCondition() {
+        return condition;
+    }
 
-	public void setCondition(String sCondition) {
-		condition = sCondition;
-	}
-	
-	
+    public void addDocument(DocumentDefinition sDocumentDefinition) {
+        documents.add(sDocumentDefinition);
+    }
+
+    public List<DocumentDefinition> getDocuments() {
+        return documents;
+    }
+
+    public void setCondition(String sCondition) {
+        condition = sCondition;
+    }
+
 }

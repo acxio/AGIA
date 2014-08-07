@@ -17,6 +17,9 @@ package fr.acxio.tools.agia.ftp;
  */
  
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 
@@ -28,6 +31,7 @@ import org.mockftpserver.fake.filesystem.FileEntry;
 import org.mockftpserver.fake.filesystem.FileSystem;
 import org.mockftpserver.fake.filesystem.UnixFakeFileSystem;
 import org.mockftpserver.fake.filesystem.WindowsFakeFileSystem;
+import org.springframework.batch.core.StepContribution;
 
 public class FTPDownloadTaskletTest {
 
@@ -67,13 +71,18 @@ public class FTPDownloadTaskletTest {
 		aTasklet.setRemoteBaseDir("/data/");
 		aTasklet.setRegexFilename(".*\\.zip");
 		
-		aTasklet.execute(null, null);
+		StepContribution aStepContribution = mock(StepContribution.class);
+		
+		aTasklet.execute(aStepContribution, null);
 		
 		assertTrue(new File("target/file2.zip").exists());
 		assertTrue(new File("target/file3.zip").exists());
 		
 		new File("target/file2.zip").delete();
 		new File("target/file3.zip").delete();
+		
+		verify(aStepContribution, times(2)).incrementReadCount();
+        verify(aStepContribution, times(2)).incrementWriteCount(1);
 	}
 	
 	@Test

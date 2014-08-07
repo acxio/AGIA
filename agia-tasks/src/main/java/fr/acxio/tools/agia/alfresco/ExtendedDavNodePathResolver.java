@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,52 +34,50 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 
 public class ExtendedDavNodePathResolver implements ExtendedNodePathResolver {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ExtendedDavNodePathResolver.class);
-	
-	private static final String QUERY_PATH_AND_NAME = "PATH:\"%s/*\" AND @cm\\:name:\"%s\"";
-	
-	private static final String CACHE_KEY = "#sPath.toString() + '/' + #sName.toString()";
-	private static final String CACHE_NAME = "drnodes";
 
-	@Override
-	@Cacheable(value=CACHE_NAME, key=CACHE_KEY)
-	public Node[] getRepositoryMatchingNodes(
-			RepositoryServiceSoapBindingStub sRepositoryService, String sPath,
-			String sName) throws NodePathException {
-		if (LOGGER.isDebugEnabled()) {
-        	LOGGER.debug("Querying Alfresco for path: " + sPath + " and name " + sName);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExtendedDavNodePathResolver.class);
+
+    private static final String QUERY_PATH_AND_NAME = "PATH:\"%s/*\" AND @cm\\:name:\"%s\"";
+
+    private static final String CACHE_KEY = "#sPath.toString() + '/' + #sName.toString()";
+    private static final String CACHE_NAME = "drnodes";
+
+    @Override
+    @Cacheable(value = CACHE_NAME, key = CACHE_KEY)
+    public Node[] getRepositoryMatchingNodes(RepositoryServiceSoapBindingStub sRepositoryService, String sPath, String sName) throws NodePathException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Querying Alfresco for path: " + sPath + " and name " + sName);
         }
-		
-		Query aQuery = new Query("lucene", String.format(QUERY_PATH_AND_NAME, sPath, sName));
-		
+
+        Query aQuery = new Query("lucene", String.format(QUERY_PATH_AND_NAME, sPath, sName));
+
         List<Node> aNodeList = new ArrayList<Node>(1);
-       	try {
-			QueryResult aQueryResult = sRepositoryService.query(AlfrescoServicesConsumer.STORE, aQuery, true);
-			ResultSet aResultSet = aQueryResult.getResultSet();
-			for(ResultSetRow aRow : aResultSet.getRows()) {
-				Node aNewNode = new Node();
-				aNewNode.setReference(new Reference(AlfrescoServicesConsumer.STORE, aRow.getNode().getId(), null));
-				aNewNode.setAspects(aRow.getNode().getAspects());
-				aNewNode.setType(aRow.getNode().getType());
-				
-				List<NamedValue> aProperties = new ArrayList<NamedValue>();
-				
-				for(NamedValue aCol : aRow.getColumns()) {
-					aProperties.add(aCol);
-				}
-				
-				aNewNode.setProperties(aProperties.toArray(new NamedValue[]{}));
-				
-				aNodeList.add(aNewNode);
-			}
-		} catch (RepositoryFault e) {
-			throw new NodePathException(e);
-		} catch (RemoteException e) {
-			throw new NodePathException(e);
-		}
-       	
-        return aNodeList.toArray(new Node[]{});
-	}
+        try {
+            QueryResult aQueryResult = sRepositoryService.query(AlfrescoServicesConsumer.STORE, aQuery, true);
+            ResultSet aResultSet = aQueryResult.getResultSet();
+            for (ResultSetRow aRow : aResultSet.getRows()) {
+                Node aNewNode = new Node();
+                aNewNode.setReference(new Reference(AlfrescoServicesConsumer.STORE, aRow.getNode().getId(), null));
+                aNewNode.setAspects(aRow.getNode().getAspects());
+                aNewNode.setType(aRow.getNode().getType());
+
+                List<NamedValue> aProperties = new ArrayList<NamedValue>();
+
+                for (NamedValue aCol : aRow.getColumns()) {
+                    aProperties.add(aCol);
+                }
+
+                aNewNode.setProperties(aProperties.toArray(new NamedValue[] {}));
+
+                aNodeList.add(aNewNode);
+            }
+        } catch (RepositoryFault e) {
+            throw new NodePathException(e);
+        } catch (RemoteException e) {
+            throw new NodePathException(e);
+        }
+
+        return aNodeList.toArray(new Node[] {});
+    }
 
 }

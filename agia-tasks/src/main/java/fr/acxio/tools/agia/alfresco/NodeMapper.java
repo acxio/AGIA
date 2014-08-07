@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
@@ -37,121 +37,125 @@ import fr.acxio.tools.agia.expression.StandardEvaluationContextFactory;
  * 
  * @author pcollardez
  *
- * @param <T> The object graph to transform
+ * @param <T>
+ *            The object graph to transform
  */
 public abstract class NodeMapper<T> {
 
-	/**
-	 * The node factory used to create nodes from the object graph
-	 */
-	private NodeFactory nodeFactory;
-	
-	/**
-	 * The variable name of the root of the object graph.
-	 * Defaulted to "in".
-	 */
-	private String variableName = "in";
-	
-	/**
-	 * The evaluation context factory which may contain extra beans.
-	 */
-	private EvaluationContextFactory evaluationContextFactory;
-	
-	/**
-	 * The instantiated evaluation context.
-	 */
-	private StandardEvaluationContext evaluationContext;
+    /**
+     * The node factory used to create nodes from the object graph
+     */
+    private NodeFactory nodeFactory;
 
-	/**
-	 * Returns the node factory.
-	 * 
-	 * @return the node factory
-	 */
-	public NodeFactory getNodeFactory() {
-		return nodeFactory;
-	}
+    /**
+     * The variable name of the root of the object graph. Defaulted to "in".
+     */
+    private String variableName = "in";
 
-	/**
-	 * Sets the node factory.
-	 * 
-	 * @param sNodeFactory a node factory
-	 */
-	public void setNodeFactory(NodeFactory sNodeFactory) {
-		nodeFactory = sNodeFactory;
-	}
-	
-	/**
-	 * Returns the name of the variable representing the root object.
-	 * 
-	 * @return the name of the variable representing the root object.
-	 */
-	public String getVariableName() {
-		return variableName;
-	}
+    /**
+     * The evaluation context factory which may contain extra beans.
+     */
+    private EvaluationContextFactory evaluationContextFactory;
 
-	/**
-	 * Sets the name of the variable representing the root object.
-	 * 
-	 * @param sVariableName a name for the variable representing the root
-	 *        object.
-	 */
-	public void setVariableName(String sVariableName) {
-		Assert.hasText(sVariableName, "variableName must not be empty");
-		variableName = sVariableName;
-	}
+    /**
+     * The instantiated evaluation context.
+     */
+    private StandardEvaluationContext evaluationContext;
 
-	/**
-	 * Returns the evaluation context factory.
-	 * 
-	 * @return the evaluation context factory.
-	 */
-	public synchronized EvaluationContextFactory getEvaluationContextFactory() {
-		if (evaluationContextFactory == null) {
-			evaluationContextFactory = new StandardEvaluationContextFactory();
-		}
-		return evaluationContextFactory;
-	}
+    /**
+     * Returns the node factory.
+     * 
+     * @return the node factory
+     */
+    public NodeFactory getNodeFactory() {
+        return nodeFactory;
+    }
 
-	/**
-	 * Sets the evaluation context factory.
-	 * 
-	 * @param sEvaluationContextFactory an evaluation context factory.
-	 */
-	public synchronized void setEvaluationContextFactory(
-			EvaluationContextFactory sEvaluationContextFactory) {
-		evaluationContextFactory = sEvaluationContextFactory;
-	}
-	
-	/**
-	 * Transforms the data into an object graph usable into the expressions.
-	 * 
-	 * @param sData the data to transform
-	 * @return an object graph usable into the expressions
-	 */
-	public abstract Object transformData(T sData);
-	
-	/**
-	 * <p>
-	 * Transforms the data into a NodeList with the help of the node factory.
-	 * </p>
-	 * <p>
-	 * This method calls transformData to obtain an expression friendly object
-	 * graph.
-	 * </p>
-	 * 
-	 * @param sData the data to transform
-	 * @return a NodeList
-	 * @throws BindException if the data cannot be used into an expression
-	 */
-	public synchronized NodeList objectToNodeList(T sData) throws BindException {
-		NodeList aResult;
-		try {
-			evaluationContext = getEvaluationContextFactory().createContext(variableName, transformData(sData), evaluationContext);
-			aResult = getNodeFactory().getNodes(evaluationContext);
-		} catch (Exception e) {
-			// FIXME : org.springframework.validation.BindException
-			throw new RuntimeException("Error mapping data", e);
-		}
-		return aResult;
-	}
+    /**
+     * Sets the node factory.
+     * 
+     * @param sNodeFactory
+     *            a node factory
+     */
+    public void setNodeFactory(NodeFactory sNodeFactory) {
+        nodeFactory = sNodeFactory;
+    }
+
+    /**
+     * Returns the name of the variable representing the root object.
+     * 
+     * @return the name of the variable representing the root object.
+     */
+    public String getVariableName() {
+        return variableName;
+    }
+
+    /**
+     * Sets the name of the variable representing the root object.
+     * 
+     * @param sVariableName
+     *            a name for the variable representing the root object.
+     */
+    public void setVariableName(String sVariableName) {
+        Assert.hasText(sVariableName, "variableName must not be empty");
+        variableName = sVariableName;
+    }
+
+    /**
+     * Returns the evaluation context factory.
+     * 
+     * @return the evaluation context factory.
+     */
+    public synchronized EvaluationContextFactory getEvaluationContextFactory() {
+        if (evaluationContextFactory == null) {
+            evaluationContextFactory = new StandardEvaluationContextFactory();
+        }
+        return evaluationContextFactory;
+    }
+
+    /**
+     * Sets the evaluation context factory.
+     * 
+     * @param sEvaluationContextFactory
+     *            an evaluation context factory.
+     */
+    public synchronized void setEvaluationContextFactory(EvaluationContextFactory sEvaluationContextFactory) {
+        evaluationContextFactory = sEvaluationContextFactory;
+    }
+
+    /**
+     * Transforms the data into an object graph usable into the expressions.
+     * 
+     * @param sData
+     *            the data to transform
+     * @return an object graph usable into the expressions
+     */
+    public abstract Object transformData(T sData);
+
+    /**
+     * <p>
+     * Transforms the data into a NodeList with the help of the node factory.
+     * </p>
+     * <p>
+     * This method calls transformData to obtain an expression friendly object
+     * graph.
+     * </p>
+     * 
+     * @param sData
+     *            the data to transform
+     * @return a NodeList
+     * @throws BindException
+     *             if the data cannot be used into an expression
+     */
+    public synchronized NodeList objectToNodeList(T sData) throws BindException {
+        NodeList aResult;
+        try {
+            evaluationContext = getEvaluationContextFactory().createContext(variableName, transformData(sData), evaluationContext);
+            aResult = getNodeFactory().getNodes(evaluationContext);
+        } catch (Exception e) {
+            // FIXME : org.springframework.validation.BindException
+            throw new RuntimeException("Error mapping data", e);
+        }
+        return aResult;
+    }
 }

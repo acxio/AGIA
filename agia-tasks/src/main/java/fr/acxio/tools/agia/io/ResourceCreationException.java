@@ -15,25 +15,25 @@ package fr.acxio.tools.agia.io;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 public class ResourceCreationException extends Exception {
 
-	private static final long serialVersionUID = 2892334791098800492L;
+    private static final long serialVersionUID = 2892334791098800492L;
 
-	public ResourceCreationException() {
-		super();
-	}
+    public ResourceCreationException() {
+        super();
+    }
 
-	public ResourceCreationException(String sMessage) {
-		super(sMessage);
-	}
+    public ResourceCreationException(String sMessage) {
+        super(sMessage);
+    }
 
-	public ResourceCreationException(Throwable sCause) {
-		super(sCause);
-	}
+    public ResourceCreationException(Throwable sCause) {
+        super(sCause);
+    }
 
-	public ResourceCreationException(String sMessage, Throwable sCause) {
-		super(sMessage, sCause);
-	}
+    public ResourceCreationException(String sMessage, Throwable sCause) {
+        super(sMessage, sCause);
+    }
 
 }

@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.Date;
 import java.util.List;
 
@@ -38,94 +38,97 @@ import fr.acxio.tools.agia.alfresco.domain.NodeStatus;
 import fr.acxio.tools.agia.common.ProcessIndicatorItemWrapper;
 
 /**
- * <p>A specific
- * {@link org.springframework.batch.item.ItemProcessor ItemProcessor} for the
- * Hibernate store of
- * {@link fr.acxio.tools.agia.alfresco.domain.Node Node}s that marks the
- * nodes with a given lifecyle status (success or error).</p>
+ * <p>
+ * A specific {@link org.springframework.batch.item.ItemProcessor ItemProcessor}
+ * for the Hibernate store of {@link fr.acxio.tools.agia.alfresco.domain.Node
+ * Node}s that marks the nodes with a given lifecyle status (success or error).
+ * </p>
  * 
- * <p>It follows the process indicator pattern.</p>
+ * <p>
+ * It follows the process indicator pattern.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class HibernateNodeProcessor implements ItemProcessor<ProcessIndicatorItemWrapper<Node>, NodeList>, ItemWriteListener<NodeList>, InitializingBean {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(HibernateNodeProcessor.class);
-	
-	private NodeDao nodeDao;
-	
-	private int nextStep = NodeStatus.DONE;
-	
-	private int errorStep = NodeStatus.ERROR;
-	
-	public void setNodeDao(NodeDao sNodeDao) {
-		nodeDao = sNodeDao;
-	}
-	
-	public void setNextStep(int sNextStep) {
-		nextStep = sNextStep;
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(HibernateNodeProcessor.class);
 
-	public void setErrorStep(int sErrorStep) {
-		errorStep = sErrorStep;
-	}
+    private NodeDao nodeDao;
 
-	public void afterPropertiesSet() {
-		Assert.notNull(nodeDao, "You must provide a NodeDao.");
-	}
+    private int nextStep = NodeStatus.DONE;
 
-	public NodeList process(ProcessIndicatorItemWrapper<Node> sWrapper) {
-		NodeList aNodeList = new NodeList();
-		Node aNode = sWrapper.getItem();
-		addAndMarkNodes(aNodeList, aNode);
-		return aNodeList;
-	}
+    private int errorStep = NodeStatus.ERROR;
 
-	private void addAndMarkNodes(NodeList sNodeList, Node sParentNode) {
-		sNodeList.add(sParentNode);
-		sParentNode.setInjectedTimestamp(new Date());
-		sParentNode.setJobStep(nextStep);
-		if (sParentNode instanceof Folder) {
-			Folder sFolder = (Folder)sParentNode;
-			for(Folder aFolder : sFolder.getFolders()) {
-				addAndMarkNodes(sNodeList, aFolder);
-			}
-			for(Document aDocument : sFolder.getDocuments()) {
-				addAndMarkNodes(sNodeList, aDocument);
-			}
-		}
-	}
+    public void setNodeDao(NodeDao sNodeDao) {
+        nodeDao = sNodeDao;
+    }
 
-	public void beforeWrite(List<? extends NodeList> sItems) {
-	}
+    public void setNextStep(int sNextStep) {
+        nextStep = sNextStep;
+    }
 
-	public void afterWrite(List<? extends NodeList> sItems) {
-		try {
-			for(NodeList aNodeList : sItems) {
-				for(Node aNode : aNodeList) {
-					if (aNode.getParent() == null) {
-						nodeDao.saveOrUpdate(aNode);
-					}
-				}
-			}
-		} catch (NodeDaoException e) {
-			LOGGER.error("Cannot update nodes", e);
-		}
-	}
+    public void setErrorStep(int sErrorStep) {
+        errorStep = sErrorStep;
+    }
 
-	@Transactional(propagation=Propagation.REQUIRES_NEW)
-	public void onWriteError(Exception sException, List<? extends NodeList> sItems) {
-		LOGGER.info("Write error occured");
-		for(NodeList aNodeList : sItems) {
-			for(Node aNode : aNodeList) {
-				try {
-					nodeDao.markError(aNode.getId(), errorStep);
-				} catch (Exception e) {
-					LOGGER.error("Unable to mark node on error with id " + aNode.getId(), e);
-				}
-			}
-		}
-	}
-	
+    public void afterPropertiesSet() {
+        Assert.notNull(nodeDao, "You must provide a NodeDao.");
+    }
+
+    public NodeList process(ProcessIndicatorItemWrapper<Node> sWrapper) {
+        NodeList aNodeList = new NodeList();
+        Node aNode = sWrapper.getItem();
+        addAndMarkNodes(aNodeList, aNode);
+        return aNodeList;
+    }
+
+    private void addAndMarkNodes(NodeList sNodeList, Node sParentNode) {
+        sNodeList.add(sParentNode);
+        sParentNode.setInjectedTimestamp(new Date());
+        sParentNode.setJobStep(nextStep);
+        if (sParentNode instanceof Folder) {
+            Folder sFolder = (Folder) sParentNode;
+            for (Folder aFolder : sFolder.getFolders()) {
+                addAndMarkNodes(sNodeList, aFolder);
+            }
+            for (Document aDocument : sFolder.getDocuments()) {
+                addAndMarkNodes(sNodeList, aDocument);
+            }
+        }
+    }
+
+    public void beforeWrite(List<? extends NodeList> sItems) {
+        // Nothing to do
+    }
+
+    public void afterWrite(List<? extends NodeList> sItems) {
+        try {
+            for (NodeList aNodeList : sItems) {
+                for (Node aNode : aNodeList) {
+                    if (aNode.getParent() == null) {
+                        nodeDao.saveOrUpdate(aNode);
+                    }
+                }
+            }
+        } catch (NodeDaoException e) {
+            LOGGER.error("Cannot update nodes", e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void onWriteError(Exception sException, List<? extends NodeList> sItems) {
+        LOGGER.info("Write error occured");
+        for (NodeList aNodeList : sItems) {
+            for (Node aNode : aNodeList) {
+                try {
+                    nodeDao.markError(aNode.getId(), errorStep);
+                } catch (Exception e) {
+                    LOGGER.error("Unable to mark node on error with id " + aNode.getId(), e);
+                }
+            }
+        }
+    }
+
 }

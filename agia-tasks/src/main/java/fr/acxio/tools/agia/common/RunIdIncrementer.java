@@ -15,25 +15,30 @@ package fr.acxio.tools.agia.common;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersIncrementer;
 
 /**
  * Simple incrementer maintaining the parameter {@code run.id} for a job.
- * <p>This incremeter will add the parameter {@code run.id} if it is not set for
- * the job, or it will increment it if the job already has this parameter.</p>
+ * <p>
+ * This incremeter will add the parameter {@code run.id} if it is not set for
+ * the job, or it will increment it if the job already has this parameter.
+ * </p>
  *
  */
 public class RunIdIncrementer implements JobParametersIncrementer {
 
-	public JobParameters getNext(JobParameters sParameters) {
-		if ((sParameters == null) || sParameters.isEmpty()) {
-            return new JobParametersBuilder().addLong("run.id", 1L).toJobParameters();
+    private static final long RUN_ID_DEFAULT = 1L;
+    private static final String RUN_ID = "run.id";
+
+    public JobParameters getNext(JobParameters sParameters) {
+        if ((sParameters == null) || sParameters.isEmpty()) {
+            return new JobParametersBuilder().addLong(RUN_ID, RUN_ID_DEFAULT).toJobParameters();
         }
-        long aId = sParameters.getLong("run.id", 1L) + 1;
-        return new JobParametersBuilder().addLong("run.id", aId).toJobParameters();
-	}
+        long aId = sParameters.getLong(RUN_ID, RUN_ID_DEFAULT) + 1;
+        return new JobParametersBuilder().addLong(RUN_ID, aId).toJobParameters();
+    }
 
 }

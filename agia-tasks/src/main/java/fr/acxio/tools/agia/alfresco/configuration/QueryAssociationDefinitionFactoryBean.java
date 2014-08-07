@@ -15,60 +15,61 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.util.Assert;
 
 /**
- * <p>Factory of
- * {@link fr.acxio.tools.agia.alfresco.configuration.QueryAssociationDefinition QueryAssociationDefinition}
- * .</p>
+ * <p>
+ * Factory of
+ * {@link fr.acxio.tools.agia.alfresco.configuration.QueryAssociationDefinition
+ * QueryAssociationDefinition} .
+ * </p>
  * 
  * @author pcollardez
  *
  */
-public class QueryAssociationDefinitionFactoryBean extends
-	AssociationDefinitionFactoryBean<QueryAssociationDefinition> {
+public class QueryAssociationDefinitionFactoryBean extends AssociationDefinitionFactoryBean<QueryAssociationDefinition> {
 
-	private String queryLanguage;
-	private String query;
+    private String queryLanguage;
+    private String query;
 
-	public String getQueryLanguage() {
-		return queryLanguage;
-	}
+    public String getQueryLanguage() {
+        return queryLanguage;
+    }
 
-	public void setQueryLanguage(String sQueryLanguage) {
-		queryLanguage = sQueryLanguage;
-	}
+    public void setQueryLanguage(String sQueryLanguage) {
+        queryLanguage = sQueryLanguage;
+    }
 
-	public String getQuery() {
-		return query;
-	}
+    public String getQuery() {
+        return query;
+    }
 
-	public void setQuery(String sQuery) {
-		query = sQuery;
-	}
+    public void setQuery(String sQuery) {
+        query = sQuery;
+    }
 
-	@Override
-	public void afterPropertiesSet() {
-		super.afterPropertiesSet();
-		Assert.hasText(query, "'query' must not be empty.");
-		if ((queryLanguage == null) || (queryLanguage.isEmpty())) {
-			queryLanguage = "lucene";
-		}
-	}
+    @Override
+    public void afterPropertiesSet() {
+        super.afterPropertiesSet();
+        Assert.hasText(query, "'query' must not be empty.");
+        if ((queryLanguage == null) || (queryLanguage.isEmpty())) {
+            queryLanguage = "lucene";
+        }
+    }
 
-	@Override
-	public QueryAssociationDefinition getObject() {
-		SimpleQueryAssociationDefinition aQueryAssociationDefinition = new SimpleQueryAssociationDefinition();
-		aQueryAssociationDefinition.setType(getType());
-		aQueryAssociationDefinition.setQuery(getQuery());
-		aQueryAssociationDefinition.setQueryLanguage(getQueryLanguage());
-		return aQueryAssociationDefinition;
-	}
+    @Override
+    public QueryAssociationDefinition getObject() {
+        SimpleQueryAssociationDefinition aQueryAssociationDefinition = new SimpleQueryAssociationDefinition();
+        aQueryAssociationDefinition.setType(getType());
+        aQueryAssociationDefinition.setQuery(getQuery());
+        aQueryAssociationDefinition.setQueryLanguage(getQueryLanguage());
+        return aQueryAssociationDefinition;
+    }
 
-	@Override
-	public Class<?> getObjectType() {
-		return QueryAssociationDefinition.class;
-	}
-	
+    @Override
+    public Class<?> getObjectType() {
+        return QueryAssociationDefinition.class;
+    }
+
 }

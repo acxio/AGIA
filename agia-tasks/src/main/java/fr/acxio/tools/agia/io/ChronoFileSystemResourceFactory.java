@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.io;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.Map;
 
 import org.joda.time.Instant;
@@ -27,55 +27,57 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
 /**
- * <p>A simple filesystem resource factory using a prefix, a suffix and a
- * date format to build the descriptor.</p>
+ * <p>
+ * A simple filesystem resource factory using a prefix, a suffix and a date
+ * format to build the descriptor.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class ChronoFileSystemResourceFactory implements ResourceFactory, InitializingBean {
 
-	private String prefix;
-	private String suffix;
-	private String dateFormat;
-	
-	public ChronoFileSystemResourceFactory(String sPrefix, String sDateFormat, String sSuffix) {
-		prefix = sPrefix;
-		suffix = sSuffix;
-		dateFormat = sDateFormat;
-	}
+    private String prefix;
+    private String suffix;
+    private String dateFormat;
 
-	public void setPrefix(String sPrefix) {
-		prefix = sPrefix;
-	}
+    public ChronoFileSystemResourceFactory(String sPrefix, String sDateFormat, String sSuffix) {
+        prefix = sPrefix;
+        suffix = sSuffix;
+        dateFormat = sDateFormat;
+    }
 
-	public void setSuffix(String sSuffix) {
-		suffix = sSuffix;
-	}
+    public void setPrefix(String sPrefix) {
+        prefix = sPrefix;
+    }
 
-	public void setDateFormat(String sDateFormat) {
-		dateFormat = sDateFormat;
-	}
+    public void setSuffix(String sSuffix) {
+        suffix = sSuffix;
+    }
 
-	public void afterPropertiesSet() {
-		Assert.hasText(dateFormat, "The date format must not be empty.");
-	}
+    public void setDateFormat(String sDateFormat) {
+        dateFormat = sDateFormat;
+    }
 
-	public Resource getResource() throws ResourceCreationException {
-		FileSystemResource aFileSystemResource = null;
-		try {
-			DateTimeFormatter aFormatter = DateTimeFormat.forPattern(dateFormat);
-			StringBuilder aFilename = new StringBuilder();
-			aFilename.append(prefix).append(aFormatter.print(new Instant())).append(suffix);
-			aFileSystemResource = new FileSystemResource(aFilename.toString());
-		} catch (Exception e) {
-			throw new ResourceCreationException(e);
-		}
-		return aFileSystemResource;
-	}
+    public void afterPropertiesSet() {
+        Assert.hasText(dateFormat, "The date format must not be empty.");
+    }
 
-	public Resource getResource(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException {
-		return getResource();
-	}
+    public Resource getResource() throws ResourceCreationException {
+        FileSystemResource aFileSystemResource = null;
+        try {
+            DateTimeFormatter aFormatter = DateTimeFormat.forPattern(dateFormat);
+            StringBuilder aFilename = new StringBuilder();
+            aFilename.append(prefix).append(aFormatter.print(new Instant())).append(suffix);
+            aFileSystemResource = new FileSystemResource(aFilename.toString());
+        } catch (Exception e) {
+            throw new ResourceCreationException(e);
+        }
+        return aFileSystemResource;
+    }
+
+    public Resource getResource(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException {
+        return getResource();
+    }
 
 }

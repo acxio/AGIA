@@ -15,11 +15,10 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * Alfresco local representation of aspects.</br>
- * The AspectDefinition describes how an aspect will be added to a node in
- * Alfresco:</br>
+ * Alfresco local representation of aspects.</br> The AspectDefinition describes
+ * how an aspect will be added to a node in Alfresco:</br>
  * <ul>
  * <li>An aspect has a name (name) which is a qualified name.</li>
  * </ul>
@@ -29,10 +28,12 @@ package fr.acxio.tools.agia.alfresco.configuration;
  */
 public interface AspectDefinition {
 
-	/**
-	 * <p>Returns the name of the aspect</p>
-	 * 
-	 * @return the name of the aspect
-	 */
-	String getName();
+    /**
+     * <p>
+     * Returns the name of the aspect
+     * </p>
+     * 
+     * @return the name of the aspect
+     */
+    String getName();
 }

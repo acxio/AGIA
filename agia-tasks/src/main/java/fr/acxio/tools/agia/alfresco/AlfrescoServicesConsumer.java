@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.rmi.RemoteException;
 
 import org.alfresco.webservice.repository.RepositoryServiceSoapBindingStub;
@@ -27,62 +27,64 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 /**
- * <p>Abstract Alfresco service consumer.</p>
+ * <p>
+ * Abstract Alfresco service consumer.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class AlfrescoServicesConsumer {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AlfrescoServicesConsumer.class);
-	
-	public static final Store STORE = new Store(Constants.WORKSPACE_STORE, "SpacesStore");
-	
-	private AlfrescoService alfrescoService;
-	private NodePathResolver nodePathResolver;
-	
-	public NodePathResolver getNodePathResolver() {
-		return nodePathResolver;
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlfrescoServicesConsumer.class);
 
-	public void setNodePathResolver(NodePathResolver sNodePathResolver) {
-		nodePathResolver = sNodePathResolver;
-	}
+    public static final Store STORE = new Store(Constants.WORKSPACE_STORE, "SpacesStore");
 
-	public AlfrescoService getAlfrescoService() {
-		return alfrescoService;
-	}
+    private AlfrescoService alfrescoService;
+    private NodePathResolver nodePathResolver;
 
-	public void setAlfrescoService(AlfrescoService sAlfrescoService) {
-		alfrescoService = sAlfrescoService;
-	}
+    public NodePathResolver getNodePathResolver() {
+        return nodePathResolver;
+    }
 
-	public void init() throws RemoteException {
-		Assert.notNull(alfrescoService, "AlfrescoService is required.");
-		Assert.notNull(alfrescoService.getEndpointAddress(), "A endpoint address is required.");
-		Assert.notNull(alfrescoService.getUsername(), "A username is required.");
-		
-		alfrescoService.startSession();		
-	}
+    public void setNodePathResolver(NodePathResolver sNodePathResolver) {
+        nodePathResolver = sNodePathResolver;
+    }
 
-	public void cleanup() {
-		alfrescoService.endSession();
-	}
-	
-	public Node[] getRepositoryMatchingNodes(RepositoryServiceSoapBindingStub sRepositoryService, String sPath) throws NodePathException {
-		return nodePathResolver.getRepositoryMatchingNodes(sRepositoryService, sPath);
-	}
-	
-	public Node[] setLocalMatchingNodes(String sPath, Node[] sNodes) throws NodePathException {
-		return nodePathResolver.setLocalMatchingNodes(sPath, sNodes);
-	}
-	
-	public void evictRepositoryNode(String sPath) {
-		nodePathResolver.evictRepositoryNode(sPath);
-	}
-	
-	public void evictRepositoryNodes() {
-		nodePathResolver.evictRepositoryNodes();
-	}
+    public AlfrescoService getAlfrescoService() {
+        return alfrescoService;
+    }
+
+    public void setAlfrescoService(AlfrescoService sAlfrescoService) {
+        alfrescoService = sAlfrescoService;
+    }
+
+    public void init() throws RemoteException {
+        Assert.notNull(alfrescoService, "AlfrescoService is required.");
+        Assert.notNull(alfrescoService.getEndpointAddress(), "A endpoint address is required.");
+        Assert.notNull(alfrescoService.getUsername(), "A username is required.");
+
+        alfrescoService.startSession();
+    }
+
+    public void cleanup() {
+        alfrescoService.endSession();
+    }
+
+    public Node[] getRepositoryMatchingNodes(RepositoryServiceSoapBindingStub sRepositoryService, String sPath) throws NodePathException {
+        return nodePathResolver.getRepositoryMatchingNodes(sRepositoryService, sPath);
+    }
+
+    public Node[] setLocalMatchingNodes(String sPath, Node[] sNodes) throws NodePathException {
+        return nodePathResolver.setLocalMatchingNodes(sPath, sNodes);
+    }
+
+    public void evictRepositoryNode(String sPath) {
+        nodePathResolver.evictRepositoryNode(sPath);
+    }
+
+    public void evictRepositoryNodes() {
+        nodePathResolver.evictRepositoryNodes();
+    }
 
 }

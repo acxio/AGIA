@@ -15,15 +15,15 @@ package fr.acxio.tools.agia.ftp;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.batch.core.step.tasklet.Tasklet;
 
 public abstract class FTPFileOperationTasklet implements Tasklet {
 
-	protected FtpClientFactory ftpClientFactory;
+    protected FtpClientFactory ftpClientFactory;
 
-	public void setFtpClientFactory(FtpClientFactory sFtpClientFactory) {
-		ftpClientFactory = sFtpClientFactory;
-	}
+    public void setFtpClientFactory(FtpClientFactory sFtpClientFactory) {
+        ftpClientFactory = sFtpClientFactory;
+    }
 
 }

@@ -15,31 +15,33 @@ package fr.acxio.tools.agia.alfresco.dao;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>NodeDao related exception</p>
+ * <p>
+ * NodeDao related exception
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class NodeDaoException extends Exception {
 
-	private static final long serialVersionUID = 2953896043265051129L;
+    private static final long serialVersionUID = 2953896043265051129L;
 
-	public NodeDaoException() {
-		super();
-	}
+    public NodeDaoException() {
+        super();
+    }
 
-	public NodeDaoException(String sMessage, Throwable sCause) {
-		super(sMessage, sCause);
-	}
+    public NodeDaoException(String sMessage, Throwable sCause) {
+        super(sMessage, sCause);
+    }
 
-	public NodeDaoException(String sMessage) {
-		super(sMessage);
-	}
+    public NodeDaoException(String sMessage) {
+        super(sMessage);
+    }
 
-	public NodeDaoException(Throwable sCause) {
-		super(sCause);
-	}
+    public NodeDaoException(Throwable sCause) {
+        super(sCause);
+    }
 
 }

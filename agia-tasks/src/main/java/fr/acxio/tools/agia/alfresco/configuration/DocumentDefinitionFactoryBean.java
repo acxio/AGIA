@@ -15,67 +15,69 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>Factory of
- * {@link fr.acxio.tools.agia.alfresco.configuration.DocumentDefinition DocumentDefinition}
- * .</p>
+ * <p>
+ * Factory of
+ * {@link fr.acxio.tools.agia.alfresco.configuration.DocumentDefinition
+ * DocumentDefinition} .
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class DocumentDefinitionFactoryBean extends NodeDefinitionFactoryBean<DocumentDefinition> {
 
-	private String contentPath;
-	private String mimeType;
-	private String encoding;
-	
-	public String getContentPath() {
-		return contentPath;
-	}
+    private String contentPath;
+    private String mimeType;
+    private String encoding;
 
-	public void setContentPath(String sContentPath) {
-		contentPath = sContentPath;
-	}
+    public String getContentPath() {
+        return contentPath;
+    }
 
-	public String getMimeType() {
-		return mimeType;
-	}
+    public void setContentPath(String sContentPath) {
+        contentPath = sContentPath;
+    }
 
-	public void setMimeType(String sMimeType) {
-		mimeType = sMimeType;
-	}
+    public String getMimeType() {
+        return mimeType;
+    }
 
-	public String getEncoding() {
-		return encoding;
-	}
+    public void setMimeType(String sMimeType) {
+        mimeType = sMimeType;
+    }
 
-	public void setEncoding(String sEncoding) {
-		encoding = sEncoding;
-	}
+    public String getEncoding() {
+        return encoding;
+    }
 
-	public DocumentDefinition getObject() {
-		SimpleDocumentDefinition aDocumentDefinition = new SimpleDocumentDefinition();
-		
-		aDocumentDefinition.setNodeType(getNodeType());
-		aDocumentDefinition.setVersionOperation(getVersionOperation());
-		aDocumentDefinition.setAssocTargetId(getAssocTargetId());
+    public void setEncoding(String sEncoding) {
+        encoding = sEncoding;
+    }
 
-		addPropertiesToNodeDefinition(aDocumentDefinition);
-		addAspectsToNodeDefinition(aDocumentDefinition);
-		addAssociationsToNodeDefinition(aDocumentDefinition);
-		
-		aDocumentDefinition.setContentPath(getContentPath());
-		aDocumentDefinition.setMimeType(getMimeType());
-		aDocumentDefinition.setEncoding(getEncoding());
-		
-		aDocumentDefinition.afterPropertiesSet();
-		
-		return aDocumentDefinition;
-	}
+    public DocumentDefinition getObject() {
+        SimpleDocumentDefinition aDocumentDefinition = new SimpleDocumentDefinition();
 
-	public Class<?> getObjectType() {
-		return SimpleDocumentDefinition.class;
-	}
+        aDocumentDefinition.setNodeType(getNodeType());
+        aDocumentDefinition.setVersionOperation(getVersionOperation());
+        aDocumentDefinition.setAssocTargetId(getAssocTargetId());
+
+        addPropertiesToNodeDefinition(aDocumentDefinition);
+        addAspectsToNodeDefinition(aDocumentDefinition);
+        addAssociationsToNodeDefinition(aDocumentDefinition);
+
+        aDocumentDefinition.setContentPath(getContentPath());
+        aDocumentDefinition.setMimeType(getMimeType());
+        aDocumentDefinition.setEncoding(getEncoding());
+
+        aDocumentDefinition.afterPropertiesSet();
+
+        return aDocumentDefinition;
+    }
+
+    public Class<?> getObjectType() {
+        return SimpleDocumentDefinition.class;
+    }
 
 }

@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.List;
 
 import org.springframework.beans.factory.FactoryBean;
@@ -25,61 +25,63 @@ import org.springframework.util.Assert;
 import fr.acxio.tools.agia.convert.FormatConverter;
 
 /**
- * <p>Factory of
- * {@link fr.acxio.tools.agia.alfresco.configuration.PropertyDefinition PropertyDefinition}
- * .</p>
+ * <p>
+ * Factory of
+ * {@link fr.acxio.tools.agia.alfresco.configuration.PropertyDefinition
+ * PropertyDefinition} .
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class PropertyDefinitionFactoryBean implements FactoryBean<PropertyDefinition>, InitializingBean {
 
-	private String localName;
-	private FormatConverter converter;
-	private List<String> values;
-	
-	public void setLocalName(String sLocalName) {
-		localName = sLocalName;
-	}
+    private String localName;
+    private FormatConverter converter;
+    private List<String> values;
 
-	public String getLocalName() {
-		return localName;
-	}
+    public void setLocalName(String sLocalName) {
+        localName = sLocalName;
+    }
 
-	public void setConverter(FormatConverter sConverter) {
-		converter = sConverter;
-	}
+    public String getLocalName() {
+        return localName;
+    }
 
-	public FormatConverter getConverter() {
-		return converter;
-	}
+    public void setConverter(FormatConverter sConverter) {
+        converter = sConverter;
+    }
 
-	public void setValues(List<String> sValues) {
-		values = sValues;
-	}
+    public FormatConverter getConverter() {
+        return converter;
+    }
 
-	public List<String> getValues() {
-		return values;
-	}
+    public void setValues(List<String> sValues) {
+        values = sValues;
+    }
 
-	public void afterPropertiesSet() {
-		Assert.hasText(localName, "'localName' must not be empty.");
-	}
+    public List<String> getValues() {
+        return values;
+    }
 
-	public PropertyDefinition getObject() {
-		SimplePropertyDefinition aPropertyDefinition = new SimplePropertyDefinition();
-		aPropertyDefinition.setLocalName(getLocalName());
-		aPropertyDefinition.setConverter(getConverter());
-		aPropertyDefinition.setValues(getValues());
-		return aPropertyDefinition;
-	}
+    public void afterPropertiesSet() {
+        Assert.hasText(localName, "'localName' must not be empty.");
+    }
 
-	public Class<?> getObjectType() {
-		return PropertyDefinition.class;
-	}
+    public PropertyDefinition getObject() {
+        SimplePropertyDefinition aPropertyDefinition = new SimplePropertyDefinition();
+        aPropertyDefinition.setLocalName(getLocalName());
+        aPropertyDefinition.setConverter(getConverter());
+        aPropertyDefinition.setValues(getValues());
+        return aPropertyDefinition;
+    }
 
-	public boolean isSingleton() {
-		return true;
-	}
+    public Class<?> getObjectType() {
+        return PropertyDefinition.class;
+    }
+
+    public boolean isSingleton() {
+        return true;
+    }
 
 }

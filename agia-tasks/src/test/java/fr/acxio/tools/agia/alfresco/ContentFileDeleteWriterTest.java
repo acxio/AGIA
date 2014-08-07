@@ -25,8 +25,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.channels.FileLock;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -49,6 +53,14 @@ public class ContentFileDeleteWriterTest {
 	public ExpectedException exception = ExpectedException.none();
 
 	private AlfrescoNamespaceContext namespaceContext = new AlfrescoNamespaceContext();
+	
+	@After
+    public void tearDown() throws Exception {
+        Collection<File> aFilesToDelete = FileUtils.listFiles(new File("target"), new WildcardFileFilter("content*.pdf"), null);
+        for(File aFile : aFilesToDelete) {
+            FileUtils.deleteQuietly(aFile);
+        }
+    }
 	
 	@Test
 	public void testWriteNull() throws Exception {

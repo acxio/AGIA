@@ -15,83 +15,85 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- * <p>Abstract NodeDefinition holding common properties.</p>
+ * <p>
+ * Abstract NodeDefinition holding common properties.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public abstract class AbstractNodeDefinition implements NodeDefinition, InitializingBean {
-	
-	private String nodeType;
-	
-	private String versionOperation;
-	
-	private String assocTargetId;
-	
-	private List<PropertyDefinition> propertiesDefinitions = new ArrayList<PropertyDefinition>();
-	
-	private List<AspectDefinition> aspectsDefinitions = new ArrayList<AspectDefinition>();
-	
-	private List<AssociationDefinition> associationsDefinitions = new ArrayList<AssociationDefinition>();
 
-	public void addPropertyDefinition(PropertyDefinition sPropertyDefinition) {
-		propertiesDefinitions.add(sPropertyDefinition);
-	}
+    private String nodeType;
 
-	public void addAspectDefinition(AspectDefinition sAspectDefinition) {
-		aspectsDefinitions.add(sAspectDefinition);
-	}
-	
-	public void addAssociationDefinition(AssociationDefinition sAssociationDefinition) {
-		associationsDefinitions.add(sAssociationDefinition);
-	}
-	
-	public List<PropertyDefinition> getPropertiesDefinitions() {
-		return propertiesDefinitions;
-	}
+    private String versionOperation;
 
-	public List<AspectDefinition> getAspectsDefinitions() {
-		return aspectsDefinitions;
-	}
+    private String assocTargetId;
 
-	public List<AssociationDefinition> getAssociationsDefinitions() {
-		return associationsDefinitions;
-	}
+    private List<PropertyDefinition> propertiesDefinitions = new ArrayList<PropertyDefinition>();
 
-	public void afterPropertiesSet() {
-		// TODO Auto-generated method stub
-		
-	}
+    private List<AspectDefinition> aspectsDefinitions = new ArrayList<AspectDefinition>();
 
-	public void setNodeType(String sNodeType) {
-		nodeType = sNodeType;
-	}
-	
-	public String getNodeType() {
-		return nodeType;
-	}
+    private List<AssociationDefinition> associationsDefinitions = new ArrayList<AssociationDefinition>();
 
-	public String getVersionOperation() {
-		return versionOperation;
-	}
+    public void addPropertyDefinition(PropertyDefinition sPropertyDefinition) {
+        propertiesDefinitions.add(sPropertyDefinition);
+    }
 
-	public void setVersionOperation(String sVersionOperation) {
-		versionOperation = sVersionOperation;
-	}
+    public void addAspectDefinition(AspectDefinition sAspectDefinition) {
+        aspectsDefinitions.add(sAspectDefinition);
+    }
 
-	public String getAssocTargetId() {
-		return assocTargetId;
-	}
+    public void addAssociationDefinition(AssociationDefinition sAssociationDefinition) {
+        associationsDefinitions.add(sAssociationDefinition);
+    }
 
-	public void setAssocTargetId(String sAssocTargetId) {
-		assocTargetId = sAssocTargetId;
-	}
+    public List<PropertyDefinition> getPropertiesDefinitions() {
+        return propertiesDefinitions;
+    }
+
+    public List<AspectDefinition> getAspectsDefinitions() {
+        return aspectsDefinitions;
+    }
+
+    public List<AssociationDefinition> getAssociationsDefinitions() {
+        return associationsDefinitions;
+    }
+
+    public void afterPropertiesSet() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void setNodeType(String sNodeType) {
+        nodeType = sNodeType;
+    }
+
+    public String getNodeType() {
+        return nodeType;
+    }
+
+    public String getVersionOperation() {
+        return versionOperation;
+    }
+
+    public void setVersionOperation(String sVersionOperation) {
+        versionOperation = sVersionOperation;
+    }
+
+    public String getAssocTargetId() {
+        return assocTargetId;
+    }
+
+    public void setAssocTargetId(String sAssocTargetId) {
+        assocTargetId = sAssocTargetId;
+    }
 
 }

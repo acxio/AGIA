@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco.domain;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
@@ -32,43 +32,45 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 
 /**
- * <p>Alfresco association local representation.</p>
+ * <p>
+ * Alfresco association local representation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 @Entity
-@Table(name=DatabaseConstants.TABLE_NAME_ASSOCIATION)
+@Table(name = DatabaseConstants.TABLE_NAME_ASSOCIATION)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Association implements Serializable {
 
-	private static final long serialVersionUID = -2333171478603178081L;
+    private static final long serialVersionUID = -2333171478603178081L;
 
-	@Id
-	@GeneratedValue
-    @Column(name=DatabaseConstants.COLUMN_NAME_ASSOCIATION_ID)
-	private long id;
-	
-	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
-	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-	@JoinColumn(name=DatabaseConstants.COLUMN_NAME_TYPE_ID)
-	private QName type;
+    @Id
+    @GeneratedValue
+    @Column(name = DatabaseConstants.COLUMN_NAME_ASSOCIATION_ID)
+    private long id;
 
-	public Association() {
-		super();
-	}
-	
-	public Association(QName sType) {
-		super();
-		type = sType;
-	}
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = DatabaseConstants.COLUMN_NAME_TYPE_ID)
+    private QName type;
 
-	public QName getType() {
-		return type;
-	}
+    public Association() {
+        super();
+    }
 
-	public void setType(QName sType) {
-		type = sType;
-	}
-	
+    public Association(QName sType) {
+        super();
+        type = sType;
+    }
+
+    public QName getType() {
+        return type;
+    }
+
+    public void setType(QName sType) {
+        type = sType;
+    }
+
 }

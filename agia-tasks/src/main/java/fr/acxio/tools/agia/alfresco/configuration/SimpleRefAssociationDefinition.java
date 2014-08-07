@@ -15,26 +15,28 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>Simple
- * {@link fr.acxio.tools.agia.alfresco.configuration.RefAssociationDefinition RefAssociationDefinition}
- * implementation.</p>
+ * <p>
+ * Simple
+ * {@link fr.acxio.tools.agia.alfresco.configuration.RefAssociationDefinition
+ * RefAssociationDefinition} implementation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class SimpleRefAssociationDefinition extends AbstractAssociationDefinition implements RefAssociationDefinition {
 
-	private String targetRef;
-	
-	@Override
-	public String getTargetRef() {
-		return targetRef;
-	}
+    private String targetRef;
 
-	public void setTargetRef(String sTargetRef) {
-		targetRef = sTargetRef;
-	}
+    @Override
+    public String getTargetRef() {
+        return targetRef;
+    }
+
+    public void setTargetRef(String sTargetRef) {
+        targetRef = sTargetRef;
+    }
 
 }

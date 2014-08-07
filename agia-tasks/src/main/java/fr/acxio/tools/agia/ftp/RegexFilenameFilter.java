@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.ftp;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.regex.Pattern;
@@ -25,20 +25,20 @@ import org.apache.commons.net.ftp.FTPFileFilter;
 
 public class RegexFilenameFilter implements FTPFileFilter, FilenameFilter {
 
-	private Pattern pattern;
-	
-	public void setRegex(String sRegex) {
-		pattern = Pattern.compile(sRegex);
-	}
-	
-	@Override
-	public boolean accept(FTPFile sFile) {
-		return pattern.matcher(sFile.getName()).matches();
-	}
+    private Pattern pattern;
 
-	@Override
-	public boolean accept(File sDir, String sName) {
-		return pattern.matcher(sName).matches();
-	}
+    public void setRegex(String sRegex) {
+        pattern = Pattern.compile(sRegex);
+    }
+
+    @Override
+    public boolean accept(FTPFile sFile) {
+        return pattern.matcher(sFile.getName()).matches();
+    }
+
+    @Override
+    public boolean accept(File sDir, String sName) {
+        return pattern.matcher(sName).matches();
+    }
 
 }

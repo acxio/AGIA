@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
@@ -23,18 +23,20 @@ import org.springframework.validation.BindException;
 import fr.acxio.tools.agia.alfresco.domain.NodeList;
 
 /**
- * <p>Maps a
- * {@link org.springframework.batch.item.file.transform.FieldSet FieldsSet}
- * into a {@link fr.acxio.tools.agia.alfresco.domain.NodeList NodeList}.</p>
+ * <p>
+ * Maps a {@link org.springframework.batch.item.file.transform.FieldSet
+ * FieldsSet} into a {@link fr.acxio.tools.agia.alfresco.domain.NodeList
+ * NodeList}.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class AlfrescoFieldSetMapper extends AbstractFieldSetToNodeMapping implements FieldSetMapper<NodeList> {
-	
-	@Override
-	public NodeList mapFieldSet(FieldSet sData) throws BindException {
-		return objectToNodeList(sData);
-	}
+
+    @Override
+    public NodeList mapFieldSet(FieldSet sData) throws BindException {
+        return objectToNodeList(sData);
+    }
 
 }

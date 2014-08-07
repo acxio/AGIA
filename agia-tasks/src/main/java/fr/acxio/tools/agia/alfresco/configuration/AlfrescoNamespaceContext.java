@@ -15,13 +15,16 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.alfresco.webservice.util.Constants;
 import org.springframework.util.xml.SimpleNamespaceContext;
 
 /**
- * <p>Basic Alfresco namespaces context.</p>
- * <p>By default, it defines the following namespaces:
+ * <p>
+ * Basic Alfresco namespaces context.
+ * </p>
+ * <p>
+ * By default, it defines the following namespaces:
  * <ul>
  * <li>sys : http://www.alfresco.org/model/system/1.0</li>
  * <li>cm : http://www.alfresco.org/model/content/1.0</li>
@@ -30,20 +33,22 @@ import org.springframework.util.xml.SimpleNamespaceContext;
  * <li>d : http://www.alfresco.org/model/dictionary/1.0</li>
  * </ul>
  * </p>
- * <p>Other namespaces can be added through the {@code bindings} property.</p>
+ * <p>
+ * Other namespaces can be added through the {@code bindings} property.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class AlfrescoNamespaceContext extends SimpleNamespaceContext {
 
-	public AlfrescoNamespaceContext() {
-		super();
-		bindNamespaceUri("sys", Constants.NAMESPACE_SYSTEM_MODEL);
-		bindNamespaceUri("cm", Constants.NAMESPACE_CONTENT_MODEL);
-		bindNamespaceUri("app", "http://www.alfresco.org/model/application/1.0");
-		bindNamespaceUri("alf", "http://www.alfresco.org");
-		bindNamespaceUri("d", "http://www.alfresco.org/model/dictionary/1.0");
-	}
-	
+    public AlfrescoNamespaceContext() {
+        super();
+        bindNamespaceUri("sys", Constants.NAMESPACE_SYSTEM_MODEL);
+        bindNamespaceUri("cm", Constants.NAMESPACE_CONTENT_MODEL);
+        bindNamespaceUri("app", "http://www.alfresco.org/model/application/1.0");
+        bindNamespaceUri("alf", "http://www.alfresco.org");
+        bindNamespaceUri("d", "http://www.alfresco.org/model/dictionary/1.0");
+    }
+
 }

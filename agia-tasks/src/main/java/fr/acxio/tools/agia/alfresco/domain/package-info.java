@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2014 Acxio
  * 
@@ -14,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
  * Alfresco domain specific local representation of nodes.
  */

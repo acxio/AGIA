@@ -15,35 +15,37 @@ package fr.acxio.tools.agia.tasks;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>FileOperation tasklet related exception</p>
+ * <p>
+ * FileOperation tasklet related exception
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class FileOperationException extends Exception {
 
-	private static final long serialVersionUID = -172774244398666959L;
+    private static final long serialVersionUID = -172774244398666959L;
 
-	public FileOperationException() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    public FileOperationException() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
-	public FileOperationException(String sArg0, Throwable sArg1) {
-		super(sArg0, sArg1);
-		// TODO Auto-generated constructor stub
-	}
+    public FileOperationException(String sArg0, Throwable sArg1) {
+        super(sArg0, sArg1);
+        // TODO Auto-generated constructor stub
+    }
 
-	public FileOperationException(String sArg0) {
-		super(sArg0);
-		// TODO Auto-generated constructor stub
-	}
+    public FileOperationException(String sArg0) {
+        super(sArg0);
+        // TODO Auto-generated constructor stub
+    }
 
-	public FileOperationException(Throwable sArg0) {
-		super(sArg0);
-		// TODO Auto-generated constructor stub
-	}
+    public FileOperationException(Throwable sArg0) {
+        super(sArg0);
+        // TODO Auto-generated constructor stub
+    }
 
 }

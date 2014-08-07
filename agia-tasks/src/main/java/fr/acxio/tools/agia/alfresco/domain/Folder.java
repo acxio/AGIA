@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco.domain;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,53 +30,53 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 /**
- * <p>Alfresco folder local representation.</p>
+ * <p>
+ * Alfresco folder local representation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 @Entity
-@Table(name=DatabaseConstants.TABLE_NAME_FOLDER)
+@Table(name = DatabaseConstants.TABLE_NAME_FOLDER)
 @ForeignKey(name = DatabaseConstants.FK_FOLDER_NODE)
 public class Folder extends Node {
 
-	private static final long serialVersionUID = -6873864837412895811L;
+    private static final long serialVersionUID = -6873864837412895811L;
 
-	@OneToMany(cascade={CascadeType.ALL})
-	@JoinColumn(name=DatabaseConstants.COLUMN_NAME_PARENT_ID)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Folder> folders = new ArrayList<Folder>();
-	
-	@OneToMany(cascade={CascadeType.ALL})
-	@JoinColumn(name=DatabaseConstants.COLUMN_NAME_PARENT_ID)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Document> documents = new ArrayList<Document>();
+    @OneToMany(cascade = { CascadeType.ALL })
+    @JoinColumn(name = DatabaseConstants.COLUMN_NAME_PARENT_ID)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Folder> folders = new ArrayList<Folder>();
 
-	public List<Folder> getFolders() {
-		return folders;
-	}
+    @OneToMany(cascade = { CascadeType.ALL })
+    @JoinColumn(name = DatabaseConstants.COLUMN_NAME_PARENT_ID)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Document> documents = new ArrayList<Document>();
 
-	public void addFolder(Folder sFolder) {
-		folders.add(sFolder);
-	}
+    public List<Folder> getFolders() {
+        return folders;
+    }
 
-	public List<Document> getDocuments() {
-		return documents;
-	}
+    public void addFolder(Folder sFolder) {
+        folders.add(sFolder);
+    }
 
-	public void addDocument(Document sDocument) {
-		documents.add(sDocument);
-	}
-	
+    public List<Document> getDocuments() {
+        return documents;
+    }
 
-	
-	@Override
-	public String toString() {
-		StringBuilder aString = new StringBuilder();
-		aString.append("Folder: { type:").append(getType());
-		aString.append(", properties:").append(getProperties());
-		aString.append(", aspects:").append(getAspects());
-		aString.append("}");
-		return aString.toString();
-	}
+    public void addDocument(Document sDocument) {
+        documents.add(sDocument);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder aString = new StringBuilder();
+        aString.append("Folder: { type:").append(getType());
+        aString.append(", properties:").append(getProperties());
+        aString.append(", aspects:").append(getAspects());
+        aString.append("}");
+        return aString.toString();
+    }
 }

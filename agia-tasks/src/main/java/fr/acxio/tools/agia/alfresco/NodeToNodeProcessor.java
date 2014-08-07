@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.validation.BindException;
 
@@ -25,15 +25,15 @@ import fr.acxio.tools.agia.alfresco.domain.NodeList;
 
 public class NodeToNodeProcessor extends NodeMapper<Node> implements ItemProcessor<Node, NodeList> {
 
-	@Override
-	public Object transformData(Node sData) {
-		return sData;
-	}
+    @Override
+    public Object transformData(Node sData) {
+        return sData;
+    }
 
-	@Override
-	public NodeList process(Node sItem) throws BindException {
-		return (sItem instanceof Document) ? objectToNodeList(sItem) : null; // skip folders
-	}
-
+    @Override
+    public NodeList process(Node sItem) throws BindException {
+        return (sItem instanceof Document) ? objectToNodeList(sItem) : null; // skip
+                                                                             // folders
+    }
 
 }

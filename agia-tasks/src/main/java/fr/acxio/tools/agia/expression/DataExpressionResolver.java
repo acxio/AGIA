@@ -15,11 +15,12 @@ package fr.acxio.tools.agia.expression;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.expression.EvaluationContext;
 
 /**
- * <p>Expression resolver aimed at data handling, ie without the bean context.
+ * <p>
+ * Expression resolver aimed at data handling, ie without the bean context.
  * </p>
  * 
  * @author pcollardez
@@ -27,14 +28,19 @@ import org.springframework.expression.EvaluationContext;
  */
 public interface DataExpressionResolver {
 
-	/**
-	 * <p>Evaluates the given expression with the given context and return
-	 * the result cast to the given class.</p>
-	 * 
-	 * @param sExpression the expression to evaluate
-	 * @param sEvalContext the context to use for evaluation
-	 * @param sReturnedClass the class of the result
-	 * @return the evaluated expression cast to {@code sReturnedClass}
-	 */
-	<T> T evaluate(String sExpression, EvaluationContext sEvalContext, Class<T> sReturnedClass);
+    /**
+     * <p>
+     * Evaluates the given expression with the given context and return the
+     * result cast to the given class.
+     * </p>
+     * 
+     * @param sExpression
+     *            the expression to evaluate
+     * @param sEvalContext
+     *            the context to use for evaluation
+     * @param sReturnedClass
+     *            the class of the result
+     * @return the evaluated expression cast to {@code sReturnedClass}
+     */
+    <T> T evaluate(String sExpression, EvaluationContext sEvalContext, Class<T> sReturnedClass);
 }

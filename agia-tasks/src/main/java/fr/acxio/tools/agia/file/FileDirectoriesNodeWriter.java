@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.file;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -39,97 +39,112 @@ import fr.acxio.tools.agia.convert.FormatConverter;
 import fr.acxio.tools.agia.io.InputStreamFactory;
 
 public class FileDirectoriesNodeWriter implements ItemStreamWriter<NodeList> {
-	
-	private static Logger logger = LoggerFactory.getLogger(FileDirectoriesNodeWriter.class);
-	
-	private static final FormatConverter pathConverter = new AlfrescoPathToPathConverter();
-	
-	private ItemWriter<? super NodeList> delegate; // Can be a CSV writer
-	private Resource basePath;
-	private InputStreamFactory<String> inputStreamFactory;
-	
-	public void setDelegate(ItemWriter<? super NodeList> sDelegate) {
-		delegate = sDelegate;
-	}
 
-	public void setBasePath(Resource sBasePath) {
-		basePath = sBasePath;
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileDirectoriesNodeWriter.class);
 
-	public void setInputStreamFactory(InputStreamFactory<String> sInputStreamFactory) {
-		inputStreamFactory = sInputStreamFactory;
-	}
+    private static final FormatConverter pathConverter = new AlfrescoPathToPathConverter();
 
-	@Override
-	public void write(List<? extends NodeList> sItems) throws Exception {
-		if (!sItems.isEmpty()) {
-			
-			File aBaseDir = basePath.getFile();
-			aBaseDir.mkdirs();
-			
-			for(NodeList aNodeList : sItems) { // each NodeList represents an input record
-				for(Node aNode : aNodeList) {
-					File aDestination = new File(aBaseDir, pathConverter.convert(aNode.getPath()).get(0)); // Must decode the value, because Alfresco paths are encoded
-					if (aNode instanceof Document) {
-						Document aDocument = (Document)aNode;
-						if (logger.isDebugEnabled()) {
-							logger.debug("Copy " + aDocument.getContentPath() + " to " + aDestination.getAbsolutePath());
-						}
-						
-						FileOutputStream aOutputstream = null;
-						InputStream aInputStream = null;
-						try {
-							aInputStream = inputStreamFactory.getInputStream(aDocument.getContentPath());
-							aOutputstream = new FileOutputStream(aDestination);
-							IOUtils.copy(aInputStream, aOutputstream);
-						} finally {
-							IOUtils.closeQuietly(aInputStream);
-							IOUtils.closeQuietly(aOutputstream);
-						}
-						
-						aDocument.setContentPath(aDestination.getPath()); // SIDE EFFECT : replace remote path by local path
-						
-					} else {
-						if (logger.isDebugEnabled()) {
-							logger.debug("Create dirs " + aDestination.getAbsolutePath());
-						}
-						aDestination.mkdir();
-					}
-				}
-			}
-			
-			if (delegate != null) {
-				if (logger.isDebugEnabled()) {
-					logger.debug("Call write on delegate...");
-				}
-				delegate.write(sItems);
-			}
-			
-		}
-		
-	}
-	
-	@Override
-	public void open(ExecutionContext sExecutionContext)
-			throws ItemStreamException {
-		if (delegate instanceof ItemStream) {
-			((ItemStream) delegate).open(sExecutionContext);
-		}
-	}
+    private ItemWriter<? super NodeList> delegate; // Can be a CSV writer
+    private Resource basePath;
+    private InputStreamFactory<String> inputStreamFactory;
 
-	@Override
-	public void update(ExecutionContext sExecutionContext)
-			throws ItemStreamException {
-		if (delegate instanceof ItemStream) {
-			((ItemStream) delegate).update(sExecutionContext);
-		}
-	}
+    public void setDelegate(ItemWriter<? super NodeList> sDelegate) {
+        delegate = sDelegate;
+    }
 
-	@Override
-	public void close() throws ItemStreamException {
-		if (delegate instanceof ItemStream) {
-			((ItemStream) delegate).close();
-		}
-	}
+    public void setBasePath(Resource sBasePath) {
+        basePath = sBasePath;
+    }
+
+    public void setInputStreamFactory(InputStreamFactory<String> sInputStreamFactory) {
+        inputStreamFactory = sInputStreamFactory;
+    }
+
+    @Override
+    public void write(List<? extends NodeList> sItems) throws Exception {
+        if (!sItems.isEmpty()) {
+
+            File aBaseDir = basePath.getFile();
+            aBaseDir.mkdirs();
+
+            for (NodeList aNodeList : sItems) { // each NodeList represents an
+                                                // input record
+                for (Node aNode : aNodeList) {
+                    File aDestination = new File(aBaseDir, pathConverter.convert(aNode.getPath()).get(0)); // Must
+                                                                                                           // decode
+                                                                                                           // the
+                                                                                                           // value,
+                                                                                                           // because
+                                                                                                           // Alfresco
+                                                                                                           // paths
+                                                                                                           // are
+                                                                                                           // encoded
+                    if (aNode instanceof Document) {
+                        Document aDocument = (Document) aNode;
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("Copy " + aDocument.getContentPath() + " to " + aDestination.getAbsolutePath());
+                        }
+
+                        FileOutputStream aOutputstream = null;
+                        InputStream aInputStream = null;
+                        try {
+                            aInputStream = inputStreamFactory.getInputStream(aDocument.getContentPath());
+                            aOutputstream = new FileOutputStream(aDestination);
+                            IOUtils.copy(aInputStream, aOutputstream);
+                        } finally {
+                            IOUtils.closeQuietly(aInputStream);
+                            IOUtils.closeQuietly(aOutputstream);
+                        }
+
+                        aDocument.setContentPath(aDestination.getPath()); // SIDE
+                                                                          // EFFECT
+                                                                          // :
+                                                                          // replace
+                                                                          // remote
+                                                                          // path
+                                                                          // by
+                                                                          // local
+                                                                          // path
+
+                    } else {
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("Create dirs " + aDestination.getAbsolutePath());
+                        }
+                        aDestination.mkdir();
+                    }
+                }
+            }
+
+            if (delegate != null) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Call write on delegate...");
+                }
+                delegate.write(sItems);
+            }
+
+        }
+
+    }
+
+    @Override
+    public void open(ExecutionContext sExecutionContext) throws ItemStreamException {
+        if (delegate instanceof ItemStream) {
+            ((ItemStream) delegate).open(sExecutionContext);
+        }
+    }
+
+    @Override
+    public void update(ExecutionContext sExecutionContext) throws ItemStreamException {
+        if (delegate instanceof ItemStream) {
+            ((ItemStream) delegate).update(sExecutionContext);
+        }
+    }
+
+    @Override
+    public void close() throws ItemStreamException {
+        if (delegate instanceof ItemStream) {
+            ((ItemStream) delegate).close();
+        }
+    }
 
 }

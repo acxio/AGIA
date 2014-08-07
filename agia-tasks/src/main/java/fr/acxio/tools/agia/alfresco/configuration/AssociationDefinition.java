@@ -15,11 +15,15 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>Alfresco local representation of associations.</p>
- * <p>The AssociationDefinition describes how an association will be added
- * to a node in Alfresco:</p>
+ * <p>
+ * Alfresco local representation of associations.
+ * </p>
+ * <p>
+ * The AssociationDefinition describes how an association will be added to a
+ * node in Alfresco:
+ * </p>
  * <ul>
  * <li>An association has a type (type) which is a qualified name.</li>
  * </ul>
@@ -29,11 +33,13 @@ package fr.acxio.tools.agia.alfresco.configuration;
  */
 public interface AssociationDefinition {
 
-	/**
-	 * <p>Returns the type of the association</p>
-	 * 
-	 * @return the type of the association
-	 */
-	String getType();
+    /**
+     * <p>
+     * Returns the type of the association
+     * </p>
+     * 
+     * @return the type of the association
+     */
+    String getType();
 
 }

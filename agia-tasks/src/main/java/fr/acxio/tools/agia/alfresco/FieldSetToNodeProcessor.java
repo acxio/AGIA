@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
@@ -23,18 +23,20 @@ import org.springframework.validation.BindException;
 import fr.acxio.tools.agia.alfresco.domain.NodeList;
 
 /**
- * <p>Process a
- * {@link org.springframework.batch.item.file.transform.FieldSet FieldsSet}
- * into a {@link fr.acxio.tools.agia.alfresco.domain.NodeList NodeList}.</p>
+ * <p>
+ * Process a {@link org.springframework.batch.item.file.transform.FieldSet
+ * FieldsSet} into a {@link fr.acxio.tools.agia.alfresco.domain.NodeList
+ * NodeList}.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class FieldSetToNodeProcessor extends AbstractFieldSetToNodeMapping implements ItemProcessor<FieldSet, NodeList> {
 
-	@Override
-	public NodeList process(FieldSet sItem) throws BindException {
-		return objectToNodeList(sItem);
-	}
+    @Override
+    public NodeList process(FieldSet sItem) throws BindException {
+        return objectToNodeList(sItem);
+    }
 
 }

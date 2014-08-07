@@ -20,16 +20,24 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.channels.FileLock;
+import java.util.Collection;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.core.io.FileSystemResource;
 
@@ -38,13 +46,24 @@ public class FileCopyTaskletTest {
 	
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
+	
+	@After
+    public void tearDown() throws Exception {
+        Collection<File> aFilesToDelete = FileUtils.listFiles(new File("target"), new WildcardFileFilter("input-copy*.csv"), null);
+        for(File aFile : aFilesToDelete) {
+            FileUtils.deleteQuietly(aFile);
+        }
+    }
 
 	@Test
 	public void testExecute() throws Exception {
 		FileCopyTasklet aTasklet = new FileCopyTasklet();
 		aTasklet.setOrigin(new FileSystemResource("src/test/resources/testFiles/input.csv"));
 		aTasklet.setDestination(new FileSystemResource("target/input-copy.csv"));
-		assertEquals(RepeatStatus.FINISHED, aTasklet.execute(null, null));
+		StepContribution aStepContribution = mock(StepContribution.class);
+		assertEquals(RepeatStatus.FINISHED, aTasklet.execute(aStepContribution, null));
+		verify(aStepContribution, times(1)).incrementReadCount();
+		verify(aStepContribution, times(1)).incrementWriteCount(1);
 	}
 	
 	@Test

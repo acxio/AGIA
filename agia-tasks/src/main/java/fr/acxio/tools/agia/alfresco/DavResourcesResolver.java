@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.IOException;
 import java.util.List;
 
@@ -24,11 +24,11 @@ import com.googlecode.sardine.Sardine;
 
 public interface DavResourcesResolver {
 
-	List<DavResource> getDirectoryList(Sardine sSardine, String sPath) throws IOException;
-	
-	List<DavResource> setLocalDirectoryList(String sPath, List<DavResource> sResources);
-	
-	void evictDirectoryList(String sPath);
-	
-	void evictDictoriesLists();
+    List<DavResource> getDirectoryList(Sardine sSardine, String sPath) throws IOException;
+
+    List<DavResource> setLocalDirectoryList(String sPath, List<DavResource> sResources);
+
+    void evictDirectoryList(String sPath);
+
+    void evictDictoriesLists();
 }

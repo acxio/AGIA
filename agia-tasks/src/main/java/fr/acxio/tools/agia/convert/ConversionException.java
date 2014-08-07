@@ -15,30 +15,32 @@ package fr.acxio.tools.agia.convert;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>Conversion related exception.</p>
+ * <p>
+ * Conversion related exception.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class ConversionException extends Exception {
 
-	private static final long serialVersionUID = 9188247825367599489L;
+    private static final long serialVersionUID = 9188247825367599489L;
 
-	public ConversionException() {
-	}
+    public ConversionException() {
+    }
 
-	public ConversionException(String sArg0) {
-		super(sArg0);
-	}
+    public ConversionException(String sArg0) {
+        super(sArg0);
+    }
 
-	public ConversionException(Throwable sArg0) {
-		super(sArg0);
-	}
+    public ConversionException(Throwable sArg0) {
+        super(sArg0);
+    }
 
-	public ConversionException(String sArg0, Throwable sArg1) {
-		super(sArg0, sArg1);
-	}
+    public ConversionException(String sArg0, Throwable sArg1) {
+        super(sArg0, sArg1);
+    }
 
 }

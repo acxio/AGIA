@@ -15,54 +15,56 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.List;
 
 /**
- * <p>Factory of
- * {@link fr.acxio.tools.agia.alfresco.configuration.FolderDefinition FolderDefinition}
- * .</p>
+ * <p>
+ * Factory of
+ * {@link fr.acxio.tools.agia.alfresco.configuration.FolderDefinition
+ * FolderDefinition} .
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class FolderDefinitionFactoryBean extends NodeDefinitionFactoryBean<FolderDefinition> {
 
-	private FolderDefinition parent;
-	private List<FolderDefinition> children;
-	private List<DocumentDefinition> documents;
-	
-	public void setParent(FolderDefinition sParent) {
-		parent = sParent;
-	}
+    private FolderDefinition parent;
+    private List<FolderDefinition> children;
+    private List<DocumentDefinition> documents;
 
-	public void setChildren(List<FolderDefinition> sChildren) {
-		children = sChildren;
-	}
+    public void setParent(FolderDefinition sParent) {
+        parent = sParent;
+    }
 
-	public void setDocuments(List<DocumentDefinition> sDocuments) {
-		documents = sDocuments;
-	}
+    public void setChildren(List<FolderDefinition> sChildren) {
+        children = sChildren;
+    }
 
-	public FolderDefinition getObject() {
-		if (children != null && children.size() > 0) {
-			for (FolderDefinition child : children) {
-				parent.addFolder(child);
-			}
-		}
-		if (documents != null && documents.size() > 0) {
-			for (DocumentDefinition child : documents) {
-				parent.addDocument(child);
-			}
-		}
-		addPropertiesToNodeDefinition(parent);
-		addAspectsToNodeDefinition(parent);
-		addAssociationsToNodeDefinition(parent);
-		return parent;
-	}
+    public void setDocuments(List<DocumentDefinition> sDocuments) {
+        documents = sDocuments;
+    }
 
-	public Class<?> getObjectType() {
-		return SimpleFolderDefinition.class;
-	}
+    public FolderDefinition getObject() {
+        if (children != null && children.size() > 0) {
+            for (FolderDefinition child : children) {
+                parent.addFolder(child);
+            }
+        }
+        if (documents != null && documents.size() > 0) {
+            for (DocumentDefinition child : documents) {
+                parent.addDocument(child);
+            }
+        }
+        addPropertiesToNodeDefinition(parent);
+        addAspectsToNodeDefinition(parent);
+        addAssociationsToNodeDefinition(parent);
+        return parent;
+    }
+
+    public Class<?> getObjectType() {
+        return SimpleFolderDefinition.class;
+    }
 
 }

@@ -15,47 +15,48 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.util.Assert;
 
 /**
- * <p>Factory of
- * {@link fr.acxio.tools.agia.alfresco.configuration.QueryAssociationDefinition RefAssociationDefinition}
- * .</p>
+ * <p>
+ * Factory of
+ * {@link fr.acxio.tools.agia.alfresco.configuration.QueryAssociationDefinition
+ * RefAssociationDefinition} .
+ * </p>
  * 
  * @author pcollardez
  *
  */
-public class RefAssociationDefinitionFactoryBean extends
-		AssociationDefinitionFactoryBean<RefAssociationDefinition> {
+public class RefAssociationDefinitionFactoryBean extends AssociationDefinitionFactoryBean<RefAssociationDefinition> {
 
-	private String reference;
-	
-	public String getReference() {
-		return reference;
-	}
+    private String reference;
 
-	public void setReference(String sReference) {
-		reference = sReference;
-	}
+    public String getReference() {
+        return reference;
+    }
 
-	@Override
-	public void afterPropertiesSet() {
-		super.afterPropertiesSet();
-		Assert.hasText(reference, "'reference' must not be empty.");
-	}
+    public void setReference(String sReference) {
+        reference = sReference;
+    }
 
-	@Override
-	public RefAssociationDefinition getObject() {
-		SimpleRefAssociationDefinition aRefAssociationDefinition = new SimpleRefAssociationDefinition();
-		aRefAssociationDefinition.setType(getType());
-		aRefAssociationDefinition.setTargetRef(getReference());
-		return aRefAssociationDefinition;
-	}
+    @Override
+    public void afterPropertiesSet() {
+        super.afterPropertiesSet();
+        Assert.hasText(reference, "'reference' must not be empty.");
+    }
 
-	@Override
-	public Class<?> getObjectType() {
-		return RefAssociationDefinition.class;
-	}
+    @Override
+    public RefAssociationDefinition getObject() {
+        SimpleRefAssociationDefinition aRefAssociationDefinition = new SimpleRefAssociationDefinition();
+        aRefAssociationDefinition.setType(getType());
+        aRefAssociationDefinition.setTargetRef(getReference());
+        return aRefAssociationDefinition;
+    }
+
+    @Override
+    public Class<?> getObjectType() {
+        return RefAssociationDefinition.class;
+    }
 
 }

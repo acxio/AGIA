@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.io;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.Map;
 
 import org.springframework.core.io.Resource;
@@ -23,7 +23,8 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 /**
- * <p>A filesystem resources factory using a pattern to create the resources.
+ * <p>
+ * A filesystem resources factory using a pattern to build the resources.
  * </p>
  * 
  * @author pcollardez
@@ -31,42 +32,42 @@ import org.springframework.core.io.support.ResourcePatternResolver;
  */
 public class FileSystemResourcesFactory implements ResourcesFactory {
 
-	private ResourcePatternResolver resourcePatternResolver;
-	private String pattern;
-	
-	public FileSystemResourcesFactory() {
-		this(new PathMatchingResourcePatternResolver(), null);
-	}
-	
-	public FileSystemResourcesFactory(String sPattern) {
-		this(new PathMatchingResourcePatternResolver(), sPattern);
-	}
+    private ResourcePatternResolver resourcePatternResolver;
+    private String pattern;
 
-	public FileSystemResourcesFactory(ResourcePatternResolver sResourcePatternResolver, String sPattern) {
-		resourcePatternResolver = sResourcePatternResolver;
-		pattern = sPattern;
-	}
+    public FileSystemResourcesFactory() {
+        this(new PathMatchingResourcePatternResolver(), null);
+    }
 
-	public void setResourcePatternResolver(ResourcePatternResolver sResourcePatternResolver) {
-		resourcePatternResolver = sResourcePatternResolver;
-	}
+    public FileSystemResourcesFactory(String sPattern) {
+        this(new PathMatchingResourcePatternResolver(), sPattern);
+    }
 
-	public void setPattern(String sPattern) {
-		pattern = sPattern;
-	}
+    public FileSystemResourcesFactory(ResourcePatternResolver sResourcePatternResolver, String sPattern) {
+        resourcePatternResolver = sResourcePatternResolver;
+        pattern = sPattern;
+    }
 
-	public Resource[] getResources() throws ResourceCreationException {
-		Resource[] aResources = null;
-		try {
-			aResources = resourcePatternResolver.getResources(pattern);
-		} catch (Exception e) {
-			throw new ResourceCreationException(e);
-		}
-		return aResources;
-	}
+    public void setResourcePatternResolver(ResourcePatternResolver sResourcePatternResolver) {
+        resourcePatternResolver = sResourcePatternResolver;
+    }
 
-	public Resource[] getResources(Map<Object, Object> sParameters) throws ResourceCreationException {
-		return getResources();
-	}
+    public void setPattern(String sPattern) {
+        pattern = sPattern;
+    }
+
+    public Resource[] getResources() throws ResourceCreationException {
+        Resource[] aResources = null;
+        try {
+            aResources = resourcePatternResolver.getResources(pattern);
+        } catch (Exception e) {
+            throw new ResourceCreationException(e);
+        }
+        return aResources;
+    }
+
+    public Resource[] getResources(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException {
+        return getResources();
+    }
 
 }

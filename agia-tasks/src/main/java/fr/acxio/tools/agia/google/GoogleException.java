@@ -15,24 +15,24 @@ package fr.acxio.tools.agia.google;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 public class GoogleException extends Exception {
 
-	private static final long serialVersionUID = -3715328781552912534L;
+    private static final long serialVersionUID = -3715328781552912534L;
 
-	public GoogleException() {
-	}
+    public GoogleException() {
+    }
 
-	public GoogleException(String sMessage) {
-		super(sMessage);
-	}
+    public GoogleException(String sMessage) {
+        super(sMessage);
+    }
 
-	public GoogleException(Throwable sCause) {
-		super(sCause);
-	}
+    public GoogleException(Throwable sCause) {
+        super(sCause);
+    }
 
-	public GoogleException(String sMessage, Throwable sCause) {
-		super(sMessage, sCause);
-	}
+    public GoogleException(String sMessage, Throwable sCause) {
+        super(sMessage, sCause);
+    }
 
 }

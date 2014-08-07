@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco.domain;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -23,57 +23,59 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ForeignKey;
 
 /**
- * <p>Alfresco query association local representation.</p>
+ * <p>
+ * Alfresco query association local representation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 @Entity
-@Table(name=DatabaseConstants.TABLE_NAME_QUERYASSOCIATION)
+@Table(name = DatabaseConstants.TABLE_NAME_QUERYASSOCIATION)
 @ForeignKey(name = DatabaseConstants.FK_QUERY_ASSOCIATION)
 public class QueryAssociation extends Association {
 
-	private static final long serialVersionUID = 3866349298359568417L;
+    private static final long serialVersionUID = 3866349298359568417L;
 
-	@Column(name=DatabaseConstants.COLUMN_NAME_QUERY_LANGUAGE, length=DatabaseConstants.COLUMN_LENGTH_QUERY_LANGUAGE)
-	private String queryLanguage;
-	
-	@Column(name=DatabaseConstants.COLUMN_NAME_QUERY, length=DatabaseConstants.COLUMN_LENGTH_QUERY)
-	private String query;
+    @Column(name = DatabaseConstants.COLUMN_NAME_QUERY_LANGUAGE, length = DatabaseConstants.COLUMN_LENGTH_QUERY_LANGUAGE)
+    private String queryLanguage;
 
-	public String getQueryLanguage() {
-		return queryLanguage;
-	}
+    @Column(name = DatabaseConstants.COLUMN_NAME_QUERY, length = DatabaseConstants.COLUMN_LENGTH_QUERY)
+    private String query;
 
-	public void setQueryLanguage(String sQueryLanguage) {
-		queryLanguage = sQueryLanguage;
-	}
+    public String getQueryLanguage() {
+        return queryLanguage;
+    }
 
-	public String getQuery() {
-		return query;
-	}
+    public void setQueryLanguage(String sQueryLanguage) {
+        queryLanguage = sQueryLanguage;
+    }
 
-	public void setQuery(String sQuery) {
-		query = sQuery;
-	}
+    public String getQuery() {
+        return query;
+    }
 
-	public QueryAssociation() {
-		super();
-	}
-	
-	public QueryAssociation(QName sType, String sQueryLanguage, String sQuery) {
-		super(sType);
-		queryLanguage = sQueryLanguage;
-		query = sQuery;
-	}
+    public void setQuery(String sQuery) {
+        query = sQuery;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder aString = new StringBuilder();
-		aString.append("QueryAssociation: { type:").append(getType());
-		aString.append(", queryLanguage:").append(queryLanguage);
-		aString.append(", query:").append(query);
-		aString.append("}");
-		return aString.toString();
-	}
+    public QueryAssociation() {
+        super();
+    }
+
+    public QueryAssociation(QName sType, String sQueryLanguage, String sQuery) {
+        super(sType);
+        queryLanguage = sQueryLanguage;
+        query = sQuery;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder aString = new StringBuilder();
+        aString.append("QueryAssociation: { type:").append(getType());
+        aString.append(", queryLanguage:").append(queryLanguage);
+        aString.append(", query:").append(query);
+        aString.append("}");
+        return aString.toString();
+    }
 }

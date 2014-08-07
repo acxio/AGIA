@@ -15,46 +15,49 @@ package fr.acxio.tools.agia.transform;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.batch.item.file.transform.ExtractorLineAggregator;
 
 /**
- * <p>A
- * {@link org.springframework.batch.item.file.transform.LineAggregator LineAggregator}
- * implementation that converts an object into a delimited list of strings.
- * The default delimiter is a comma and the default
- * quote character is a double-quote.</p>
+ * <p>
+ * A {@link org.springframework.batch.item.file.transform.LineAggregator
+ * LineAggregator} implementation that converts an object into a delimited list
+ * of strings. The default delimiter is a comma and the default quote character
+ * is a double-quote.
+ * </p>
  * 
  * @author pcollardez
  */
 public class DelimitedLineAggregator<T> extends ExtractorLineAggregator<T> {
 
-	private String delimiter = ",";
-	
-	private char quoteCharacter = '"';
+    private String delimiter = ",";
 
-	/**
-	 * Public setter for the delimiter.
-	 * @param sDelimiter the delimiter to set
-	 */
-	public void setDelimiter(String sDelimiter) {
-		delimiter = sDelimiter;
-	}
+    private char quoteCharacter = '"';
 
-	public void setQuoteCharacter(char sQuoteCharacter) {
-		quoteCharacter = sQuoteCharacter;
-	}
+    /**
+     * Public setter for the delimiter.
+     * 
+     * @param sDelimiter
+     *            the delimiter to set
+     */
+    public void setDelimiter(String sDelimiter) {
+        delimiter = sDelimiter;
+    }
 
-	@Override
-	public String doAggregate(Object[] fields) {
-		StringBuilder aStringBuilder = new StringBuilder();
-		int nbFields = (fields.length - 1);
-		for(int i = 0; i <= nbFields; i++) {
-			aStringBuilder.append(quoteCharacter).append(fields[i]).append(quoteCharacter);
-			if (i < nbFields) {
-				aStringBuilder.append(delimiter);
-			}
-		}
-		return aStringBuilder.toString();
-	}
+    public void setQuoteCharacter(char sQuoteCharacter) {
+        quoteCharacter = sQuoteCharacter;
+    }
+
+    @Override
+    public String doAggregate(Object[] fields) {
+        StringBuilder aStringBuilder = new StringBuilder();
+        int nbFields = (fields.length - 1);
+        for (int i = 0; i <= nbFields; i++) {
+            aStringBuilder.append(quoteCharacter).append(fields[i]).append(quoteCharacter);
+            if (i < nbFields) {
+                aStringBuilder.append(delimiter);
+            }
+        }
+        return aStringBuilder.toString();
+    }
 }

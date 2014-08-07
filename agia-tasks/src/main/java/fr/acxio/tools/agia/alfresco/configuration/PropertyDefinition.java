@@ -15,15 +15,14 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.List;
 
 import fr.acxio.tools.agia.convert.FormatConverter;
 
 /**
- * Alfresco local representation of properties.</br>
- * The PropertyDefinition describes how a property will be created in Alfresco:
- * </br>
+ * Alfresco local representation of properties.</br> The PropertyDefinition
+ * describes how a property will be created in Alfresco: </br>
  * <ul>
  * <li>A property has a name (localName) which is a qualified name.</li>
  * <li>A property may have format converter (converter).</li>
@@ -35,12 +34,12 @@ import fr.acxio.tools.agia.convert.FormatConverter;
  */
 public interface PropertyDefinition {
 
-	String getLocalName();
-	
-	FormatConverter getConverter();
-	
-	List<String> getValues();
-	
-	boolean isMultiValued();
-	
+    String getLocalName();
+
+    FormatConverter getConverter();
+
+    List<String> getValues();
+
+    boolean isMultiValued();
+
 }

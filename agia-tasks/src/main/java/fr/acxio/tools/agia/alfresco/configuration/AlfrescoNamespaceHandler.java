@@ -15,20 +15,22 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
- * <p>Spring configuration NamespaceHandler for Alfresco specific domain.</p>
+ * <p>
+ * Spring configuration NamespaceHandler for Alfresco specific domain.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class AlfrescoNamespaceHandler extends NamespaceHandlerSupport {
 
-	public void init() {
-		registerBeanDefinitionParser("document", new DocumentDefinitionParser());
-		registerBeanDefinitionParser("folder", new FolderDefinitionParser());
-	}
+    public void init() {
+        registerBeanDefinitionParser("document", new DocumentDefinitionParser());
+        registerBeanDefinitionParser("folder", new FolderDefinitionParser());
+    }
 
 }

@@ -15,37 +15,47 @@ package fr.acxio.tools.agia.io;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.Map;
 
 import org.springframework.core.io.Resource;
 
 /**
- * <p>Factory for many resources at the same time.</p>
+ * <p>
+ * Factory for many resources at the same time.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public interface ResourcesFactory {
 
-	/**
-	 * <p>Returns an array of resources according to its internal
-	 * implementation.</p>
-	 * 
-	 * @return an array of resources
-	 * @throws ResourceCreationException if a resource cannot be created
-	 */
-	Resource[] getResources() throws ResourceCreationException;
-	
-	/**
-	 * <p>Returns an array of resources according to the given parameters.</p>
-	 * <p>If a specific implementation does not use the parameters, it should
-	 * return the same resources it would return without any parameters.</p>
-	 * 
-	 * @param sParameters the parameters to use to create the resources
-	 * @return an array of resources
-	 * @throws ResourceCreationException if a resource cannot be created
-	 */
-	Resource[] getResources(Map<Object, Object> sParameters) throws ResourceCreationException;
-	
+    /**
+     * <p>
+     * Returns an array of resources according to its internal implementation.
+     * </p>
+     * 
+     * @return an array of resources
+     * @throws ResourceCreationException
+     *             if a resource cannot be created
+     */
+    Resource[] getResources() throws ResourceCreationException;
+
+    /**
+     * <p>
+     * Returns an array of resources according to the given parameters.
+     * </p>
+     * <p>
+     * If a specific implementation does not use the parameters, it should
+     * return the same resources it would return without any parameters.
+     * </p>
+     * 
+     * @param sParameters
+     *            the parameters to use to create the resources
+     * @return an array of resources
+     * @throws ResourceCreationException
+     *             if a resource cannot be created
+     */
+    Resource[] getResources(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException;
+
 }

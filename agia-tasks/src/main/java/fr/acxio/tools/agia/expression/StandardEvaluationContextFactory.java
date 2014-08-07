@@ -15,43 +15,45 @@ package fr.acxio.tools.agia.expression;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.Map;
 
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 /**
- * <p>Standard implementation of the context factory.</p>
- * <p>This factory allows to add common variables to the context. These
- * variables are not set at the data level, which allows to inject for example
- * converters into the context.</p>
+ * <p>
+ * Standard implementation of the context factory.
+ * </p>
+ * <p>
+ * This factory allows to add common variables to the context. These variables
+ * are not set at the data level, which allows to inject for example converters
+ * into the context.
+ * </p>
  * 
  * @author pcollardez
  *
  */
-public class StandardEvaluationContextFactory implements
-		EvaluationContextFactory {
+public class StandardEvaluationContextFactory implements EvaluationContextFactory {
 
-	private Map<String, Object> commonObjects;
-	
-	public void setCommonObjects(Map<String, Object> sCommonObjects) {
-		commonObjects = sCommonObjects;
-	}
+    private Map<String, Object> commonObjects;
 
-	@Override
-	public StandardEvaluationContext createContext(String sName, Object sValue,
-			StandardEvaluationContext sContext) {
-		StandardEvaluationContext aContext = sContext;
-		if (sContext == null) {
-			aContext = new StandardEvaluationContext();
-			if (commonObjects != null) {
-				aContext.setVariables(commonObjects);
-			}
-			aContext.addPropertyAccessor(new MapAccessor());
-		}
-		aContext.setVariable(sName, sValue);
-		return aContext;
-	}
+    public void setCommonObjects(Map<String, Object> sCommonObjects) {
+        commonObjects = sCommonObjects;
+    }
+
+    @Override
+    public StandardEvaluationContext createContext(String sName, Object sValue, StandardEvaluationContext sContext) {
+        StandardEvaluationContext aContext = sContext;
+        if (sContext == null) {
+            aContext = new StandardEvaluationContext();
+            if (commonObjects != null) {
+                aContext.setVariables(commonObjects);
+            }
+            aContext.addPropertyAccessor(new MapAccessor());
+        }
+        aContext.setVariable(sName, sValue);
+        return aContext;
+    }
 
 }

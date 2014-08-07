@@ -15,34 +15,36 @@ package fr.acxio.tools.agia.tasks;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>FileCopy tasklet related exception</p>
+ * <p>
+ * FileCopy tasklet related exception
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class FileCopyException extends Exception {
 
-	private static final long serialVersionUID = 7653786058536740284L;
+    private static final long serialVersionUID = 7653786058536740284L;
 
-	public FileCopyException() {
-		// TODO Auto-generated constructor stub
-	}
+    public FileCopyException() {
+        // TODO Auto-generated constructor stub
+    }
 
-	public FileCopyException(String sArg0) {
-		super(sArg0);
-		// TODO Auto-generated constructor stub
-	}
+    public FileCopyException(String sArg0) {
+        super(sArg0);
+        // TODO Auto-generated constructor stub
+    }
 
-	public FileCopyException(Throwable sArg0) {
-		super(sArg0);
-		// TODO Auto-generated constructor stub
-	}
+    public FileCopyException(Throwable sArg0) {
+        super(sArg0);
+        // TODO Auto-generated constructor stub
+    }
 
-	public FileCopyException(String sArg0, Throwable sArg1) {
-		super(sArg0, sArg1);
-		// TODO Auto-generated constructor stub
-	}
+    public FileCopyException(String sArg0, Throwable sArg1) {
+        super(sArg0, sArg1);
+        // TODO Auto-generated constructor stub
+    }
 
 }

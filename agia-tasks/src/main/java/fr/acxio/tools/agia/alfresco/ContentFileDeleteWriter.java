@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -29,43 +29,45 @@ import fr.acxio.tools.agia.alfresco.domain.Node;
 import fr.acxio.tools.agia.alfresco.domain.NodeList;
 
 /**
- * <p>A specific {@link org.springframework.batch.item.ItemWriter ItemWriter}
- * that deletes content files associated
- * to {@link fr.acxio.tools.agia.alfresco.domain.Node Node}s.</p>
+ * <p>
+ * A specific {@link org.springframework.batch.item.ItemWriter ItemWriter} that
+ * deletes content files associated to
+ * {@link fr.acxio.tools.agia.alfresco.domain.Node Node}s.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class ContentFileDeleteWriter implements ItemWriter<NodeList> {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ContentFileDeleteWriter.class);
 
-	private boolean ignoreErrors = true;
-	
-	public void setIgnoreErrors(boolean sIgnoreErrors) {
-		ignoreErrors = sIgnoreErrors;
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContentFileDeleteWriter.class);
 
-	public void write(List<? extends NodeList> sData) throws IOException {
-		for(NodeList aNodeList : sData) {
-			for(Node aNode : aNodeList) {
-				if (aNode instanceof Document) {
-					deleteContentFile(((Document)aNode));
-				}
-			}
-		}
-	}
+    private boolean ignoreErrors = true;
 
-	private void deleteContentFile(Document sDocument) throws IOException {
-		if ((sDocument.getContentPath() != null) && (sDocument.getContentPath().length() > 0)) {
-			File aFile = new File(sDocument.getContentPath());
-			if (aFile.exists() && aFile.isFile() && !aFile.delete()) {
-				if (ignoreErrors) {
-					LOGGER.warn("Cannot delete content file: " + sDocument.getContentPath());
-				} else {
-					throw new IOException("Cannot delete content file: " + sDocument.getContentPath());
-				}
-			}
-		}
-	}
+    public void setIgnoreErrors(boolean sIgnoreErrors) {
+        ignoreErrors = sIgnoreErrors;
+    }
+
+    public void write(List<? extends NodeList> sData) throws IOException {
+        for (NodeList aNodeList : sData) {
+            for (Node aNode : aNodeList) {
+                if (aNode instanceof Document) {
+                    deleteContentFile(((Document) aNode));
+                }
+            }
+        }
+    }
+
+    private void deleteContentFile(Document sDocument) throws IOException {
+        if ((sDocument.getContentPath() != null) && (sDocument.getContentPath().length() > 0)) {
+            File aFile = new File(sDocument.getContentPath());
+            if (aFile.exists() && aFile.isFile() && !aFile.delete()) {
+                if (ignoreErrors) {
+                    LOGGER.warn("Cannot delete content file: " + sDocument.getContentPath());
+                } else {
+                    throw new IOException("Cannot delete content file: " + sDocument.getContentPath());
+                }
+            }
+        }
+    }
 }

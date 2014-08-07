@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -33,53 +33,54 @@ import fr.acxio.tools.agia.alfresco.domain.Node;
 import fr.acxio.tools.agia.alfresco.domain.NodeList;
 
 /**
- * <p>A simple {@link org.springframework.batch.item.ItemWriter ItemWriter}
- * for the Hibernate store of
- * {@link fr.acxio.tools.agia.alfresco.domain.Node Node}s.</p>
+ * <p>
+ * A simple {@link org.springframework.batch.item.ItemWriter ItemWriter} for the
+ * Hibernate store of {@link fr.acxio.tools.agia.alfresco.domain.Node Node}s.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class HibernateNodeWriter implements ItemWriter<NodeList>, InitializingBean {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(HibernateNodeWriter.class);
-	
-	private NodeDao nodeDao;
-	
-	private HibernateOperations hibernateTemplate;
-	
-	public void write(List<? extends NodeList> sData) throws NodeDaoException {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Writing to Hibernate with " + sData.size() + " top nodes.");
-		}
-		
-		if (!sData.isEmpty()) {
-			for(NodeList aNodeList : sData) {
-				for(Node aNode : aNodeList) {
-					if (aNode.getParent() == null) {
-						nodeDao.saveOrUpdate(aNode);
-					}
-				}
-			}
-			try {
-				hibernateTemplate.flush();
-			} finally {
-				hibernateTemplate.clear();
-			}
-		}
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(HibernateNodeWriter.class);
 
-	public void setNodeDao(NodeDao sNodeDao) {
-		nodeDao = sNodeDao;
-	}
+    private NodeDao nodeDao;
 
-	public void setSessionFactory(SessionFactory sSessionFactory) {
-		hibernateTemplate = new HibernateTemplate(sSessionFactory);
-	}
+    private HibernateOperations hibernateTemplate;
 
-	public void afterPropertiesSet() {
-		Assert.notNull(hibernateTemplate, "Hibernate session factory must be set");
-		Assert.notNull(nodeDao, "Delegate DAO must be set");
-	}
+    public void write(List<? extends NodeList> sData) throws NodeDaoException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Writing to Hibernate with " + sData.size() + " top nodes.");
+        }
+
+        if (!sData.isEmpty()) {
+            for (NodeList aNodeList : sData) {
+                for (Node aNode : aNodeList) {
+                    if (aNode.getParent() == null) {
+                        nodeDao.saveOrUpdate(aNode);
+                    }
+                }
+            }
+            try {
+                hibernateTemplate.flush();
+            } finally {
+                hibernateTemplate.clear();
+            }
+        }
+    }
+
+    public void setNodeDao(NodeDao sNodeDao) {
+        nodeDao = sNodeDao;
+    }
+
+    public void setSessionFactory(SessionFactory sSessionFactory) {
+        hibernateTemplate = new HibernateTemplate(sSessionFactory);
+    }
+
+    public void afterPropertiesSet() {
+        Assert.notNull(hibernateTemplate, "Hibernate session factory must be set");
+        Assert.notNull(nodeDao, "Delegate DAO must be set");
+    }
 
 }

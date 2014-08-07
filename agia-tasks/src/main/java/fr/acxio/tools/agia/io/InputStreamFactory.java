@@ -15,11 +15,11 @@ package fr.acxio.tools.agia.io;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.IOException;
 import java.io.InputStream;
 
 public interface InputStreamFactory<T> {
 
-	InputStream getInputStream(T sData) throws IOException;
+    InputStream getInputStream(T sData) throws IOException;
 }

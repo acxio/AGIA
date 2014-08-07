@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.google;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,87 +39,90 @@ import fr.acxio.tools.agia.convert.ConversionException;
 import fr.acxio.tools.agia.convert.FormatConverter;
 
 public class GoogleDriveWriter implements ItemWriter<NodeList> {
-	// NOT TRANSACTION COMPLIANT
-	
-	private static Logger logger = LoggerFactory.getLogger(GoogleDriveWriter.class);
-	
-	private static final FormatConverter pathConverter = new AlfrescoPathToPathConverter();
-	
-	private GoogleDriveService service;
-	private boolean writeProperties = false;
-	
-	public void setService(GoogleDriveService sService) {
-		service = sService;
-	}
+    // NOT TRANSACTION COMPLIANT
 
-	public void setWriteProperties(boolean sWriteProperties) {
-		writeProperties = sWriteProperties;
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleDriveWriter.class);
 
-	@Override
-	public void write(List<? extends NodeList> sData) throws GoogleException, IOException, ConversionException {
-		if (!sData.isEmpty()) {
-			init();
-			String aCurrentNodePath;
-			
-			for(NodeList aNodeList : sData) { // each NodeList represents an input record
-				for(Node aNode : aNodeList) {
-					aCurrentNodePath = pathConverter.convert(aNode.getPath()).get(0);
-					
-					if (logger.isDebugEnabled()) {
-						logger.debug("Will create: " + aCurrentNodePath);
-					}
-					
-					boolean aIsFileExist = false;
-					try {
-						File aFile = service.getFileByPath(aCurrentNodePath); // TODO : cache
-						aIsFileExist = (aFile != null);
-					} catch (IOException e) {
-						aIsFileExist = false;
-					}
-					if (!aIsFileExist) {
-						createNode(aCurrentNodePath, aNode);
-					}
-				}
-			}
-		}
-	}
+    private static final FormatConverter pathConverter = new AlfrescoPathToPathConverter();
 
-	protected void createNode(String sCurrentNodePath, Node sNode) throws IOException {
-		Map<String, String> aProperties = (writeProperties) ? getProperties(sNode) : null;
-		if (sNode instanceof Document) {
-			Document aDocument = (Document)sNode;
-			java.io.File aFile = new java.io.File(aDocument.getContentPath());
-			if (aFile.exists() && aFile.isFile()) {
-				service.createFile(sCurrentNodePath, aFile, aDocument.getMimeType(), aProperties);
-			} else {
-				throw new IOException("Cannot find content file: " + aDocument.getContentPath());
-			}
-		} else if (sNode instanceof Folder) {
-			service.createDirectory(sCurrentNodePath, aProperties);
-		}
-	}
+    private GoogleDriveService service;
+    private boolean writeProperties = false;
 
-	protected Map<String, String> getProperties(Node sNode) {
-		List<Property> aProperties = sNode.getProperties();
-		Map<String, String> aProps = new HashMap<String, String>(aProperties.size());
+    public void setService(GoogleDriveService sService) {
+        service = sService;
+    }
+
+    public void setWriteProperties(boolean sWriteProperties) {
+        writeProperties = sWriteProperties;
+    }
+
+    @Override
+    public void write(List<? extends NodeList> sData) throws GoogleException, IOException, ConversionException {
+        if (!sData.isEmpty()) {
+            init();
+            String aCurrentNodePath;
+
+            for (NodeList aNodeList : sData) { // each NodeList represents an
+                                               // input record
+                for (Node aNode : aNodeList) {
+                    aCurrentNodePath = pathConverter.convert(aNode.getPath()).get(0);
+
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("Will create: " + aCurrentNodePath);
+                    }
+
+                    boolean aIsFileExist = false;
+                    try {
+                        File aFile = service.getFileByPath(aCurrentNodePath); // TODO
+                                                                              // :
+                                                                              // cache
+                        aIsFileExist = (aFile != null);
+                    } catch (IOException e) {
+                        aIsFileExist = false;
+                    }
+                    if (!aIsFileExist) {
+                        createNode(aCurrentNodePath, aNode);
+                    }
+                }
+            }
+        }
+    }
+
+    protected void createNode(String sCurrentNodePath, Node sNode) throws IOException {
+        Map<String, String> aProperties = (writeProperties) ? getProperties(sNode) : null;
+        if (sNode instanceof Document) {
+            Document aDocument = (Document) sNode;
+            java.io.File aFile = new java.io.File(aDocument.getContentPath());
+            if (aFile.exists() && aFile.isFile()) {
+                service.createFile(sCurrentNodePath, aFile, aDocument.getMimeType(), aProperties);
+            } else {
+                throw new IOException("Cannot find content file: " + aDocument.getContentPath());
+            }
+        } else if (sNode instanceof Folder) {
+            service.createDirectory(sCurrentNodePath, aProperties);
+        }
+    }
+
+    protected Map<String, String> getProperties(Node sNode) {
+        List<Property> aProperties = sNode.getProperties();
+        Map<String, String> aProps = new HashMap<String, String>(aProperties.size());
         List<String> aPropValues;
-        for(Property aProperty : aProperties) {
-        	aPropValues = aProperty.getValues();
-        	if (aPropValues.size() > 1) {
-        		String[] aValues = aPropValues.toArray(new String[] {});
-        		aProps.put(aProperty.getName().toString(), Arrays.toString(aValues));
-        	} else {
-        		String aValue = (aPropValues.size() == 0) ? null : aPropValues.get(0);
-        		aProps.put(aProperty.getName().toString(), aValue);
-        	}
+        for (Property aProperty : aProperties) {
+            aPropValues = aProperty.getValues();
+            if (aPropValues.size() > 1) {
+                String[] aValues = aPropValues.toArray(new String[] {});
+                aProps.put(aProperty.getName().toString(), Arrays.toString(aValues));
+            } else {
+                String aValue = (aPropValues.size() == 0) ? null : aPropValues.get(0);
+                aProps.put(aProperty.getName().toString(), aValue);
+            }
         }
         return aProps;
-	}
-	
-	public void init() throws GoogleException {
-		Assert.notNull(service, "GoogleDriveService is required.");
-		
-		service.connect();
-	}
+    }
+
+    public void init() throws GoogleException {
+        Assert.notNull(service, "GoogleDriveService is required.");
+
+        service.connect();
+    }
 }

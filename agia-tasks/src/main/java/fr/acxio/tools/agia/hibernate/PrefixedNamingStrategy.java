@@ -15,46 +15,41 @@ package fr.acxio.tools.agia.hibernate;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.hibernate.cfg.ImprovedNamingStrategy;
 
 // Adapted from http://stackoverflow.com/questions/3617687/is-it-possible-to-dynamically-define-column-names-in-hibernate-jpa/3618315#3618315
 public class PrefixedNamingStrategy extends ImprovedNamingStrategy {
 
-	private static final String EMPTYSTRING = "";
-	private static final String UNDERSCORE = "_";
-	private static final long serialVersionUID = 9208231002550243729L;
-	private String prefix = EMPTYSTRING;
+    private static final String EMPTYSTRING = "";
+    private static final String UNDERSCORE = "_";
+    private static final long serialVersionUID = 9208231002550243729L;
+    private String prefix = EMPTYSTRING;
 
     public void setPrefix(String sPrefix) {
-		prefix = sPrefix;
-	}
+        prefix = sPrefix;
+    }
 
-	@Override
-	public String tableName(String sTableName) {
-		return this.addPrefix(super.tableName(sTableName));
-	}
+    @Override
+    public String tableName(String sTableName) {
+        return this.addPrefix(super.tableName(sTableName));
+    }
 
-	@Override
+    @Override
     public String classToTableName(final String className) {
         return this.addPrefix(super.classToTableName(className));
     }
 
     @Override
-    public String collectionTableName(final String ownerEntity,
-            final String ownerEntityTable, final String associatedEntity,
+    public String collectionTableName(final String ownerEntity, final String ownerEntityTable, final String associatedEntity,
             final String associatedEntityTable, final String propertyName) {
-        return this.addPrefix(super.collectionTableName(ownerEntity,
-                ownerEntityTable, associatedEntity, associatedEntityTable,
-                propertyName));
+        return this.addPrefix(super.collectionTableName(ownerEntity, ownerEntityTable, associatedEntity, associatedEntityTable, propertyName));
     }
 
     @Override
-    public String logicalCollectionTableName(final String tableName,
-            final String ownerEntityTable, final String associatedEntityTable,
+    public String logicalCollectionTableName(final String tableName, final String ownerEntityTable, final String associatedEntityTable,
             final String propertyName) {
-        return this.addPrefix(super.logicalCollectionTableName(tableName,
-                ownerEntityTable, associatedEntityTable, propertyName));
+        return this.addPrefix(super.logicalCollectionTableName(tableName, ownerEntityTable, associatedEntityTable, propertyName));
     }
 
     private String addPrefix(final String composedTableName) {
@@ -62,5 +57,4 @@ public class PrefixedNamingStrategy extends ImprovedNamingStrategy {
 
     }
 
-	
 }

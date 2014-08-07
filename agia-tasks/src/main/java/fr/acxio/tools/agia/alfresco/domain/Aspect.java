@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco.domain;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
@@ -30,44 +30,46 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 
 /**
- * <p>Alfresco aspect local representation.</p>
+ * <p>
+ * Alfresco aspect local representation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 @Entity
-@Table(name=DatabaseConstants.TABLE_NAME_ASPECT)
+@Table(name = DatabaseConstants.TABLE_NAME_ASPECT)
 public class Aspect implements Serializable {
-	
-	private static final long serialVersionUID = 4705838365696437436L;
 
-	@Id
-	@GeneratedValue
-    @Column(name=DatabaseConstants.COLUMN_NAME_ASPECT_ID)
-	private long id;
-	
-	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
-	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-	@JoinColumn(name=DatabaseConstants.COLUMN_NAME_NAME_ID)
-	private QName name;
+    private static final long serialVersionUID = 4705838365696437436L;
 
-	public Aspect() {
-	}
-	
-	public Aspect(QName sName) {
-		name = sName;
-	}
-	
-	public QName getName() {
-		return name;
-	}
+    @Id
+    @GeneratedValue
+    @Column(name = DatabaseConstants.COLUMN_NAME_ASPECT_ID)
+    private long id;
 
-	public void setName(QName sName) {
-		name = sName;
-	}
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = DatabaseConstants.COLUMN_NAME_NAME_ID)
+    private QName name;
 
-	@Override
-	public String toString() {
-		return name.getShortName();
-	}
+    public Aspect() {
+    }
+
+    public Aspect(QName sName) {
+        name = sName;
+    }
+
+    public QName getName() {
+        return name;
+    }
+
+    public void setName(QName sName) {
+        name = sName;
+    }
+
+    @Override
+    public String toString() {
+        return name.getShortName();
+    }
 }

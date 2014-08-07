@@ -15,18 +15,17 @@ package fr.acxio.tools.agia.item;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-public class ItemReaderReadException extends
-		org.springframework.batch.item.ItemReaderException {
 
-	private static final long serialVersionUID = -7286918657107682932L;
+public class ItemReaderReadException extends org.springframework.batch.item.ItemReaderException {
 
-	public ItemReaderReadException(String sMessage) {
-		super(sMessage);
-	}
+    private static final long serialVersionUID = -7286918657107682932L;
 
-	public ItemReaderReadException(String sMessage, Throwable sCause) {
-		super(sMessage, sCause);
-	}
+    public ItemReaderReadException(String sMessage) {
+        super(sMessage);
+    }
+
+    public ItemReaderReadException(String sMessage, Throwable sCause) {
+        super(sMessage, sCause);
+    }
 
 }

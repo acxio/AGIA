@@ -15,45 +15,44 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
 
 /**
- * <p>Simple
- * {@link fr.acxio.tools.agia.alfresco.configuration.DocumentDefinition DocumentDefinition}
- * implementation.</p>
+ * <p>
+ * Simple {@link fr.acxio.tools.agia.alfresco.configuration.DocumentDefinition
+ * DocumentDefinition} implementation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class SimpleDocumentDefinition extends AbstractNodeDefinition implements DocumentDefinition {
 
-	private String contentPath;
-	private String mimeType;
-	private String encoding;
-	
-	public void setContentPath(String sContentPath) {
-		contentPath = sContentPath;
-	}
-	
-	public String getContentPath() {
-		return contentPath;
-	}
+    private String contentPath;
+    private String mimeType;
+    private String encoding;
 
-	public String getMimeType() {
-		return mimeType;
-	}
+    public void setContentPath(String sContentPath) {
+        contentPath = sContentPath;
+    }
 
-	public void setMimeType(String sMimeType) {
-		mimeType = sMimeType;
-	}
+    public String getContentPath() {
+        return contentPath;
+    }
 
-	public String getEncoding() {
-		return encoding;
-	}
+    public String getMimeType() {
+        return mimeType;
+    }
 
-	public void setEncoding(String sEncoding) {
-		encoding = sEncoding;
-	}
+    public void setMimeType(String sMimeType) {
+        mimeType = sMimeType;
+    }
 
-	
+    public String getEncoding() {
+        return encoding;
+    }
+
+    public void setEncoding(String sEncoding) {
+        encoding = sEncoding;
+    }
+
 }

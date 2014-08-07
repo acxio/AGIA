@@ -15,29 +15,37 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>Query association definition.</p>
- * <p>The association is represented by a query that will return 0 or more
- * nodes in Alfresco.</p>
+ * <p>
+ * Query association definition.
+ * </p>
+ * <p>
+ * The association is represented by a query that will return 0 or more nodes in
+ * Alfresco.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public interface QueryAssociationDefinition extends AssociationDefinition {
 
-	/**
-	 * <p>Returns the query language.</p>
-	 * 
-	 * @return the query language
-	 */
-	String getQueryLanguage();
+    /**
+     * <p>
+     * Returns the query language.
+     * </p>
+     * 
+     * @return the query language
+     */
+    String getQueryLanguage();
 
-	/**
-	 * <p>Returns the query.</p>
-	 * 
-	 * @return the query
-	 */
-	String getQuery();
-	
+    /**
+     * <p>
+     * Returns the query.
+     * </p>
+     * 
+     * @return the query
+     */
+    String getQuery();
+
 }

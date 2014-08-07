@@ -15,26 +15,33 @@ package fr.acxio.tools.agia.expression;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 /**
- * <p>Factory of evaluation context for expression evaluation.</p>
+ * <p>
+ * Factory of evaluation context for expression evaluation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public interface EvaluationContextFactory {
 
-	/**
-	 * <p>Creates or update a context with the given variable name and value.</p>
-	 * 
-	 * @param sName the name of the variable to create or update
-	 * @param sValue the value to set into the variable
-	 * @param sContext if not null, the context to update
-	 * @return a new context if {@code sContext} is null, or {@code sContext}
-	 *         otherwise
-	 */
-	StandardEvaluationContext createContext(String sName, Object sValue, StandardEvaluationContext sContext);
+    /**
+     * <p>
+     * Creates or update a context with the given variable name and value.
+     * </p>
+     * 
+     * @param sName
+     *            the name of the variable to create or update
+     * @param sValue
+     *            the value to set into the variable
+     * @param sContext
+     *            if not null, the context to update
+     * @return a new context if {@code sContext} is null, or {@code sContext}
+     *         otherwise
+     */
+    StandardEvaluationContext createContext(String sName, Object sValue, StandardEvaluationContext sContext);
 
 }

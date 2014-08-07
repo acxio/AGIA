@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.io;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.Collections;
 import java.util.Map;
 
@@ -29,54 +29,60 @@ import fr.acxio.tools.agia.expression.EvaluationContextFactory;
 import fr.acxio.tools.agia.expression.StandardDataExpressionResolver;
 import fr.acxio.tools.agia.expression.StandardEvaluationContextFactory;
 
+/**
+ * <p>
+ * A ResourceFactory using an expression to build a filename.
+ * </p>
+ * 
+ * @author pcollardez
+ *
+ */
 public class ExpressionResourceFactory implements ResourceFactory {
 
-	private String expression;
-	private String variableName = "in";
-	
-	private EvaluationContextFactory evaluationContextFactory;
-	private StandardEvaluationContext evaluationContext;
-	
-	private DataExpressionResolver expressionResolver = new StandardDataExpressionResolver();
-	
-	public synchronized void setExpression(String sExpression) {
-		expression = sExpression;
-	}
+    private String expression;
+    private String variableName = "in";
 
-	public synchronized void setVariableName(String sVariableName) {
-		Assert.hasText(sVariableName, "variableName must not be empty");
-		variableName = sVariableName;
-	}
-	
-	public synchronized EvaluationContextFactory getEvaluationContextFactory() {
-		if (evaluationContextFactory == null) {
-			evaluationContextFactory = new StandardEvaluationContextFactory();
-		}
-		return evaluationContextFactory;
-	}
+    private EvaluationContextFactory evaluationContextFactory;
+    private StandardEvaluationContext evaluationContext;
 
-	public synchronized void setEvaluationContextFactory(
-			EvaluationContextFactory sEvaluationContextFactory) {
-		evaluationContextFactory = sEvaluationContextFactory;
-	}
+    private DataExpressionResolver expressionResolver = new StandardDataExpressionResolver();
 
-	@Override
-	public Resource getResource() throws ResourceCreationException {
-		return getResource(Collections.EMPTY_MAP);
-	}
+    public synchronized void setExpression(String sExpression) {
+        expression = sExpression;
+    }
 
-	@Override
-	public synchronized Resource getResource(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException {
-		Resource aResult = null;
-		try {
-			evaluationContext = getEvaluationContextFactory().createContext(variableName, sParameters, evaluationContext);
-			String aPath = expressionResolver.evaluate(expression, evaluationContext, String.class);
-			aResult = new FileSystemResource(aPath);
-		} catch (Exception e) {
-			throw new ResourceCreationException(e);
-		}
-		return aResult;
-	}
-	
-	
+    public synchronized void setVariableName(String sVariableName) {
+        Assert.hasText(sVariableName, "variableName must not be empty");
+        variableName = sVariableName;
+    }
+
+    public synchronized EvaluationContextFactory getEvaluationContextFactory() {
+        if (evaluationContextFactory == null) {
+            evaluationContextFactory = new StandardEvaluationContextFactory();
+        }
+        return evaluationContextFactory;
+    }
+
+    public synchronized void setEvaluationContextFactory(EvaluationContextFactory sEvaluationContextFactory) {
+        evaluationContextFactory = sEvaluationContextFactory;
+    }
+
+    @Override
+    public Resource getResource() throws ResourceCreationException {
+        return getResource(Collections.EMPTY_MAP);
+    }
+
+    @Override
+    public synchronized Resource getResource(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException {
+        Resource aResult = null;
+        try {
+            evaluationContext = getEvaluationContextFactory().createContext(variableName, sParameters, evaluationContext);
+            String aPath = expressionResolver.evaluate(expression, evaluationContext, String.class);
+            aResult = new FileSystemResource(aPath);
+        } catch (Exception e) {
+            throw new ResourceCreationException(e);
+        }
+        return aResult;
+    }
+
 }

@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.cmis;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -27,18 +27,18 @@ import fr.acxio.tools.agia.io.InputStreamFactory;
 
 public class CmisInputStreamFactory implements InputStreamFactory<String> {
 
-	private CmisService cmisService;
-	
-	public void setCmisService(CmisService sCmisService) {
-		cmisService = sCmisService;
-	}
+    private CmisService cmisService;
 
-	@Override
-	public InputStream getInputStream(String sObjectId) throws IOException {
-		Session aSession = cmisService.startSession();
-		ObjectId aObjectId = aSession.createObjectId(sObjectId);
-		ContentStream aContentStream = aSession.getContentStream(aObjectId);
-		return aContentStream.getStream();
-	}
+    public void setCmisService(CmisService sCmisService) {
+        cmisService = sCmisService;
+    }
+
+    @Override
+    public InputStream getInputStream(String sObjectId) throws IOException {
+        Session aSession = cmisService.startSession();
+        ObjectId aObjectId = aSession.createObjectId(sObjectId);
+        ContentStream aContentStream = aSession.getContentStream(aObjectId);
+        return aContentStream.getStream();
+    }
 
 }

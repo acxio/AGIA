@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.convert;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,32 +26,32 @@ import java.util.List;
  *
  */
 public class ListFormatConverter implements FormatConverter {
-	
-	private String separator;
-	
-	public ListFormatConverter() {
-	}
-	
-	public ListFormatConverter(String sSeparator) {
-		separator = sSeparator;
-	}
 
-	public String getSeparator() {
-		return separator;
-	}
+    private String separator;
 
-	public void setSeparator(String sSeparator) {
-		separator = sSeparator;
-	}
+    public ListFormatConverter() {
+    }
 
-	public List<String> convert(String sSource) throws ConversionException {
-		List<String> aResult = null;
-		try {
-			aResult = Arrays.asList(sSource.split(separator));
-		} catch (Exception e) {
-			throw new ConversionException("Error converting: " + sSource, e);
-		}
-		return aResult;
-	}
+    public ListFormatConverter(String sSeparator) {
+        separator = sSeparator;
+    }
+
+    public String getSeparator() {
+        return separator;
+    }
+
+    public void setSeparator(String sSeparator) {
+        separator = sSeparator;
+    }
+
+    public List<String> convert(String sSource) throws ConversionException {
+        List<String> aResult = null;
+        try {
+            aResult = Arrays.asList(sSource.split(separator));
+        } catch (Exception e) {
+            throw new ConversionException("Error converting: " + sSource, e);
+        }
+        return aResult;
+    }
 
 }

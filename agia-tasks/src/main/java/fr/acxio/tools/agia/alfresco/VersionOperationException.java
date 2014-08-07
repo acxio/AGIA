@@ -15,30 +15,32 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>Exception related to version operation.</p>
+ * <p>
+ * Exception related to version operation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class VersionOperationException extends Exception {
 
-	private static final long serialVersionUID = 1518027549410083009L;
+    private static final long serialVersionUID = 1518027549410083009L;
 
-	public VersionOperationException() {
-	}
+    public VersionOperationException() {
+    }
 
-	public VersionOperationException(String sArg0) {
-		super(sArg0);
-	}
+    public VersionOperationException(String sArg0) {
+        super(sArg0);
+    }
 
-	public VersionOperationException(Throwable sArg0) {
-		super(sArg0);
-	}
+    public VersionOperationException(Throwable sArg0) {
+        super(sArg0);
+    }
 
-	public VersionOperationException(String sArg0, Throwable sArg1) {
-		super(sArg0, sArg1);
-	}
+    public VersionOperationException(String sArg0, Throwable sArg1) {
+        super(sArg0, sArg1);
+    }
 
 }

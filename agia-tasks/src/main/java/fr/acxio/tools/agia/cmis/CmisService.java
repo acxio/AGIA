@@ -15,14 +15,14 @@ package fr.acxio.tools.agia.cmis;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.apache.chemistry.opencmis.client.api.Session;
 
 public interface CmisService {
 
-	Session startSession();
-	
-	Session getSession();
-	
-	void endSession();
+    Session startSession();
+
+    Session getSession();
+
+    void endSession();
 }

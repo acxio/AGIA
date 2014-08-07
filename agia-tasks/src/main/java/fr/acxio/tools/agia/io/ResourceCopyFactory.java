@@ -15,71 +15,80 @@ package fr.acxio.tools.agia.io;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.File;
 import java.util.Map;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
+/**
+ * <p>
+ * A simple ResourceFactory using a prefix, a suffix and a file extension to
+ * build the descriptor from a <code>SOURCE</code> resource.
+ * </p>
+ * 
+ * @author pcollardez
+ *
+ */
 public class ResourceCopyFactory implements ResourceFactory {
 
-	private Resource parentFolder;
-	private String prefix;
-	private String suffix;
-	private String extension;
-	
-	public void setParentFolder(Resource sParentFolder) {
-		parentFolder = sParentFolder;
-	}
+    private Resource parentFolder;
+    private String prefix;
+    private String suffix;
+    private String extension;
 
-	public void setPrefix(String sPrefix) {
-		prefix = sPrefix;
-	}
+    public void setParentFolder(Resource sParentFolder) {
+        parentFolder = sParentFolder;
+    }
 
-	public void setSuffix(String sSuffix) {
-		suffix = sSuffix;
-	}
+    public void setPrefix(String sPrefix) {
+        prefix = sPrefix;
+    }
 
-	public void setExtension(String sExtension) {
-		extension = sExtension;
-	}
+    public void setSuffix(String sSuffix) {
+        suffix = sSuffix;
+    }
 
-	@Override
-	public Resource getResource() throws ResourceCreationException {
-		return null;
-	}
+    public void setExtension(String sExtension) {
+        extension = sExtension;
+    }
 
-	@Override
-	public Resource getResource(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException {
-		Resource aResult = null;
-		try {
-			Resource aSourceResource = (Resource) sParameters.get("SOURCE");
-			String aFilename = aSourceResource.getFilename();
-			String aFileNameWOExtension = aFilename.substring(0, aFilename.lastIndexOf('.'));
-			String aExtension = extension;
-			if (aExtension == null) {
-				aExtension = aFilename.substring(aFilename.lastIndexOf('.'));
-			}
-			File aParentPath = (parentFolder != null) ? parentFolder.getFile() : null;
-			if (aParentPath == null) {
-				aParentPath = aSourceResource.getFile().getParentFile();
-			}
-			StringBuilder aNewFilename = new StringBuilder();
-			if (prefix != null) {
-				aNewFilename.append(prefix);
-			}
-			aNewFilename.append(aFileNameWOExtension);
-			if (suffix != null) {
-				aNewFilename.append(suffix);
-			}
-			aNewFilename.append(aExtension);
-			File aNewFile = new File(aParentPath, aNewFilename.toString());
-			aResult = new FileSystemResource(aNewFile);
-		} catch (Exception e) {
-			throw new ResourceCreationException(e);
-		}
-		return aResult;
-	}
+    @Override
+    public Resource getResource() throws ResourceCreationException {
+        return null;
+    }
+
+    @Override
+    public Resource getResource(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException {
+        Resource aResult = null;
+        try {
+            Resource aSourceResource = (Resource) sParameters.get(ResourceFactoryConstants.PARAM_SOURCE);
+            String aFilename = aSourceResource.getFilename();
+            String aFileNameWOExtension = aFilename.substring(0, aFilename.lastIndexOf('.'));
+            String aExtension = extension;
+            if (aExtension == null) {
+                aExtension = aFilename.substring(aFilename.lastIndexOf('.'));
+            }
+            File aParentPath = (parentFolder != null) ? parentFolder.getFile() : null;
+            if (aParentPath == null) {
+                aParentPath = aSourceResource.getFile().getParentFile();
+            }
+            StringBuilder aNewFilename = new StringBuilder();
+            if (prefix != null) {
+                aNewFilename.append(prefix);
+            }
+            aNewFilename.append(aFileNameWOExtension);
+            if (suffix != null) {
+                aNewFilename.append(suffix);
+            }
+            aNewFilename.append(aExtension);
+            File aNewFile = new File(aParentPath, aNewFilename.toString());
+            aResult = new FileSystemResource(aNewFile);
+        } catch (Exception e) {
+            throw new ResourceCreationException(e);
+        }
+        return aResult;
+    }
 
 }

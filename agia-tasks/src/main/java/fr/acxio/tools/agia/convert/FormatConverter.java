@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.convert;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.List;
 
 /**
@@ -26,19 +26,21 @@ import java.util.List;
  */
 public interface FormatConverter {
 
-	/**
-	 * Converts a string into a list of strings, according to its internal
-	 * implementation.
-	 * <p>
-	 * Being able to convert a string into a list of strings widen the
-	 * possibilities of conversion.</br>
-	 * For example, a converter can split a value, do a lookup on an external
-	 * datasource, or even concatenate many lookup and splits.
-	 * </p>
-	 * 
-	 * @param sSource a value to convert to an other format
-	 * @return the converted value
-	 * @throws ConversionException if the conversion fails
-	 */
-	List<String> convert(String sSource) throws ConversionException;
+    /**
+     * Converts a string into a list of strings, according to its internal
+     * implementation.
+     * <p>
+     * Being able to convert a string into a list of strings widen the
+     * possibilities of conversion.</br> For example, a converter can split a
+     * value, do a lookup on an external datasource, or even concatenate many
+     * lookup and splits.
+     * </p>
+     * 
+     * @param sSource
+     *            a value to convert to an other format
+     * @return the converted value
+     * @throws ConversionException
+     *             if the conversion fails
+     */
+    List<String> convert(String sSource) throws ConversionException;
 }

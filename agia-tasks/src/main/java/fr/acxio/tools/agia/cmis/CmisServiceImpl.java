@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.cmis;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.List;
 import java.util.Map;
 
@@ -26,32 +26,33 @@ import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 
 public class CmisServiceImpl implements CmisService {
 
-	private Map<String, String> parameters;
-	
-	private Session session;
-	
-	public synchronized void setParameters(Map<String, String> sParameters) {
-		parameters = sParameters;
-		session = null;
-	}
+    private Map<String, String> parameters;
 
-	@Override
-	public synchronized Session startSession() {
-		if (session == null) {
-			SessionFactory aFactory = SessionFactoryImpl.newInstance();
-			List<Repository> aRepositories = aFactory.getRepositories(parameters);
-			session = aRepositories.get(0).createSession();
-		}
-		return session;
-	}
+    private Session session;
 
-	@Override
-	public Session getSession() {
-		return session;
-	}
+    public synchronized void setParameters(Map<String, String> sParameters) {
+        parameters = sParameters;
+        session = null;
+    }
 
-	@Override
-	public void endSession() {
-	}
+    @Override
+    public synchronized Session startSession() {
+        if (session == null) {
+            SessionFactory aFactory = SessionFactoryImpl.newInstance();
+            List<Repository> aRepositories = aFactory.getRepositories(parameters);
+            session = aRepositories.get(0).createSession();
+        }
+        return session;
+    }
+
+    @Override
+    public Session getSession() {
+        return session;
+    }
+
+    @Override
+    public void endSession() {
+        // Let the session timeout
+    }
 
 }

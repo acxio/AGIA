@@ -15,12 +15,12 @@ package fr.acxio.tools.agia.ftp;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.IOException;
 
 import org.apache.commons.net.ftp.FTPClient;
 
 public interface FtpClientFactory {
 
-	FTPClient getFtpClient() throws IOException;
+    FTPClient getFtpClient() throws IOException;
 }

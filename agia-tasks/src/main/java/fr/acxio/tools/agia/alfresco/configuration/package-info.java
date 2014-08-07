@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
  * SPI interfaces and configuration-related classes for the Alfresco domain.
  * </br>

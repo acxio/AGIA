@@ -15,38 +15,38 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>Simple
- * {@link fr.acxio.tools.agia.alfresco.configuration.QueryAssociationDefinition QueryAssociationDefinition}
- * implementation.</p>
+ * <p>
+ * Simple
+ * {@link fr.acxio.tools.agia.alfresco.configuration.QueryAssociationDefinition
+ * QueryAssociationDefinition} implementation.
+ * </p>
  * 
  * @author pcollardez
  *
  */
-public class SimpleQueryAssociationDefinition extends AbstractAssociationDefinition implements
-		QueryAssociationDefinition {
+public class SimpleQueryAssociationDefinition extends AbstractAssociationDefinition implements QueryAssociationDefinition {
 
-	private String queryLanguage;
-	private String query;
+    private String queryLanguage;
+    private String query;
 
-	@Override
-	public String getQueryLanguage() {
-		return queryLanguage;
-	}
+    @Override
+    public String getQueryLanguage() {
+        return queryLanguage;
+    }
 
-	@Override
-	public String getQuery() {
-		return query;
-	}
+    @Override
+    public String getQuery() {
+        return query;
+    }
 
-	public void setQueryLanguage(String sQueryLanguage) {
-		queryLanguage = sQueryLanguage;
-	}
+    public void setQueryLanguage(String sQueryLanguage) {
+        queryLanguage = sQueryLanguage;
+    }
 
-	public void setQuery(String sQuery) {
-		query = sQuery;
-	}
+    public void setQuery(String sQuery) {
+        query = sQuery;
+    }
 
-	
 }

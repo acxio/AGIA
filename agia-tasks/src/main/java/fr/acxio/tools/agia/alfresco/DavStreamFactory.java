@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -24,17 +24,17 @@ import com.googlecode.sardine.Sardine;
 import fr.acxio.tools.agia.io.InputStreamFactory;
 
 public class DavStreamFactory implements InputStreamFactory<String> {
-	
-	private AlfrescoService alfrescoService;
 
-	public void setAlfrescoService(AlfrescoService sAlfrescoService) {
-		alfrescoService = sAlfrescoService;
-	}
+    private AlfrescoService alfrescoService;
 
-	@Override
-	public InputStream getInputStream(String sData) throws IOException {
-		Sardine aSardine = alfrescoService.startWebDavSession();
-		return aSardine.get(sData);
-	}
+    public void setAlfrescoService(AlfrescoService sAlfrescoService) {
+        alfrescoService = sAlfrescoService;
+    }
+
+    @Override
+    public InputStream getInputStream(String sData) throws IOException {
+        Sardine aSardine = alfrescoService.startWebDavSession();
+        return aSardine.get(sData);
+    }
 
 }

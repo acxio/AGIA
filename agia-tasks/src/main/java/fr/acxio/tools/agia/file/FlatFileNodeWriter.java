@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.file;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.util.List;
 
 import org.springframework.batch.item.ExecutionContext;
@@ -27,36 +27,33 @@ import fr.acxio.tools.agia.alfresco.domain.Node;
 import fr.acxio.tools.agia.alfresco.domain.NodeList;
 
 public class FlatFileNodeWriter implements ItemStreamWriter<NodeList> {
-	
-	private ResourceAwareItemWriterItemStream<Node> delegate;
 
-	public void setDelegate(ResourceAwareItemWriterItemStream<Node> sDelegate) {
-		delegate = sDelegate;
-	}
+    private ResourceAwareItemWriterItemStream<Node> delegate;
 
-	@Override
-	public void write(List<? extends NodeList> sItems) throws Exception {
-		for(NodeList aNodeList : sItems) {
-			delegate.write(aNodeList);
-		}
-	}
+    public void setDelegate(ResourceAwareItemWriterItemStream<Node> sDelegate) {
+        delegate = sDelegate;
+    }
 
-	@Override
-	public void open(ExecutionContext sExecutionContext)
-			throws ItemStreamException {
-		delegate.open(sExecutionContext);
-	}
+    @Override
+    public void write(List<? extends NodeList> sItems) throws Exception {
+        for (NodeList aNodeList : sItems) {
+            delegate.write(aNodeList);
+        }
+    }
 
-	@Override
-	public void update(ExecutionContext sExecutionContext)
-			throws ItemStreamException {
-		delegate.update(sExecutionContext);
-	}
+    @Override
+    public void open(ExecutionContext sExecutionContext) throws ItemStreamException {
+        delegate.open(sExecutionContext);
+    }
 
-	@Override
-	public void close() throws ItemStreamException {
-		delegate.close();
-	}
+    @Override
+    public void update(ExecutionContext sExecutionContext) throws ItemStreamException {
+        delegate.update(sExecutionContext);
+    }
 
-	
+    @Override
+    public void close() throws ItemStreamException {
+        delegate.close();
+    }
+
 }

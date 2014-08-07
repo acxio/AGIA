@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.ftp;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URI;
@@ -30,90 +30,99 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.repeat.RepeatStatus;
 
-
 public class FTPDownloadTasklet extends FTPFileOperationTasklet {
-	
-	private static Logger logger = LoggerFactory.getLogger(FTPDownloadTasklet.class);
-	
-	private static final String SEPARATOR = "/";
-	private static final Pattern PATH_PATTERN = Pattern.compile("^(/|.*[^/])/*$");
 
-	private String remoteBaseDir; // Factory ?
-	private String regexFilename;
-	private String localBaseDir; // Factory ?
-	private boolean removeRemote = false;
-	
-	public void setRemoteBaseDir(String sRemoteBaseDir) {
-		remoteBaseDir = sRemoteBaseDir;
-		
-		Matcher aMatcher = PATH_PATTERN.matcher(sRemoteBaseDir);
-		if (aMatcher.matches()) {
-			remoteBaseDir = aMatcher.group(1);
-		}
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(FTPDownloadTasklet.class);
 
-	public void setRegexFilename(String sRegexFilename) {
-		regexFilename = sRegexFilename;
-	}
+    private static final String SEPARATOR = "/";
+    private static final Pattern PATH_PATTERN = Pattern.compile("^(/|.*[^/])/*$");
 
-	public void setLocalBaseDir(String sLocalBaseDir) {
-		localBaseDir = sLocalBaseDir;
-	}
+    private String remoteBaseDir; // Factory ?
+    private String regexFilename;
+    private String localBaseDir; // Factory ?
+    private boolean removeRemote = false;
 
-	public void setRemoveRemote(boolean sRemoveRemote) {
-		removeRemote = sRemoveRemote;
-	}
+    public void setRemoteBaseDir(String sRemoteBaseDir) {
+        remoteBaseDir = sRemoteBaseDir;
 
-	@Override
-	public RepeatStatus execute(StepContribution sArg0, ChunkContext sArg1) throws Exception {
-		FTPClient aClient = ftpClientFactory.getFtpClient();
-		
-		RegexFilenameFilter aFilter = new RegexFilenameFilter();
-		aFilter.setRegex(regexFilename);
-		try {
-			URI aRemoteBaseURI = new URI(remoteBaseDir);
-			URI aRemoteBasePath = new URI(aRemoteBaseURI.toASCIIString() + SEPARATOR);
-			
-			if (logger.isInfoEnabled()) {
-				logger.info("Listing : [{}] {} ({})", aClient.getRemoteAddress().toString(), aRemoteBaseURI.toASCIIString(), regexFilename);
-			}
-			
-			FTPFile[] aRemoteFiles = aClient.listFiles(aRemoteBaseURI.toASCIIString(), aFilter);
-			
-			if (logger.isInfoEnabled()) {
-				logger.info("  {} file(s) found", aRemoteFiles.length);
-			}
-			
-			for(FTPFile aRemoteFile : aRemoteFiles) {
-				File aLocalFile = new File(localBaseDir, aRemoteFile.getName());
-				URI aRemoteTFile = aRemoteBasePath.resolve(aRemoteFile.getName());
+        Matcher aMatcher = PATH_PATTERN.matcher(sRemoteBaseDir);
+        if (aMatcher.matches()) {
+            remoteBaseDir = aMatcher.group(1);
+        }
+    }
 
-				FileOutputStream aOutputStream = new FileOutputStream(aLocalFile);
-				try {
-					
-					if (logger.isInfoEnabled()) {
-						logger.info(" Downloading : {} => {}", aRemoteTFile.toASCIIString(), aLocalFile.getAbsolutePath());
-					}
-					
-					aClient.retrieveFile(aRemoteTFile.toASCIIString(), aOutputStream);
-					if (removeRemote) {
-						
-						if (logger.isInfoEnabled()) {
-							logger.info(" Deleting : {}", aRemoteTFile.toASCIIString());
-						}
-						
-						aClient.deleteFile(aRemoteTFile.toASCIIString());
-					}
-				} finally {
-					aOutputStream.close();
-				}
-			}
-		} finally {
-			aClient.logout();
-			aClient.disconnect();
-		}
-		
-		return RepeatStatus.FINISHED;
-	}
+    public void setRegexFilename(String sRegexFilename) {
+        regexFilename = sRegexFilename;
+    }
+
+    public void setLocalBaseDir(String sLocalBaseDir) {
+        localBaseDir = sLocalBaseDir;
+    }
+
+    public void setRemoveRemote(boolean sRemoveRemote) {
+        removeRemote = sRemoveRemote;
+    }
+
+    @Override
+    public RepeatStatus execute(StepContribution sContribution, ChunkContext sChunkContext) throws Exception {
+        FTPClient aClient = ftpClientFactory.getFtpClient();
+
+        RegexFilenameFilter aFilter = new RegexFilenameFilter();
+        aFilter.setRegex(regexFilename);
+        try {
+            URI aRemoteBaseURI = new URI(remoteBaseDir);
+            URI aRemoteBasePath = new URI(aRemoteBaseURI.toASCIIString() + SEPARATOR);
+
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("Listing : [{}] {} ({})", aClient.getRemoteAddress().toString(), aRemoteBaseURI.toASCIIString(), regexFilename);
+            }
+
+            FTPFile[] aRemoteFiles = aClient.listFiles(aRemoteBaseURI.toASCIIString(), aFilter);
+
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("  {} file(s) found", aRemoteFiles.length);
+            }
+
+            for (FTPFile aRemoteFile : aRemoteFiles) {
+
+                if (sContribution != null) {
+                    sContribution.incrementReadCount();
+                }
+
+                File aLocalFile = new File(localBaseDir, aRemoteFile.getName());
+                URI aRemoteTFile = aRemoteBasePath.resolve(aRemoteFile.getName());
+
+                FileOutputStream aOutputStream = new FileOutputStream(aLocalFile);
+                try {
+
+                    if (LOGGER.isInfoEnabled()) {
+                        LOGGER.info(" Downloading : {} => {}", aRemoteTFile.toASCIIString(), aLocalFile.getAbsolutePath());
+                    }
+
+                    aClient.retrieveFile(aRemoteTFile.toASCIIString(), aOutputStream);
+                    if (removeRemote) {
+
+                        if (LOGGER.isInfoEnabled()) {
+                            LOGGER.info(" Deleting : {}", aRemoteTFile.toASCIIString());
+                        }
+
+                        aClient.deleteFile(aRemoteTFile.toASCIIString());
+                    }
+
+                    if (sContribution != null) {
+                        sContribution.incrementWriteCount(1);
+                    }
+
+                } finally {
+                    aOutputStream.close();
+                }
+            }
+        } finally {
+            aClient.logout();
+            aClient.disconnect();
+        }
+
+        return RepeatStatus.FINISHED;
+    }
 
 }

@@ -15,20 +15,25 @@ package fr.acxio.tools.agia.alfresco.domain;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>Default constants for the nodes lifecycle.</p>
+ * <p>
+ * Default constants for the nodes lifecycle.
+ * </p>
  * 
  * @author pcollardez
  *
  */
-public interface NodeStatus {
+public final class NodeStatus {
+    
+    private NodeStatus() {
+    }
 
-	int NEW = 0;
-	int INJECTED = 500;
-	int DONE = 1000;
-	int ERROR = -1;
-	int INJECTION_ERROR = -500;
-	int DELETION_ERROR = -1000;
-	
+    public static final int NEW = 0;
+    public static final int INJECTED = 500;
+    public static final int DONE = 1000;
+    public static final int ERROR = -1;
+    public static final int INJECTION_ERROR = -500;
+    public static final int DELETION_ERROR = -1000;
+
 }

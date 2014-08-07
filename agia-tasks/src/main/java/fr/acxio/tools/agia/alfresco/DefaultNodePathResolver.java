@@ -15,7 +15,7 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import java.rmi.RemoteException;
 
 import org.alfresco.webservice.repository.RepositoryFault;
@@ -30,63 +30,62 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 
 /**
- * <p>Resolves nodes from their paths, and cache paths and nodes.</p>
+ * <p>
+ * Resolves nodes from their paths, and cache paths and nodes.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public class DefaultNodePathResolver implements NodePathResolver {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultNodePathResolver.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultNodePathResolver.class);
 
-	private static final String CACHE_KEY = "#sPath";
-	private static final String CACHE_NAME = "rnodes";
-	
-	@Override
-	@Cacheable(value=CACHE_NAME, key=CACHE_KEY)
-	public Node[] getRepositoryMatchingNodes(
-			RepositoryServiceSoapBindingStub sRepositoryService, String sPath)
-			throws NodePathException {
-		if (LOGGER.isDebugEnabled()) {
-        	LOGGER.debug("Calling Alfresco for path: " + sPath);
+    private static final String CACHE_KEY = "#sPath";
+    private static final String CACHE_NAME = "rnodes";
+
+    @Override
+    @Cacheable(value = CACHE_NAME, key = CACHE_KEY)
+    public Node[] getRepositoryMatchingNodes(RepositoryServiceSoapBindingStub sRepositoryService, String sPath) throws NodePathException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Calling Alfresco for path: " + sPath);
         }
-		Reference reference = new Reference(AlfrescoServicesConsumer.STORE, null, sPath);
-        Predicate predicate = new Predicate(new Reference[]{reference}, null, null);        
+        Reference reference = new Reference(AlfrescoServicesConsumer.STORE, null, sPath);
+        Predicate predicate = new Predicate(new Reference[] { reference }, null, null);
         Node[] nodes = null;
         try {
-        	nodes = sRepositoryService.get(predicate);
+            nodes = sRepositoryService.get(predicate);
         } catch (RepositoryFault e) {
-        	nodes = null;
+            nodes = null;
         } catch (RemoteException e) {
-			throw new NodePathException(e);
-		}
+            throw new NodePathException(e);
+        }
         return nodes;
-	}
+    }
 
-	@Override
-	@CachePut(value=CACHE_NAME, key=CACHE_KEY)
-	public Node[] setLocalMatchingNodes(String sPath, Node[] sNodes)
-			throws NodePathException {
-		if (LOGGER.isDebugEnabled()) {
-        	LOGGER.debug("Set local for Alfresco path: " + sPath);
+    @Override
+    @CachePut(value = CACHE_NAME, key = CACHE_KEY)
+    public Node[] setLocalMatchingNodes(String sPath, Node[] sNodes) throws NodePathException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Set local for Alfresco path: " + sPath);
         }
-		return sNodes;
-	}
+        return sNodes;
+    }
 
-	@Override
-	@CacheEvict(value=CACHE_NAME)
-	public void evictRepositoryNode(String sPath) {
-		if (LOGGER.isDebugEnabled()) {
-        	LOGGER.debug("Evict Alfresco path: " + sPath);
+    @Override
+    @CacheEvict(value = CACHE_NAME)
+    public void evictRepositoryNode(String sPath) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Evict Alfresco path: " + sPath);
         }
-	}
+    }
 
-	@Override
-	@CacheEvict(value=CACHE_NAME, allEntries=true)
-	public void evictRepositoryNodes() {
-		if (LOGGER.isDebugEnabled()) {
-        	LOGGER.debug("Evict all Alfresco pathes");
+    @Override
+    @CacheEvict(value = CACHE_NAME, allEntries = true)
+    public void evictRepositoryNodes() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Evict all Alfresco pathes");
         }
-	}
+    }
 
 }

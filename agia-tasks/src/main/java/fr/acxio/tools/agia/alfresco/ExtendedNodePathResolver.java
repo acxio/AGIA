@@ -15,12 +15,12 @@ package fr.acxio.tools.agia.alfresco;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.alfresco.webservice.repository.RepositoryServiceSoapBindingStub;
 import org.alfresco.webservice.types.Node;
 
 public interface ExtendedNodePathResolver {
 
-	Node[] getRepositoryMatchingNodes(RepositoryServiceSoapBindingStub sRepositoryService, String sPath, String sName) throws NodePathException;
-	
+    Node[] getRepositoryMatchingNodes(RepositoryServiceSoapBindingStub sRepositoryService, String sPath, String sName) throws NodePathException;
+
 }

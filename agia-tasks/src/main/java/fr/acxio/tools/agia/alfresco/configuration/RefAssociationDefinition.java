@@ -15,24 +15,31 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * <p>Reference association definition.</p>
- * <p>The association is represented by a reference to an local ID of target.
+ * <p>
+ * Reference association definition.
  * </p>
- * <p>If many local nodes have the same ID, one association will be created
- * for each of them.</p>
+ * <p>
+ * The association is represented by a reference to an local ID of target.
+ * </p>
+ * <p>
+ * If many local nodes have the same ID, one association will be created for
+ * each of them.
+ * </p>
  * 
  * @author pcollardez
  *
  */
 public interface RefAssociationDefinition extends AssociationDefinition {
 
-	/**
-	 * <p>Returns the reference of the target of the association.</p>
-	 * 
-	 * @return the reference of the target of the association
-	 */
-	String getTargetRef();
-	
+    /**
+     * <p>
+     * Returns the reference of the target of the association.
+     * </p>
+     * 
+     * @return the reference of the target of the association
+     */
+    String getTargetRef();
+
 }

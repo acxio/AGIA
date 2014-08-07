@@ -15,11 +15,10 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 /**
- * Alfresco local representation of documents.</br>
- * The DocumentDefinition describes how a document will be created in Alfresco:
- * </br>
+ * Alfresco local representation of documents.</br> The DocumentDefinition
+ * describes how a document will be created in Alfresco: </br>
  * <ul>
  * <li>A document is a node.</li>
  * <li>A document may have a content path (contentPath) indicating where to find
@@ -33,9 +32,9 @@ package fr.acxio.tools.agia.alfresco.configuration;
  */
 public interface DocumentDefinition extends NodeDefinition {
 
-	String getContentPath();
-	
-	String getMimeType();
-	
-	String getEncoding();
+    String getContentPath();
+
+    String getMimeType();
+
+    String getEncoding();
 }

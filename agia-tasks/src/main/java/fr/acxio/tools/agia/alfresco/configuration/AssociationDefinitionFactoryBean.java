@@ -15,39 +15,42 @@ package fr.acxio.tools.agia.alfresco.configuration;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
 /**
- * <p>Abstract factory of
- * {@link fr.acxio.tools.agia.alfresco.configuration.AssociationDefinition AssociationDefinition}
- * .</p>
+ * <p>
+ * Abstract factory of
+ * {@link fr.acxio.tools.agia.alfresco.configuration.AssociationDefinition
+ * AssociationDefinition} .
+ * </p>
  * 
  * @author pcollardez
  *
- * @param <T> a AssociationDefinition subclass
+ * @param <T>
+ *            a AssociationDefinition subclass
  */
 public abstract class AssociationDefinitionFactoryBean<T> implements FactoryBean<T>, InitializingBean {
 
-	private String type;
+    private String type;
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String sType) {
-		type = sType;
-	}
+    public void setType(String sType) {
+        type = sType;
+    }
 
-	@Override
-	public void afterPropertiesSet() {
-		Assert.hasText(type, "'type' must not be empty.");
-	}
+    @Override
+    public void afterPropertiesSet() {
+        Assert.hasText(type, "'type' must not be empty.");
+    }
 
-	@Override
-	public boolean isSingleton() {
-		return true;
-	}
+    @Override
+    public boolean isSingleton() {
+        return true;
+    }
 }
