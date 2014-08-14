@@ -16,14 +16,11 @@ package fr.acxio.tools.agia.alfresco;
  * limitations under the License.
  */
 
-import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
 
 import fr.acxio.tools.agia.alfresco.configuration.NodeFactory;
 import fr.acxio.tools.agia.alfresco.domain.NodeList;
-import fr.acxio.tools.agia.expression.EvaluationContextFactory;
-import fr.acxio.tools.agia.expression.StandardEvaluationContextFactory;
+import fr.acxio.tools.agia.expression.support.AbstractSingleVariableExpressionEvaluator;
 
 /**
  * <p>
@@ -40,27 +37,12 @@ import fr.acxio.tools.agia.expression.StandardEvaluationContextFactory;
  * @param <T>
  *            The object graph to transform
  */
-public abstract class NodeMapper<T> {
+public abstract class NodeMapper<T> extends AbstractSingleVariableExpressionEvaluator {
 
     /**
      * The node factory used to create nodes from the object graph
      */
     private NodeFactory nodeFactory;
-
-    /**
-     * The variable name of the root of the object graph. Defaulted to "in".
-     */
-    private String variableName = "in";
-
-    /**
-     * The evaluation context factory which may contain extra beans.
-     */
-    private EvaluationContextFactory evaluationContextFactory;
-
-    /**
-     * The instantiated evaluation context.
-     */
-    private StandardEvaluationContext evaluationContext;
 
     /**
      * Returns the node factory.
@@ -79,48 +61,6 @@ public abstract class NodeMapper<T> {
      */
     public void setNodeFactory(NodeFactory sNodeFactory) {
         nodeFactory = sNodeFactory;
-    }
-
-    /**
-     * Returns the name of the variable representing the root object.
-     * 
-     * @return the name of the variable representing the root object.
-     */
-    public String getVariableName() {
-        return variableName;
-    }
-
-    /**
-     * Sets the name of the variable representing the root object.
-     * 
-     * @param sVariableName
-     *            a name for the variable representing the root object.
-     */
-    public void setVariableName(String sVariableName) {
-        Assert.hasText(sVariableName, "variableName must not be empty");
-        variableName = sVariableName;
-    }
-
-    /**
-     * Returns the evaluation context factory.
-     * 
-     * @return the evaluation context factory.
-     */
-    public synchronized EvaluationContextFactory getEvaluationContextFactory() {
-        if (evaluationContextFactory == null) {
-            evaluationContextFactory = new StandardEvaluationContextFactory();
-        }
-        return evaluationContextFactory;
-    }
-
-    /**
-     * Sets the evaluation context factory.
-     * 
-     * @param sEvaluationContextFactory
-     *            an evaluation context factory.
-     */
-    public synchronized void setEvaluationContextFactory(EvaluationContextFactory sEvaluationContextFactory) {
-        evaluationContextFactory = sEvaluationContextFactory;
     }
 
     /**
@@ -150,8 +90,8 @@ public abstract class NodeMapper<T> {
     public synchronized NodeList objectToNodeList(T sData) throws BindException {
         NodeList aResult;
         try {
-            evaluationContext = getEvaluationContextFactory().createContext(variableName, transformData(sData), evaluationContext);
-            aResult = getNodeFactory().getNodes(evaluationContext);
+            updateContext(getVariableName(), transformData(sData), getEvaluationContext());
+            aResult = getNodeFactory().getNodes(getEvaluationContext());
         } catch (Exception e) {
             // FIXME : org.springframework.validation.BindException
             throw new RuntimeException("Error mapping data", e);

@@ -21,13 +21,8 @@ import java.util.Map;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.util.Assert;
 
-import fr.acxio.tools.agia.expression.DataExpressionResolver;
-import fr.acxio.tools.agia.expression.EvaluationContextFactory;
-import fr.acxio.tools.agia.expression.StandardDataExpressionResolver;
-import fr.acxio.tools.agia.expression.StandardEvaluationContextFactory;
+import fr.acxio.tools.agia.expression.support.AbstractSingleVariableExpressionEvaluator;
 
 /**
  * <p>
@@ -37,34 +32,12 @@ import fr.acxio.tools.agia.expression.StandardEvaluationContextFactory;
  * @author pcollardez
  *
  */
-public class ExpressionResourceFactory implements ResourceFactory {
+public class ExpressionResourceFactory extends AbstractSingleVariableExpressionEvaluator implements ResourceFactory {
 
     private String expression;
-    private String variableName = "in";
-
-    private EvaluationContextFactory evaluationContextFactory;
-    private StandardEvaluationContext evaluationContext;
-
-    private DataExpressionResolver expressionResolver = new StandardDataExpressionResolver();
 
     public synchronized void setExpression(String sExpression) {
         expression = sExpression;
-    }
-
-    public synchronized void setVariableName(String sVariableName) {
-        Assert.hasText(sVariableName, "variableName must not be empty");
-        variableName = sVariableName;
-    }
-
-    public synchronized EvaluationContextFactory getEvaluationContextFactory() {
-        if (evaluationContextFactory == null) {
-            evaluationContextFactory = new StandardEvaluationContextFactory();
-        }
-        return evaluationContextFactory;
-    }
-
-    public synchronized void setEvaluationContextFactory(EvaluationContextFactory sEvaluationContextFactory) {
-        evaluationContextFactory = sEvaluationContextFactory;
     }
 
     @Override
@@ -76,8 +49,8 @@ public class ExpressionResourceFactory implements ResourceFactory {
     public synchronized Resource getResource(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException {
         Resource aResult = null;
         try {
-            evaluationContext = getEvaluationContextFactory().createContext(variableName, sParameters, evaluationContext);
-            String aPath = expressionResolver.evaluate(expression, evaluationContext, String.class);
+            updateContext(getVariableName(), sParameters, getEvaluationContext());
+            String aPath = getExpressionResolver().evaluate(expression, getEvaluationContext(), String.class);
             aResult = new FileSystemResource(aPath);
         } catch (Exception e) {
             throw new ResourceCreationException(e);

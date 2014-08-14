@@ -22,21 +22,13 @@ import java.util.List;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemStream;
-import org.springframework.batch.item.ItemStreamException;
 import org.springframework.batch.item.ItemStreamReader;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.batch.item.file.transform.FieldSet;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.Assert;
 
-import fr.acxio.tools.agia.expression.DataExpressionResolver;
-import fr.acxio.tools.agia.expression.EvaluationContextFactory;
-import fr.acxio.tools.agia.expression.StandardDataExpressionResolver;
-import fr.acxio.tools.agia.expression.StandardEvaluationContextFactory;
+import fr.acxio.tools.agia.expression.support.AbstractExpressionEvaluator;
 
-public abstract class MultiLineItemReader<T> implements ItemStreamReader<T> {
+public abstract class MultiLineItemReader<T> extends AbstractExpressionEvaluator implements ItemStreamReader<T> {
 
     private ItemReader<FieldSet> delegate;
     private FieldSet nextItem = null;
@@ -46,11 +38,6 @@ public abstract class MultiLineItemReader<T> implements ItemStreamReader<T> {
 
     private String currentVariableName = "current";
     private String nextVariableName = "next";
-
-    private EvaluationContextFactory evaluationContextFactory;
-    private StandardEvaluationContext evaluationContext;
-
-    private DataExpressionResolver expressionResolver = new StandardDataExpressionResolver();
 
     public synchronized void setDelegate(ItemReader<FieldSet> sDelegate) {
         delegate = sDelegate;
@@ -70,16 +57,6 @@ public abstract class MultiLineItemReader<T> implements ItemStreamReader<T> {
         newRecordCondition = sNewRecordCondition;
     }
 
-    public synchronized EvaluationContextFactory getEvaluationContextFactory() {
-        if (evaluationContextFactory == null) {
-            evaluationContextFactory = new StandardEvaluationContextFactory();
-        }
-        return evaluationContextFactory;
-    }
-
-    public synchronized void setEvaluationContextFactory(EvaluationContextFactory sEvaluationContextFactory) {
-        evaluationContextFactory = sEvaluationContextFactory;
-    }
 
     @Override
     public synchronized T read() {
@@ -91,11 +68,9 @@ public abstract class MultiLineItemReader<T> implements ItemStreamReader<T> {
         while (!aConditionResult && (line != null)) {
             aTmpResult.add(line);
             if (nextItem != null) {
-                evaluationContext = getEvaluationContextFactory().createContext(currentVariableName,
-                        (line.hasNames()) ? line.getProperties() : line.getValues(), evaluationContext);
-                evaluationContext = getEvaluationContextFactory().createContext(nextVariableName,
-                        (nextItem.hasNames()) ? nextItem.getProperties() : nextItem.getValues(), evaluationContext);
-                aConditionResult = expressionResolver.evaluate(newRecordCondition, evaluationContext, Boolean.class);
+                updateContext(currentVariableName, (line.hasNames()) ? line.getProperties() : line.getValues(), getEvaluationContext());
+                updateContext(nextVariableName, (nextItem.hasNames()) ? nextItem.getProperties() : nextItem.getValues(), getEvaluationContext());
+                aConditionResult = getExpressionResolver().evaluate(newRecordCondition, getEvaluationContext(), Boolean.class);
             }
             if (!aConditionResult) {
                 line = readNextFieldSet();

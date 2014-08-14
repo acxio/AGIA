@@ -21,16 +21,12 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.SqlTypeValue;
 import org.springframework.jdbc.core.StatementCreatorUtils;
 import org.springframework.util.Assert;
 
-import fr.acxio.tools.agia.expression.DataExpressionResolver;
-import fr.acxio.tools.agia.expression.EvaluationContextFactory;
-import fr.acxio.tools.agia.expression.StandardDataExpressionResolver;
-import fr.acxio.tools.agia.expression.StandardEvaluationContextFactory;
+import fr.acxio.tools.agia.expression.support.AbstractSingleVariableExpressionEvaluator;
 
 /**
  * <p>Sets values on a <code>PreparedStatement</code> provided by the
@@ -45,24 +41,9 @@ import fr.acxio.tools.agia.expression.StandardEvaluationContextFactory;
  * @author pcollardez
  *
  */
-public class ExpressionsPreparedStatementSetter implements PreparedStatementSetter {
+public class ExpressionsPreparedStatementSetter extends AbstractSingleVariableExpressionEvaluator implements PreparedStatementSetter {
     
     private String[] lookupFieldsExpressions;
-    private EvaluationContextFactory evaluationContextFactory;
-    private StandardEvaluationContext evaluationContext;
-    private String variableName = "in";
-    private DataExpressionResolver expressionResolver = new StandardDataExpressionResolver();
-    
-    public synchronized EvaluationContextFactory getEvaluationContextFactory() {
-        if (evaluationContextFactory == null) {
-            evaluationContextFactory = new StandardEvaluationContextFactory();
-        }
-        return evaluationContextFactory;
-    }
-
-    public synchronized void setEvaluationContextFactory(EvaluationContextFactory sEvaluationContextFactory) {
-        evaluationContextFactory = sEvaluationContextFactory;
-    }
 
     public synchronized void setLookupFieldsExpressions(String[] sExpressions) {
         Assert.notNull(sExpressions, "Lookup expressions must be non-null");
@@ -70,7 +51,7 @@ public class ExpressionsPreparedStatementSetter implements PreparedStatementSett
     }
     
     public synchronized void updateContext(Map<? extends Object, ? extends Object> sParameters) {
-        evaluationContext = getEvaluationContextFactory().createContext(variableName, sParameters, evaluationContext);
+        updateContext(getVariableName(), sParameters, getEvaluationContext());
     }
 
     @Override
@@ -78,7 +59,7 @@ public class ExpressionsPreparedStatementSetter implements PreparedStatementSett
         try {
             String aResolvedValue;
             for(int i = 0; i < lookupFieldsExpressions.length; i++) {
-                aResolvedValue = expressionResolver.evaluate(lookupFieldsExpressions[i], evaluationContext, String.class);
+                aResolvedValue = getExpressionResolver().evaluate(lookupFieldsExpressions[i], getEvaluationContext(), String.class);
                 StatementCreatorUtils.setParameterValue(sPs, i + 1, SqlTypeValue.TYPE_UNKNOWN, aResolvedValue);
             }
         } catch (Exception e) {

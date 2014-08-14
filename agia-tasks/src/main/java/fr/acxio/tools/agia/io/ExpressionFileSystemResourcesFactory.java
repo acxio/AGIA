@@ -22,13 +22,8 @@ import java.util.Map;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.util.Assert;
 
-import fr.acxio.tools.agia.expression.DataExpressionResolver;
-import fr.acxio.tools.agia.expression.EvaluationContextFactory;
-import fr.acxio.tools.agia.expression.StandardDataExpressionResolver;
-import fr.acxio.tools.agia.expression.StandardEvaluationContextFactory;
+import fr.acxio.tools.agia.expression.support.AbstractSingleVariableExpressionEvaluator;
 
 /**
  * <p>
@@ -39,17 +34,10 @@ import fr.acxio.tools.agia.expression.StandardEvaluationContextFactory;
  * @author pcollardez
  *
  */
-public class ExpressionFileSystemResourcesFactory implements ResourcesFactory {
+public class ExpressionFileSystemResourcesFactory extends AbstractSingleVariableExpressionEvaluator implements ResourcesFactory {
 
     private ResourcePatternResolver resourcePatternResolver;
     private String pattern;
-
-    private String variableName = "in";
-
-    private EvaluationContextFactory evaluationContextFactory;
-    private StandardEvaluationContext evaluationContext;
-
-    private DataExpressionResolver expressionResolver = new StandardDataExpressionResolver();
 
     public ExpressionFileSystemResourcesFactory() {
         this(new PathMatchingResourcePatternResolver(), null);
@@ -72,22 +60,6 @@ public class ExpressionFileSystemResourcesFactory implements ResourcesFactory {
         pattern = sPattern;
     }
 
-    public synchronized void setVariableName(String sVariableName) {
-        Assert.hasText(sVariableName, "variableName must not be empty");
-        variableName = sVariableName;
-    }
-
-    public synchronized EvaluationContextFactory getEvaluationContextFactory() {
-        if (evaluationContextFactory == null) {
-            evaluationContextFactory = new StandardEvaluationContextFactory();
-        }
-        return evaluationContextFactory;
-    }
-
-    public synchronized void setEvaluationContextFactory(EvaluationContextFactory sEvaluationContextFactory) {
-        evaluationContextFactory = sEvaluationContextFactory;
-    }
-
     public synchronized Resource[] getResources() throws ResourceCreationException {
         return getResources(Collections.EMPTY_MAP);
     }
@@ -95,8 +67,8 @@ public class ExpressionFileSystemResourcesFactory implements ResourcesFactory {
     public synchronized Resource[] getResources(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException {
         Resource[] aResources = null;
         try {
-            evaluationContext = getEvaluationContextFactory().createContext(variableName, sParameters, evaluationContext);
-            String aResolvedPattern = expressionResolver.evaluate(pattern, evaluationContext, String.class);
+            updateContext(getVariableName(), sParameters, getEvaluationContext());
+            String aResolvedPattern = getExpressionResolver().evaluate(pattern, getEvaluationContext(), String.class);
             aResources = resourcePatternResolver.getResources(aResolvedPattern);
         } catch (Exception e) {
             throw new ResourceCreationException(e);
