@@ -78,4 +78,70 @@ public class FilePathTest {
         assertNull(aPath.getElement(1));
     }
 
+    @Test
+    public void testGetSubpath() {
+        FilePath aPath = FilePath.valueOf("c:\\folder1\\folder2\\file.ext");
+        assertEquals("folder1/folder2", aPath.getSubpath(1,2));
+        assertEquals("folder2/file.ext", aPath.getSubpath(2,3));
+        assertEquals("c:/folder1/folder2/file.ext", aPath.getSubpath(3,4));
+    }
+
+    @Test
+    public void testGetSubpathNegativeIndex() {
+        FilePath aPath = FilePath.valueOf("c:\\folder1\\folder2\\file.ext");
+        assertEquals("folder1/folder2", aPath.getSubpath(-2,-3));
+        assertEquals("folder2/file.ext", aPath.getSubpath(-1,-2));
+    }
+
+    @Test
+    public void testGetSubpathMixedIndex() {
+        FilePath aPath = FilePath.valueOf("c:\\folder1\\folder2\\file.ext");
+        assertEquals("folder1/folder2", aPath.getSubpath(-2,1));
+    }
+
+    @Test
+    public void testGetSubpathSameIndex() {
+        FilePath aPath = FilePath.valueOf("c:\\folder1\\folder2\\file.ext");
+        assertEquals("folder1", aPath.getSubpath(1,1));
+    }
+
+    @Test
+    public void testGetSubpathSameIndexMixed() {
+        FilePath aPath = FilePath.valueOf("c:\\folder1\\folder2\\file.ext");
+        assertEquals("folder1", aPath.getSubpath(1,-3));
+    }
+    
+    @Test
+    public void testGetSubpathCustomSeparator() {
+        FilePath aPath = FilePath.valueOf("c:\\folder1\\folder2\\file.ext");
+        assertEquals("folder1\\folder2", aPath.getSubpath(1,2, "\\"));
+    }
+
+    @Test
+    public void testGetSubpathOneElement() {
+        FilePath aPath = FilePath.valueOf("file.ext");
+        assertEquals("file.ext", aPath.getSubpath(0,0));
+        assertEquals("file.ext", aPath.getSubpath(0,1));
+        assertEquals("file.ext", aPath.getSubpath(-1,0));
+        assertEquals("file.ext", aPath.getSubpath(1,-1));
+    }
+
+    @Test
+    public void testGetSubpathEmptyElement() {
+        FilePath aPath = FilePath.valueOf("");
+        assertEquals("", aPath.getSubpath(0,0));
+        assertEquals("", aPath.getSubpath(0,1));
+        assertEquals("", aPath.getSubpath(-1,0));
+        assertEquals("", aPath.getSubpath(1,-1));
+    }
+
+    @Test
+    public void testGetSubpathNullElement() {
+        FilePath aPath = FilePath.valueOf((String)null);
+        assertEquals(null, aPath.getSubpath(0,0));
+        assertEquals(null, aPath.getSubpath(0,1));
+        assertEquals(null, aPath.getSubpath(-1,0));
+        assertEquals(null, aPath.getSubpath(1,-1));
+    }
+
 }

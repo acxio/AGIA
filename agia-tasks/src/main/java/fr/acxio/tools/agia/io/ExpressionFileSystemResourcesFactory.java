@@ -61,7 +61,7 @@ public class ExpressionFileSystemResourcesFactory extends AbstractSingleVariable
     }
 
     public synchronized Resource[] getResources() throws ResourceCreationException {
-        return getResources(Collections.EMPTY_MAP);
+        return getResources(Collections.emptyMap());
     }
 
     public synchronized Resource[] getResources(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException {

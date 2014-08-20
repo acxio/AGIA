@@ -19,7 +19,6 @@ package fr.acxio.tools.agia.file.pdf;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
 
 import fr.acxio.tools.agia.io.ResourcesFactory;

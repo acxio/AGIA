@@ -31,10 +31,10 @@ import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.util.Assert;
 
 /**
- * <p>Does a lookup query using a <code>JdbcCursorItemReader</code>. The result
+ * <p>Does a lookup query using a {@code JdbcCursorItemReader}. The result
  * is appended to the input map to produce the output.</p>
  * <p>The names of the result will be prefixed and used as the key in the map
- * with the format: <code>lkp%d_%s</code>.</p>
+ * with the format: {@code lkp%d_%s}.</p>
  * <p>Each row of the result will be inserted into the map: the index of the
  * row is used after the prefix. The names of the columns are used after the
  * prefix and the index of the row.</p>

@@ -42,7 +42,7 @@ public class ExpressionResourceFactory extends AbstractSingleVariableExpressionE
 
     @Override
     public Resource getResource() throws ResourceCreationException {
-        return getResource(Collections.EMPTY_MAP);
+        return getResource(Collections.emptyMap());
     }
 
     @Override

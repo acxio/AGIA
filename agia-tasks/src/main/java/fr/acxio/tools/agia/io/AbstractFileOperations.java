@@ -30,8 +30,31 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.core.io.Resource;
 
-import fr.acxio.tools.agia.tasks.FileOperationException;
-
+/**
+ * <p>Abstract files manipulation utilities.</p>
+ * <p>The source resources must be provided by the subclass.</p>
+ * <p>The destination of a copy or move operation must be a single resource.
+ * This resource can be built by a {@code ResourceFactory}.</p>
+ * <p>The destination is built for each source: it can be a single folder or
+ * different filenames calculated from a complex expression.</p>
+ * <p>Each source resource and the current StepExecution are sent in the
+ * evaluation context of the destination factory.</p>
+ * <p>These objects can be used to calculate a complex path. For example:</p>
+ * 
+ * <pre>
+ * ${config.destdir}/@{#in.STEP_EXEC.jobExecution.jobId}/@{#in.SOURCE.filename}
+ * </pre>
+ * <p>
+ * In this expression, the base path is read from a properties file, the folder
+ * just under the base path is named from the current job instance ID, and the
+ * source filename is used as the destination filename.
+ * </p>
+ * <p>A subclass may provide a default destination Resource in the case of the
+ * destination ResourceFactory is null.</p>
+ * 
+ * @author pcollardez
+ *
+ */
 public abstract class AbstractFileOperations {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractFileOperations.class);

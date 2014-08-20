@@ -29,10 +29,10 @@ import org.springframework.util.Assert;
 import fr.acxio.tools.agia.expression.support.AbstractSingleVariableExpressionEvaluator;
 
 /**
- * <p>Sets values on a <code>PreparedStatement</code> provided by the
+ * <p>Sets values on a {@code PreparedStatement} provided by the
  * JdbcTemplate class, for each of a number of updates in a batch using the
  * same SQL. The parameters are set from expressions evaluated in a context.</p>
- * <p>The SQL statement should contain placeholders (<code>?</code>). The list
+ * <p>The SQL statement should contain placeholders ({@code ?}). The list
  * of expressions matches the order of the placeholders.</p>
  * <p>IMPORTANT: The context is updated in another method than the one updating
  * the PreparedStatement. If the same instance of this class is used by more

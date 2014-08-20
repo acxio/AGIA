@@ -90,14 +90,13 @@ public class MergePDFProcessor implements ItemProcessor<Map<String, Object>, Map
                     Resource aDestinationResource = destinationFactory.getResource(aSourceParams);
                     
                     File aDestFile = aDestinationResource.getFile();
-                    if (aDestinationResource.exists()) {
-                        if (forceReplace) {
-                            aDestFile.delete();
+                    if (aDestFile.exists()) {
+                        if (forceReplace && !aDestFile.delete()) {
+                            throw new IOException("Destination '" + aDestFile + "' cannot be replaced");
                         }
-                    } else if (aDestFile.getParentFile() != null && aDestFile.getParentFile().exists() == false) {
-                        if (aDestFile.getParentFile().mkdirs() == false) {
-                            throw new IOException("Destination '" + aDestFile + "' directory cannot be created");
-                        }
+                    } else if (aDestFile.getParentFile() != null && !aDestFile.getParentFile().exists()
+                                && !aDestFile.getParentFile().mkdirs()) {
+                        throw new IOException("Destination '" + aDestFile + "' directory cannot be created");
                     }
                     
                     PDDocument destination = aContainer.getParts().get(0);
@@ -128,8 +127,7 @@ public class MergePDFProcessor implements ItemProcessor<Map<String, Object>, Map
         if (context==null) {
             return null;
         }
-        StepExecution stepExecution = context.getStepExecution();
-        return stepExecution;
+        return context.getStepExecution();
     }
 
 }

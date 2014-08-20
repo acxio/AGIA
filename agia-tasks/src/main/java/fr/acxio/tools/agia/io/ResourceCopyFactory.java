@@ -25,7 +25,7 @@ import org.springframework.core.io.Resource;
 /**
  * <p>
  * A simple ResourceFactory using a prefix, a suffix and a file extension to
- * build the descriptor from a <code>SOURCE</code> resource.
+ * build the descriptor from a {@code SOURCE} resource.
  * </p>
  * 
  * @author pcollardez

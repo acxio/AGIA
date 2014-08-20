@@ -16,21 +16,23 @@ package fr.acxio.tools.agia.item;
  * limitations under the License.
  */
 
-import java.util.List;
+public class ConditionalItemWriterException extends Exception {
 
-import org.springframework.batch.item.file.transform.FieldSet;
+    private static final long serialVersionUID = -449115149402633549L;
 
-/**
- * <p>Passthrough {@code MultiLineItemReader} returning a list of FieldSet.</p>
- * 
- * @author pcollardez
- *
- */
-public class MultiLineNodeListItemReader extends MultiLineItemReader<List<FieldSet>> {
+    public ConditionalItemWriterException() {
+    }
 
-    @Override
-    public List<FieldSet> mapFieldSets(List<FieldSet> sFieldSets) {
-        return sFieldSets;
+    public ConditionalItemWriterException(String sMessage) {
+        super(sMessage);
+    }
+
+    public ConditionalItemWriterException(Throwable sCause) {
+        super(sCause);
+    }
+
+    public ConditionalItemWriterException(String sMessage, Throwable sCause) {
+        super(sMessage, sCause);
     }
 
 }

@@ -22,6 +22,12 @@ import java.util.Map;
 
 import org.springframework.core.io.Resource;
 
+/**
+ * <p>Composite ResourcesFactory using delegates ResourcesFactory.</p>
+ * 
+ * @author pcollardez
+ *
+ */
 public class CompositeResourcesFactory implements ResourcesFactory {
     
     private List<ResourcesFactory> delegates;

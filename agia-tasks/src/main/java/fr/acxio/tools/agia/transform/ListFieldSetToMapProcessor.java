@@ -24,15 +24,15 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.file.transform.FieldSet;
 
 /**
- * <p>Transforms a list of <code>FieldSet</code> into a <code>Map</code>.</p>
+ * <p>Transforms a list of {@code FieldSet} into a {@code Map}.</p>
  * <p>The names of the FieldSet will be used as the key in the map. If a name
  * is null or empty, the key is built from index of the FieldSet into the list
  * and from the index of the column into the FieldSet, with the format:
- * <code>rec%d_ucol%d</code>.</p>
+ * {@code rec%d_ucol%d}.</p>
  * <p>For example, if the list contains 2 FieldSet, the first one having the
  * names "Field1" and null, the second one having the names null, "Field2" and
- * "Field3", the resulting map will contain the keys: <code>rec0_Field1,
- * rec0_ucol1, rec1_ucol0, rec1_Field2, rec1_Field3</code>.</p>
+ * "Field3", the resulting map will contain the keys: {@code rec0_Field1,
+ * rec0_ucol1, rec1_ucol0, rec1_Field2, rec1_Field3}.</p>
  * <p>The prefixes used for the FieldSet index and the column index can be
  * set to other values.</p>
  * 

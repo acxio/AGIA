@@ -28,7 +28,7 @@ public class ExpressionsMapToMapProcessor extends AbstractSingleVariableExpressi
 
     private Map<String, String> expressions;
 
-    public void setExpressions(Map<String, String> sExpressions) {
+    public synchronized void setExpressions(Map<String, String> sExpressions) {
         expressions = sExpressions;
     }
 

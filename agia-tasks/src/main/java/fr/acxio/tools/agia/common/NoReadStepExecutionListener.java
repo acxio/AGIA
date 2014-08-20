@@ -22,7 +22,7 @@ import org.springframework.batch.core.listener.StepExecutionListenerSupport;
 
 /**
  * <p>
- * Sets the exit code <code>NOREAD</code> to the step if no items have been
+ * Sets the exit code {@code NOREAD} to the step if no items have been
  * processed (item count is 0).
  * </p>
  * <p>

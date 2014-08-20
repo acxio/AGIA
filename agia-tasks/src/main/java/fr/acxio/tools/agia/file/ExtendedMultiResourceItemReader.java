@@ -44,7 +44,7 @@ import fr.acxio.tools.agia.io.ResourcesFactory;
 // Copy of MultiResourceItemReader because of private members not available to subclasses
 public class ExtendedMultiResourceItemReader<T> implements ItemReader<T>, ItemStream {
 
-    private static final Log logger = LogFactory.getLog(ExtendedMultiResourceItemReader.class);
+    private static final Log LOGGER = LogFactory.getLog(ExtendedMultiResourceItemReader.class);
 
     private static final String RESOURCE_KEY = "resourceIndex";
 
@@ -180,7 +180,7 @@ public class ExtendedMultiResourceItemReader<T> implements ItemReader<T>, ItemSt
             if (strict) {
                 throw new IllegalStateException("No resources to read. Set strict=false if this is not an error condition.");
             } else {
-                logger.warn("No resources to read. Set strict=true if this should be an error condition.");
+                LOGGER.warn("No resources to read. Set strict=true if this should be an error condition.");
                 noInput = true;
                 return;
             }

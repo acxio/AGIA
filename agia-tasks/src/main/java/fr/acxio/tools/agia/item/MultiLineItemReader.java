@@ -28,6 +28,45 @@ import org.springframework.util.Assert;
 
 import fr.acxio.tools.agia.expression.support.AbstractExpressionEvaluator;
 
+/**
+ * <p>
+ * Item reader for records made of many lines with different mappings and having
+ * non-explicit rules for detecting the ends of the records.
+ * </p>
+ * <p>
+ * This item reader delegates the real reading, parsing and mapping to its
+ * {@code delegate}.
+ * </p>
+ * <p>
+ * The {@code newRecordCondition} is a boolean expression that can use the
+ * {@code currentVariableName} and the {@code nextVariableName}, respectively
+ * "current" and "next" by default.
+ * </p>
+ * <p>
+ * As their names are self-explanatory, these variables contain the current line
+ * and the next line from the stream.
+ * </p>
+ * <p>
+ * The delegate reader may return different FieldSets, having different fields
+ * from one another. The condition must take this into account.
+ * </p>
+ * <p>
+ * Every time the end of a record is reach in the current line, the condition
+ * should evaluate to {@code true} and a list of
+ * {@link org.springframework.batch.item.file.transform.FieldSet FieldSet} is
+ * returned.
+ * </p>
+ * <p>
+ * The returned FieldSets by the delegate reader may not have the same fields.
+ * </p>
+ * <p>Subclasses must implement {@code mapFieldSets} to transform the list
+ * of read FieldSet into items.</p>
+ * 
+ * @param <T> The type of the returned items
+ * 
+ * @author pcollardez
+ *
+ */
 public abstract class MultiLineItemReader<T> extends AbstractExpressionEvaluator implements ItemStreamReader<T> {
 
     private ItemReader<FieldSet> delegate;

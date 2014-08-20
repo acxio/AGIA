@@ -30,17 +30,15 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
 import fr.acxio.tools.agia.io.AbstractFileOperations;
+import fr.acxio.tools.agia.io.FileOperationException;
 import fr.acxio.tools.agia.io.ResourceCreationException;
 
 /**
- * <p>
- * Single file manipulation tasklet.
- * </p>
- * <p>
- * The destination of a copy or move operation must be a single resource. This
- * resource can be built by a ResourceFactory.
- * </p>
+ * <p>Single file manipulation tasklet.</p>
+ * <p>The destination of a copy or move operation must be a single resource.
+ * This resource can be built by a ResourceFactory or can be set directly.</p>
  * 
+ * @see AbstractFileOperations
  * @author pcollardez
  *
  */

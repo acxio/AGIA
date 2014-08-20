@@ -36,6 +36,7 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.core.io.FileSystemResource;
 
+import fr.acxio.tools.agia.io.FileOperationException;
 import fr.acxio.tools.agia.io.AbstractFileOperations.Operation;
 
 @RunWith(JUnit4.class)

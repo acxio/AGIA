@@ -31,6 +31,23 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
+/**
+ * <p>Files manipulation processor.</p>
+ * <p>The source resources is set by a ResourcesFactory.</p>
+ * <p>The destination is built by a ResourceFactory.</p>
+ * <p>The destination is built for each source: it can be a single folder or
+ * different filenames calculated from a complex expression.</p>
+ * <p>The destination resources are added into the processed item as a list
+ * of absolute paths associated to the given {@code key}.</p>
+ * <p>IMPORTANT: This processor can have strong side effects! It can move or
+ * remove files, but it does so out of any transaction. If used in a
+ * transactionnal step, its effects will not be rolled back and it will leave
+ * an inconsistent state preventing a clean restart of the job.</p>
+ *
+ * @see AbstractFileOperations
+ * @author pcollardez
+ *
+ */
 public class FilesOperationProcessor extends AbstractFileOperations implements ItemProcessor<Map<String, Object>, Map<String, Object>>, InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FilesOperationProcessor.class);
@@ -87,7 +104,6 @@ public class FilesOperationProcessor extends AbstractFileOperations implements I
         if (context==null) {
             return null;
         }
-        StepExecution stepExecution = context.getStepExecution();
-        return stepExecution;
+        return context.getStepExecution();
     }
 }

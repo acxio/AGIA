@@ -43,6 +43,7 @@ import org.springframework.batch.core.scope.context.StepContext;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.core.io.Resource;
 
+import fr.acxio.tools.agia.io.FileOperationException;
 import fr.acxio.tools.agia.io.ResourceFactory;
 import fr.acxio.tools.agia.io.ResourcesFactory;
 import fr.acxio.tools.agia.io.AbstractFileOperations.Operation;

@@ -50,7 +50,7 @@ public class IdentityResourceAwareItemReaderItemStream extends AbstractItemCount
      * input resource does not exist.
      * 
      * @param strict
-     *            <code>true</code> by default
+     *            {@code true} by default
      */
     public void setStrict(boolean strict) {
         this.strict = strict;
