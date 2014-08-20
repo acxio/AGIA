@@ -36,7 +36,7 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.core.io.FileSystemResource;
 
-import fr.acxio.tools.agia.tasks.FileOperationTasklet.Operation;
+import fr.acxio.tools.agia.io.AbstractFileOperations.Operation;
 
 @RunWith(JUnit4.class)
 public class FileOperationTaskletTest {
@@ -72,7 +72,10 @@ public class FileOperationTaskletTest {
 		aTasklet.setDestination(new FileSystemResource("target/input-copy.csv"));
 		aTasklet.setOperation(Operation.COPY);
 		aTasklet.afterPropertiesSet();
-		aTasklet.execute(null, null);
+		StepContribution aStepContribution = mock(StepContribution.class);
+		aTasklet.execute(aStepContribution, null);
+		verify(aStepContribution, times(0)).incrementReadCount();
+        verify(aStepContribution, times(0)).incrementWriteCount(1);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

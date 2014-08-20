@@ -46,19 +46,18 @@ import org.slf4j.LoggerFactory;
  * @author pcollardez
  *
  */
-public class PageSplittingPDDocumentFactory implements PDDocumentFactory {
+public class PageSplittingPDDocumentFactory extends AbstractPDDocumentFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageSplittingPDDocumentFactory.class);
 
     public static final String PARAM_SPLITATPAGE = "SPLITATPAGE";
     public static final String PARAM_STARTPAGE = "STARTPAGE";
     public static final String PARAM_ENDPAGE = "ENDPAGE";
-    public static final String PARAM_NONSEQ = "NONSEQ";
 
     private Integer splitAtPage;
     private Integer startPage;
     private Integer endPage;
-    private Boolean useNonSeq;
+    
 
     public void setSplitAtPage(Integer sSplitAtPage) {
         splitAtPage = sSplitAtPage;
@@ -72,16 +71,12 @@ public class PageSplittingPDDocumentFactory implements PDDocumentFactory {
         endPage = sEndPage;
     }
 
-    public void setUseNonSeq(Boolean sUseNonSeq) {
-        useNonSeq = sUseNonSeq;
-    }
-
     @Override
     public PDDocumentContainer getDocument(File sFile) throws PDDocumentFactoryException {
         return getDocument(sFile, null);
     }
 
-    private Map<String, Object> getMergedParameters(Map<String, Object> sParameters) {
+    protected Map<String, Object> getMergedParameters(Map<String, Object> sParameters) {
         Map<String, Object> aParameters = new HashMap<String, Object>();
         if (splitAtPage != null) {
             aParameters.put(PARAM_SPLITATPAGE, splitAtPage);
@@ -109,15 +104,7 @@ public class PageSplittingPDDocumentFactory implements PDDocumentFactory {
         PDDocument document = null;
 
         try {
-            if (Boolean.TRUE.equals(aParameters.get(PARAM_NONSEQ))) {
-                document = PDDocument.loadNonSeq(sFile, (RandomAccess) aParameters.get(PDDocumentFactoryConstants.PARAM_SCRATCHFILE),
-                        (String) aParameters.get(PDDocumentFactoryConstants.PARAM_PASSWORD));
-            } else {
-                document = PDDocument.load(sFile);
-                if (document.isEncrypted()) {
-                    document.decrypt((String) aParameters.get(PDDocumentFactoryConstants.PARAM_PASSWORD));
-                }
-            }
+            document = loadDocument(sFile, aParameters);
 
             aResult = splitDocument(document, (Integer) aParameters.get(PARAM_STARTPAGE), (Integer) aParameters.get(PARAM_ENDPAGE),
                     (Integer) aParameters.get(PARAM_SPLITATPAGE));
@@ -178,10 +165,7 @@ public class PageSplittingPDDocumentFactory implements PDDocumentFactory {
         PDDocument document = null;
 
         try {
-            document = PDDocument.load(sInputStream);
-            if (document.isEncrypted()) {
-                document.decrypt((String) aParameters.get(PDDocumentFactoryConstants.PARAM_PASSWORD));
-            }
+            document = loadDocument(sInputStream, aParameters);
 
             aResult = splitDocument(document, (Integer) aParameters.get(PARAM_STARTPAGE), (Integer) aParameters.get(PARAM_ENDPAGE),
                     (Integer) aParameters.get(PARAM_SPLITATPAGE));

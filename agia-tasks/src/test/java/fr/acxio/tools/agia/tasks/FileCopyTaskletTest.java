@@ -53,6 +53,7 @@ public class FileCopyTaskletTest {
         for(File aFile : aFilesToDelete) {
             FileUtils.deleteQuietly(aFile);
         }
+        FileUtils.deleteDirectory(new File("target/CP-testfiles"));
     }
 
 	@Test
@@ -65,6 +66,17 @@ public class FileCopyTaskletTest {
 		verify(aStepContribution, times(1)).incrementReadCount();
 		verify(aStepContribution, times(1)).incrementWriteCount(1);
 	}
+	
+	@Test
+    public void testExecuteDestDirDoesNotExist() throws Exception {
+        FileCopyTasklet aTasklet = new FileCopyTasklet();
+        aTasklet.setOrigin(new FileSystemResource("src/test/resources/testFiles/input.csv"));
+        aTasklet.setDestination(new FileSystemResource("target/CP-testfiles/input-copy.csv"));
+        StepContribution aStepContribution = mock(StepContribution.class);
+        assertEquals(RepeatStatus.FINISHED, aTasklet.execute(aStepContribution, null));
+        verify(aStepContribution, times(1)).incrementReadCount();
+        verify(aStepContribution, times(1)).incrementWriteCount(1);
+    }
 	
 	@Test
 	public void testExecuteFileNotFound() {
@@ -199,4 +211,39 @@ public class FileCopyTaskletTest {
 		assertTrue(aTasklet.getOrigin().getFile().exists());
 		assertEquals(0, aTasklet.getOrigin().getFile().length());
 	}
+	
+	@Test
+    public void testIgnoreEmptyFile() throws Exception {
+        File aTmpFile = File.createTempFile("input-copy-", ".csv", new File("target/"));
+	    FileCopyTasklet aTasklet = new FileCopyTasklet();
+	    aTasklet.setIgnoreEmptyFile(true);
+	    aTasklet.setOrigin(new FileSystemResource(aTmpFile));
+        aTasklet.setDestination(new FileSystemResource("target/input-copyEmpty.csv"));
+        StepContribution aStepContribution = mock(StepContribution.class);
+        aTasklet.execute(aStepContribution, null);
+        verify(aStepContribution, times(0)).incrementReadCount();
+        verify(aStepContribution, times(0)).incrementWriteCount(1);
+        
+        assertFalse(aTasklet.getDestination().getFile().exists());
+        assertTrue(aTasklet.getOrigin().getFile().exists());
+        assertEquals(0, aTasklet.getOrigin().getFile().length());
+	}
+	
+	@Test
+    public void testEmptyFile() throws Exception {
+        File aTmpFile = File.createTempFile("input-copy-", ".csv", new File("target/"));
+        FileCopyTasklet aTasklet = new FileCopyTasklet();
+        aTasklet.setIgnoreEmptyFile(false);
+        aTasklet.setOrigin(new FileSystemResource(aTmpFile));
+        aTasklet.setDestination(new FileSystemResource("target/input-copyEmpty2.csv"));
+        StepContribution aStepContribution = mock(StepContribution.class);
+        aTasklet.execute(aStepContribution, null);
+        verify(aStepContribution, times(1)).incrementReadCount();
+        verify(aStepContribution, times(1)).incrementWriteCount(1);
+        
+        assertTrue(aTasklet.getDestination().getFile().exists());
+        assertTrue(aTasklet.getOrigin().getFile().exists());
+        assertEquals(0, aTasklet.getOrigin().getFile().length());
+        assertEquals(0, aTasklet.getDestination().getFile().length());
+    }
 }

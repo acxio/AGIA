@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepContribution;
@@ -30,7 +31,6 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
-import org.springframework.util.FileCopyUtils;
 
 import fr.acxio.tools.agia.io.ResourceCreationException;
 import fr.acxio.tools.agia.io.ResourceFactory;
@@ -44,7 +44,9 @@ import fr.acxio.tools.agia.io.ResourceFactoryConstants;
  * This tasklet can raise an error if it cannot replace the destination.
  * </p>
  * <p>
- * It can also remove or empty the origin.
+ * It can also remove or empty the origin, or even ignore an empty origin.
+ * If the origin is empty and is ignored, the destination will not be created
+ * and the read count for the step will not be incremented.
  * </p>
  * 
  * @author pcollardez
@@ -64,6 +66,8 @@ public class FileCopyTasklet implements Tasklet, InitializingBean {
     private Boolean deleteOrigin = Boolean.FALSE;
 
     private Boolean emptyOrigin = Boolean.FALSE;
+    
+    private Boolean ignoreEmptyFile = Boolean.FALSE;
 
     public Resource getOrigin() {
         return origin;
@@ -109,6 +113,14 @@ public class FileCopyTasklet implements Tasklet, InitializingBean {
         emptyOrigin = sEmptyOrigin;
     }
 
+    public Boolean getIgnoreEmptyFile() {
+        return ignoreEmptyFile;
+    }
+
+    public void setIgnoreEmptyFile(Boolean sIgnoreEmptyFile) {
+        ignoreEmptyFile = sIgnoreEmptyFile;
+    }
+
     public void afterPropertiesSet() {
         Assert.notNull(origin, "Origin must be set");
         if (destinationFactory == null) {
@@ -121,45 +133,50 @@ public class FileCopyTasklet implements Tasklet, InitializingBean {
         File aOriginFile = origin.getFile();
         if (aOriginFile.exists() && aOriginFile.isFile()) {
 
-            if (sContribution != null) {
-                sContribution.incrementReadCount();
-            }
-
-            if (destinationFactory != null) {
-                Map<String, Object> aDestinationParams = new HashMap<String, Object>();
-                aDestinationParams.put(ResourceFactoryConstants.PARAM_SOURCE, origin);
-                aDestinationParams.put(ResourceFactoryConstants.PARAM_STEP_EXEC,
-                        ((sChunkContext != null) && (sChunkContext.getStepContext() != null)) ? sChunkContext.getStepContext().getStepExecution() : null);
-
-                destination = destinationFactory.getResource(aDestinationParams);
-            }
-
-            File aDestinationFile = destination.getFile();
-            if (aDestinationFile.exists()) {
-                if (forceReplace && aDestinationFile.isFile()) {
-                    if (!aDestinationFile.delete()) {
-                        throw new FileCopyException("Cannot remove: " + destination);
-                    }
-                } else {
-                    throw new FileCopyException("Cannot replace: " + destination);
+            if (!ignoreEmptyFile || (aOriginFile.length() > 0)) {
+            
+                if (sContribution != null) {
+                    sContribution.incrementReadCount();
                 }
-            }
-
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("Copying : {} => {}", aOriginFile.getAbsolutePath(), aDestinationFile.getAbsolutePath());
-            }
-
-            FileCopyUtils.copy(aOriginFile, aDestinationFile);
-
-            if ((emptyOrigin || deleteOrigin) && !aOriginFile.delete()) {
-                throw new FileCopyException("Cannot delete: " + origin);
-            }
-            if (emptyOrigin && !aOriginFile.createNewFile()) {
-                throw new FileCopyException("Cannot create: " + origin);
-            }
-
-            if (sContribution != null) {
-                sContribution.incrementWriteCount(1);
+    
+                if (destinationFactory != null) {
+                    Map<String, Object> aDestinationParams = new HashMap<String, Object>();
+                    aDestinationParams.put(ResourceFactoryConstants.PARAM_SOURCE, origin);
+                    aDestinationParams.put(ResourceFactoryConstants.PARAM_STEP_EXEC,
+                            ((sChunkContext != null) && (sChunkContext.getStepContext() != null)) ? sChunkContext.getStepContext().getStepExecution() : null);
+    
+                    destination = destinationFactory.getResource(aDestinationParams);
+                }
+    
+                File aDestinationFile = destination.getFile();
+                if (aDestinationFile.exists()) {
+                    if (forceReplace && aDestinationFile.isFile()) {
+                        if (!aDestinationFile.delete()) {
+                            throw new FileCopyException("Cannot remove: " + destination);
+                        }
+                    } else {
+                        throw new FileCopyException("Cannot replace: " + destination);
+                    }
+                }
+    
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("Copying : {} => {}", aOriginFile.getAbsolutePath(), aDestinationFile.getAbsolutePath());
+                }
+    
+                FileUtils.copyFile(aOriginFile, aDestinationFile);
+    
+                if ((emptyOrigin || deleteOrigin) && !aOriginFile.delete()) {
+                    throw new FileCopyException("Cannot delete: " + origin);
+                }
+                if (emptyOrigin && !aOriginFile.createNewFile()) {
+                    throw new FileCopyException("Cannot create: " + origin);
+                }
+    
+                if (sContribution != null) {
+                    sContribution.incrementWriteCount(1);
+                }
+            } else if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("Ignoring empty file : {}", aOriginFile.getAbsolutePath());
             }
 
         } else {

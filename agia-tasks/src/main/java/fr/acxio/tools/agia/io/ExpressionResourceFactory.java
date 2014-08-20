@@ -48,12 +48,14 @@ public class ExpressionResourceFactory extends AbstractSingleVariableExpressionE
     @Override
     public synchronized Resource getResource(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException {
         Resource aResult = null;
-        try {
-            updateContext(getVariableName(), sParameters, getEvaluationContext());
-            String aPath = getExpressionResolver().evaluate(expression, getEvaluationContext(), String.class);
-            aResult = new FileSystemResource(aPath);
-        } catch (Exception e) {
-            throw new ResourceCreationException(e);
+        if (expression != null) {
+            try {
+                updateContext(getVariableName(), sParameters, getEvaluationContext());
+                String aPath = getExpressionResolver().evaluate(expression, getEvaluationContext(), String.class);
+                aResult = new FileSystemResource(aPath);
+            } catch (Exception e) {
+                throw new ResourceCreationException(e);
+            }
         }
         return aResult;
     }

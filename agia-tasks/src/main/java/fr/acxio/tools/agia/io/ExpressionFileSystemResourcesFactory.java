@@ -66,12 +66,16 @@ public class ExpressionFileSystemResourcesFactory extends AbstractSingleVariable
 
     public synchronized Resource[] getResources(Map<? extends Object, ? extends Object> sParameters) throws ResourceCreationException {
         Resource[] aResources = null;
-        try {
-            updateContext(getVariableName(), sParameters, getEvaluationContext());
-            String aResolvedPattern = getExpressionResolver().evaluate(pattern, getEvaluationContext(), String.class);
-            aResources = resourcePatternResolver.getResources(aResolvedPattern);
-        } catch (Exception e) {
-            throw new ResourceCreationException(e);
+        if (pattern != null) {
+            try {
+                updateContext(getVariableName(), sParameters, getEvaluationContext());
+                String aResolvedPattern = getExpressionResolver().evaluate(pattern, getEvaluationContext(), String.class);
+                if (aResolvedPattern != null) {
+                    aResources = resourcePatternResolver.getResources(aResolvedPattern);
+                }
+            } catch (Exception e) {
+                throw new ResourceCreationException(e);
+            }
         }
         return aResources;
     }

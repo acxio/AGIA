@@ -1,4 +1,4 @@
-package fr.acxio.tools.agia.io;
+package fr.acxio.tools.agia.tasks;
 
 /*
  * Copyright 2014 Acxio
@@ -16,20 +16,23 @@ package fr.acxio.tools.agia.io;
  * limitations under the License.
  */
 
-/**
- * <p>
- * General constants used by ResourceFactory and ResourcesFactory.
- * </p>
- * 
- * @author pcollardez
- *
- */
-public final class ResourceFactoryConstants {
+public class ZipFilesException extends Exception {
 
-    private ResourceFactoryConstants() {
+    private static final long serialVersionUID = 2619133651478978455L;
+
+    public ZipFilesException() {
     }
-    
-    public static final String PARAM_SOURCE = "SOURCE";
-    public static final String PARAM_STEP_EXEC = "STEP_EXEC";
-    public static final String PARAM_BASE_DIRECTORY = "BASEDIR";
+
+    public ZipFilesException(String sMessage) {
+        super(sMessage);
+    }
+
+    public ZipFilesException(Throwable sCause) {
+        super(sCause);
+    }
+
+    public ZipFilesException(String sMessage, Throwable sCause) {
+        super(sMessage, sCause);
+    }
+
 }

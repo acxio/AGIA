@@ -19,7 +19,10 @@ package fr.acxio.tools.agia.file.pdf;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
+
+import fr.acxio.tools.agia.io.ResourcesFactory;
 
 /**
  * <p>
@@ -46,5 +49,18 @@ public interface PDDocumentFactory {
     PDDocumentContainer getDocument(InputStream sInputStream) throws PDDocumentFactoryException;
 
     PDDocumentContainer getDocument(InputStream sInputStream, Map<String, Object> sParameters) throws PDDocumentFactoryException;
+
+
+// Create container by reading parts. Pb: parts' descriptors may not be homogeneous => CompositeFactory
+// Use this factory in a processor to create aggregated PDF
+    
+    PDDocumentContainer fromParts(ResourcesFactory sResourcesFactory) throws PDDocumentFactoryException;
+
+    PDDocumentContainer fromParts(ResourcesFactory sResourcesFactory, Map<String, Object> sParameters) throws PDDocumentFactoryException;
+    
+
+    PDDocumentContainer addParts(PDDocumentContainer sContainer, ResourcesFactory sResourcesFactory) throws PDDocumentFactoryException;
+
+    PDDocumentContainer addParts(PDDocumentContainer sContainer, ResourcesFactory sResourcesFactory, Map<String, Object> sParameters) throws PDDocumentFactoryException;
 
 }

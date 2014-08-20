@@ -58,10 +58,12 @@ public class FileSystemResourcesFactory implements ResourcesFactory {
 
     public Resource[] getResources() throws ResourceCreationException {
         Resource[] aResources = null;
-        try {
-            aResources = resourcePatternResolver.getResources(pattern);
-        } catch (Exception e) {
-            throw new ResourceCreationException(e);
+        if (pattern != null) {
+            try {
+                aResources = resourcePatternResolver.getResources(pattern);
+            } catch (Exception e) {
+                throw new ResourceCreationException(e);
+            }
         }
         return aResources;
     }

@@ -1,4 +1,4 @@
-package fr.acxio.tools.agia.io;
+package fr.acxio.tools.agia.alfresco;
 
 /*
  * Copyright 2014 Acxio
@@ -16,20 +16,22 @@ package fr.acxio.tools.agia.io;
  * limitations under the License.
  */
 
-/**
- * <p>
- * General constants used by ResourceFactory and ResourcesFactory.
- * </p>
- * 
- * @author pcollardez
- *
- */
-public final class ResourceFactoryConstants {
+import java.util.Map;
 
-    private ResourceFactoryConstants() {
+import org.springframework.batch.item.ItemProcessor;
+
+import fr.acxio.tools.agia.alfresco.domain.NodeList;
+
+public class MapToNodeProcessor extends NodeMapper<Map<String, Object>> implements ItemProcessor<Map<String, Object>, NodeList> {
+
+    @Override
+    public NodeList process(Map<String, Object> sItem) throws Exception {
+        return objectToNodeList(sItem);
     }
-    
-    public static final String PARAM_SOURCE = "SOURCE";
-    public static final String PARAM_STEP_EXEC = "STEP_EXEC";
-    public static final String PARAM_BASE_DIRECTORY = "BASEDIR";
+
+    @Override
+    public Object transformData(Map<String, Object> sData) {
+        return sData;
+    }
+
 }
